@@ -9,7 +9,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 7s linear;
   }
 }
 
@@ -35,4 +35,45 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.fade-out {
+ opacity: 0;
+ transition: opacity 1s ease-in-out;
+}
+.pageTitle{
+  margin-bottom:1em;
+}
+
+.App-logo{
+  display:inline;
+}
+.directions{
+  font-size:.85em;
+  font-weight:bold;
+}
+.textInput{
+  padding:.75em 4em ;
+  border-radius:10px;
+  width:50%;
+  display:inline;
+}
+.button{
+  padding:.75em ;
+  border-radius:10px;
+  font-weight:bold;
+  margin-left:1em;
+  background-color:#ddd;
+  color:#333;
+  width:25%;
+  display:inline;
+}
+.button:hover{
+  background-color:ghostwhite;
+  color:black;
 }
