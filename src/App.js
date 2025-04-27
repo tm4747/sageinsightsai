@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import AILogo from './components/AILogo';
 import { testPost } from './lib/LambdaHelper';
@@ -9,9 +9,14 @@ import FlashingText from './components/FlashingText';
 
 function App() {
   const [htmlReponse, setHtmlResponse] = useState('');
+  const [displayedTextTracker, setDisplayedTextTracker] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isUserScrolling, setIsUserScrolling] = useState(false); // Track if the user scrolls
+
+  const summaryRef = useRef(null);
+
 
     useEffect(() => {
       const theHtmlResponse = marked(postResponse)
@@ -25,6 +30,7 @@ function App() {
     const callLambda = () => {
       if(enteredUrl){
         try {
+          setPostResponse("");
           setIsLoading(true);
           console.log("lambda call")
           testPost(enteredUrl, setPostResponse, setIsLoading);
@@ -33,6 +39,18 @@ function App() {
         } 
       }
     }
+
+     // Function to scroll to bottom if user isn't scrolling
+  useEffect(() => {
+    if (!isUserScrolling && summaryRef.current) {
+      summaryRef.current.scrollTop = summaryRef.current.scrollHeight;
+    }
+  }, [displayedTextTracker, isUserScrolling]);
+
+  // Handle user scroll to cancel auto-scrolling
+  const handleScroll = () => {
+    setIsUserScrolling(true); // User is scrolling, cancel auto-scroll
+  };
 
   return (
     <div className="App">
@@ -48,8 +66,11 @@ function App() {
             <input className={"textInput"} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
           </div>
-          <div className={"resultsDiv"}>
-            { !htmlReponse ? <h5>Post Response:</h5>:<TypingEffectWithMarkup content={htmlReponse} />}
+          <div className={"resultsDiv"}
+          ref={summaryRef}
+          onScroll={handleScroll}>
+            { !htmlReponse ? 
+            <h5>Post Response:</h5>:<TypingEffectWithMarkup content={htmlReponse} setDisplayedTextTracker={setDisplayedTextTracker} />}
           </div>
       </section>
       </header>
