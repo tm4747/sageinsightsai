@@ -62,7 +62,7 @@ function App() {
         <section className="body">
           <div className={"formDiv"}>
             <p className={"directions"}>Please enter a website url.  
-              This tool will return a general summary of all site content:</p>
+              This tool will return a general summary of the homepage:</p>
             <input className={"textInput"} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
           </div>
