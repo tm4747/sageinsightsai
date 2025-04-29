@@ -10,7 +10,6 @@ import FlashingText from './components/FlashingText';
 
 function App() {
   const [htmlReponse, setHtmlResponse] = useState('');
-  const [displayedTextTracker, setDisplayedTextTracker] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +45,7 @@ function App() {
     if (!isUserScrolling && summaryRef.current) {
       summaryRef.current.scrollTop = summaryRef.current.scrollHeight;
     }
-  }, [displayedTextTracker, isUserScrolling]);
+  }, [isUserScrolling]); // displayedTextTracker  - future state to get auto scrolling working
 
   // Handle user scroll to cancel auto-scrolling
   const handleScroll = () => {
@@ -71,7 +70,7 @@ function App() {
           ref={summaryRef}
           onScroll={handleScroll}>
             { !htmlReponse ? 
-            <h5>Post Response:</h5>:<TypingEffectWithMarkup content={htmlReponse} setDisplayedTextTracker={setDisplayedTextTracker} />}
+            <h5>Post Response:</h5>:<TypingEffectWithMarkup content={htmlReponse} />}
           </div>
       </section>
       </header>

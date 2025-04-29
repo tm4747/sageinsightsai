@@ -1,5 +1,3 @@
-import marked from 'marked';
-
 export const testGet = async (setResponse) => {
     const apiKey = process.env.REACT_APP_API_KEY;
     const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/hello";

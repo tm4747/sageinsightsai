@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import AILogo from './AILogo';
-import FlashingText from './FlashingText';
-
-
-// Add your spinner GIF URL
-const spinnerGifUrl = 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/images/loader-large.gif';  // Replace with your spinner GIF URL
 
 const Modal = ({ isLoading }) => {
   return (
@@ -27,7 +22,6 @@ const Modal = ({ isLoading }) => {
     >
       <div style={{ textAlign: 'center', color: '#fff', fontSize: '18px' }}>
         <AILogo size={"4em"} transparency={true}/>
-        {/* <img src={spinnerGifUrl} alt="Loading..." style={{ width: '50px', height: '50px', marginBottom: '20px' }} /> */}
         <h3>Please be patient as Lambda fetches results...</h3>
       </div>
     </div>
