@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Children } from 'react';
 import './App.css';
 import AILogo from './components/AILogo';
 import { testPost } from './lib/LambdaHelper';
@@ -14,8 +14,7 @@ function App() {
   const [enteredUrl, setEnteredUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isUserScrolling, setIsUserScrolling] = useState(false); // Track if the user scrolls
-
-  const summaryRef = useRef(null);
+  const [doScroll, setDoScroll] = useState(0);
 
 
     useEffect(() => {
@@ -39,20 +38,24 @@ function App() {
         } 
       }
     }
-
-     // Function to scroll to bottom if user isn't scrolling
-  useEffect(() => {
-    if (!isUserScrolling && summaryRef.current) {
-      summaryRef.current.scrollTop = summaryRef.current.scrollHeight;
+    const triggerScroll = () => {
+      setDoScroll(Math.random())
     }
-  }, [isUserScrolling]); // displayedTextTracker  - future state to get auto scrolling working
 
-  // Handle user scroll to cancel auto-scrolling
-  const handleScroll = () => {
-    setIsUserScrolling(true); // User is scrolling, cancel auto-scroll
-  };
+    const messagesEndRef = useRef(null)
 
-  const howAppWorks = "How it works:\n 1. The input you entered is submitted to a Lambda function via API Gateway\n 2. which"
+    const scrollToBottom = () => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }
+
+    useEffect(() => {
+      console.log('doScroll')
+      console.log(doScroll)
+      scrollToBottom()
+    }, [doScroll]);
+
+ 
+  const howAppWorks = "<h4>How it works:</h4> 1. The input you entered is submitted to a Lambda function via API Gateway\n 2. which"
 
   return (
     <div className="App">
@@ -67,13 +70,14 @@ function App() {
               This tool will return a general summary of the homepage:</p>
             <input className={"textInput"} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
+            <button className={"button"} onClick={triggerScroll}>trigger scroll</button>
+            {doScroll}
           </div>
-          <div className={"resultsDiv"}
-          ref={summaryRef}
-          onScroll={handleScroll}>
+          <div className={"resultsDiv"} >
             { !htmlReponse ? 
-            <h5>{howAppWorks}</h5>:<TypingEffectWithMarkup content={htmlReponse} />}
+            <div dangerouslySetInnerHTML={{ __html: howAppWorks }} />:<TypingEffectWithMarkup content={htmlReponse} />}
           </div>
+          <div ref={messagesEndRef}/>
       </section>
       </header>
       <Modal isLoading={isLoading}/>
