@@ -52,6 +52,8 @@ function App() {
     setIsUserScrolling(true); // User is scrolling, cancel auto-scroll
   };
 
+  const howAppWorks = "How it works:\n 1. The input you entered is submitted to a Lambda function via API Gateway\n 2. which"
+
   return (
     <div className="App">
       <header className="App-header">
@@ -70,7 +72,7 @@ function App() {
           ref={summaryRef}
           onScroll={handleScroll}>
             { !htmlReponse ? 
-            <h5>Post Response:</h5>:<TypingEffectWithMarkup content={htmlReponse} />}
+            <h5>{howAppWorks}</h5>:<TypingEffectWithMarkup content={htmlReponse} />}
           </div>
       </section>
       </header>
