@@ -1,0 +1,43 @@
+name: Deploy React App to S3 and Invalidate CloudFront
+
+on:
+  push:
+    branches:
+      - main  # Or your deploy branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23.6.0'
+
+      - name: Build React app
+        run: |
+          npm install
+          npm run build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Clear old S3 files
+        run: |
+          aws s3 rm s3://ai-portfolio-tommolinaro/ --recursive
+
+      - name: Upload new build to S3
+        run: |
+          aws s3 cp build/ s3://ai-portfolio-tommolinaro/ --recursive
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id E1GDMJ2H19J58Y --paths "/*"
