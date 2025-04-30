@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Children } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import AILogo from './components/AILogo';
 import { testPost } from './lib/LambdaHelper';
@@ -56,12 +56,11 @@ function App() {
   }, [typingContent]);
 
  
-  const howAppWorks = "<h4>How it works:</h4> <ol>\
-  <li>The url entered is submitted to a Lambda function via API Gateway</li>\
-  <li>Which attempts to scrape all content from the site homepage</li>\
-  <li>This content is then submitted to OpenAI, requesting a summary</li>\
-  <li>Which is then returned as long as the url is valid and the site is not loaded via JavaScript</li>\
-  </ol>"
+  var howAppWorks = "<h4>How it works:</h4> <ol>";
+  howAppWorks += "<li>The url entered is submitted to a Lambda function via API Gateway</li>"
+  howAppWorks += "<li>Which attempts to scrape all content from the site homepage</li>"
+  howAppWorks += "<li>This content is then submitted to OpenAI, requesting a summary</li>"
+  howAppWorks += "<li>Which is then returned as long as the url is valid and the site is not loaded via JavaScript</li></ol>"
 
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
 
