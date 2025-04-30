@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const TypingEffectWithMarkup = ({ content }) => {
+const TypingEffectWithMarkup = ({ content, setTypingContent }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
 
@@ -9,7 +9,9 @@ const TypingEffectWithMarkup = ({ content }) => {
 
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
-        setDisplayedText((prev) => prev + content[currentIndex]);
+      const updatedContent = (prev) => prev + content[currentIndex];
+        setDisplayedText(updatedContent);
+        setTypingContent(updatedContent)
         currentIndex += 1;
 
       // If we've added all characters, stop the typing effect

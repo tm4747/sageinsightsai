@@ -10,7 +10,9 @@ a:hover {
 .App {
   text-align: center;
 }
-
+ol li {
+  padding-bottom:.75em;
+}
 
 
 .App-header {
@@ -51,6 +53,14 @@ a:hover {
   border-radius:10px;
   width:50%;
   display:inline;
+}
+.errorTextInput{
+  padding:.75em 4em ;
+  border-radius:10px;
+  width:50%;
+  display:inline;
+  border:solid 2px red;
+  background-color:red;
 }
 .button{
   padding:.75em ;
