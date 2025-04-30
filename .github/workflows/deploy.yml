@@ -41,7 +41,7 @@ jobs:
             echo "cf_dist=E1GDMJ2H19J58Y" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
             echo "bucket=ai-portfolio-tommolinaro-qa" >> $GITHUB_OUTPUT
-            echo "cf_dist=E1GDMJ2H19J58Y" >> $GITHUB_OUTPUT
+            echo "cf_dist=ECPSOWY126ECU" >> $GITHUB_OUTPUT
           fi
 
       - name: Clear old S3 files
