@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import AILogo from './components/AILogo';
 import { testPost } from './lib/LambdaHelper';
-import TypingEffectWithMarkup from './components/TypingEffectWithMarkup';
 import { marked } from 'marked';
 import Modal from "./components/Modal" 
 import FlashingText from './components/FlashingText';
@@ -11,15 +10,36 @@ import FlashingText from './components/FlashingText';
 function App() {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
-  const [indexValue, setIndex] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  //typing effect
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDone, setIsDone] = useState(false);
 
   // update state values
   const handleInputChange = (event) => {
     setEnteredUrl(event.target.value);
   };
+
+  //typing effect
+  useEffect(() => {
+    if (!htmlReponse) return;  // No htmlReponse to display
+
+    let currentIndex = 0;
+    const typingInterval = setInterval(() => {
+        setDisplayedText((prev) => prev + htmlReponse[currentIndex]);
+        currentIndex += 1;
+
+      // If we've added all characters, stop the typing effect
+      if (currentIndex === htmlReponse.length) {
+        clearInterval(typingInterval);
+        setIsDone(true);
+      }
+    }, 1); // Adjust speed here (50ms per character)
+
+    return () => clearInterval(typingInterval); // Cleanup the interval
+  }, [htmlReponse]);
 
   // converts markup response from lambda to HTML
   useEffect(() => {
@@ -53,7 +73,7 @@ function App() {
   useEffect(() => {
     console.log('doScroll')
     scrollToBottom()
-  }, [indexValue]);
+  }, [displayedText]);
 
  
   var howAppWorks = "<h4>How it works:</h4> <ol>";
@@ -80,9 +100,10 @@ function App() {
             {/* <span> error: {enteredUrlError}</span> */}
           </div>
           <div className={"resultsDiv"} >
-            { !htmlReponse ? 
-            <div dangerouslySetInnerHTML={{ __html: howAppWorks }} />:
-            <TypingEffectWithMarkup content={htmlReponse} setIndex={setIndex} />}
+            <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
+            <div>
+              {isDone && <p>Done typing!</p>}
+            </div>
           </div>
           <div ref={messagesEndRef}/>
       </section>
@@ -93,6 +114,7 @@ function App() {
 }
 
 export default App;
+
 
 
 const TypingText = ({ text, flashingText = "", speed = 100 }) => {
