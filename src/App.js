@@ -78,7 +78,7 @@ function App() {
               This tool will return a general summary of the homepage:</p>
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
-            <span> error: {enteredUrlError}</span>
+            {/* <span> error: {enteredUrlError}</span> */}
           </div>
           <div className={"resultsDiv"} >
             { !htmlReponse ? 
