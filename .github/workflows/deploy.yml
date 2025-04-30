@@ -19,8 +19,6 @@ jobs:
           node-version: '23.6.0'
 
       - name: Build React app
-        env:
-          REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
         run: |
           npm install
           npm run build
