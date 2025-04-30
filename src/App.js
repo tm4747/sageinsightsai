@@ -11,7 +11,7 @@ import FlashingText from './components/FlashingText';
 function App() {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
-  const [currentIndex, setCurrentIndex] = useState('');
+  const [indexValue, setIndex] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +53,7 @@ function App() {
   useEffect(() => {
     console.log('doScroll')
     scrollToBottom()
-  }, [currentIndex]);
+  }, [indexValue]);
 
  
   var howAppWorks = "<h4>How it works:</h4> <ol>";
@@ -82,7 +82,7 @@ function App() {
           <div className={"resultsDiv"} >
             { !htmlReponse ? 
             <div dangerouslySetInnerHTML={{ __html: howAppWorks }} />:
-            <TypingEffectWithMarkup content={htmlReponse} setCurrentIndex={setCurrentIndex} />}
+            <TypingEffectWithMarkup content={htmlReponse} setIndex={setIndex} />}
           </div>
           <div ref={messagesEndRef}/>
       </section>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
-const TypingEffectWithMarkup = ({ content, setCurrentIndex }) => {
+const TypingEffectWithMarkup = ({ content, setIndex }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
 
@@ -11,7 +11,7 @@ const TypingEffectWithMarkup = ({ content, setCurrentIndex }) => {
     const typingInterval = setInterval(() => {
         setDisplayedText((prev) => prev + content[currentIndex]);
         currentIndex += 1;
-        setCurrentIndex(currentIndex);
+        updateIndex(currentIndex);
 
       // If we've added all characters, stop the typing effect
       if (currentIndex === content.length) {
@@ -22,6 +22,10 @@ const TypingEffectWithMarkup = ({ content, setCurrentIndex }) => {
 
     return () => clearInterval(typingInterval); // Cleanup the interval
   }, [content]);
+
+  const updateIndex = useCallback((index) => {
+    setIndex(index);
+  }, [])
 
   return (
     <div>
