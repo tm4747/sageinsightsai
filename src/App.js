@@ -5,6 +5,7 @@ import { testPost } from './lib/LambdaHelper';
 import { marked } from 'marked';
 import Modal from "./components/Modal" 
 import FlashingText from './components/FlashingText';
+// TODO: remove
 
 
 function App() {
