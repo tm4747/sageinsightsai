@@ -5,7 +5,6 @@ import { testPost } from './lib/LambdaHelper';
 import { marked } from 'marked';
 import Modal from "./components/Modal" 
 import FlashingText from './components/FlashingText';
-// TODO: remove
 
 
 function App() {
@@ -77,7 +76,7 @@ function App() {
   }, [displayedText]);
 
  
-  var howAppWorks = "<h4>How it works QA:</h4> <ol>";
+  var howAppWorks = "<h4>How it works:</h4> <ol>";
   howAppWorks += "<li>The url entered is submitted to a Lambda function via API Gateway</li>"
   howAppWorks += "<li>Which attempts to scrape all content from the site homepage</li>"
   howAppWorks += "<li>This content is then submitted to OpenAI, requesting a summary</li>"
