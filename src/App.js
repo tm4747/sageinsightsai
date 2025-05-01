@@ -8,7 +8,7 @@ import FlashingText from './components/FlashingText';
 
 
 function App() {
-  const [htmlReponse, setHtmlResponse] = useState('');
+  const [htmlReponse, setHtmlResponse] = useState();
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
@@ -77,10 +77,11 @@ function App() {
 
  
   var howAppWorks = "<h4>How it works:</h4> <ol>";
-  howAppWorks += "<li>The url entered is submitted to a Lambda function via API Gateway</li>"
-  howAppWorks += "<li>Which attempts to scrape all content from the site homepage</li>"
-  howAppWorks += "<li>This content is then submitted to OpenAI, requesting a summary</li>"
-  howAppWorks += "<li>Which is then returned as long as the url is valid and the site is not loaded via JavaScript</li></ol>"
+  howAppWorks += "<li>A valid url must be entered which is then submitted to a Lambda function via AWS API Gateway.</li>"
+  howAppWorks += "<li>The Lambda function then attempts to pull and parse all content from the site homepage.</li>"
+  howAppWorks += "<ul><li><strong>Please note:</strong> this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app.</li></ul>"
+  howAppWorks += "<li>The Lambda function then submits this content to OpenAI via API, requesting a summary.</li>"
+  howAppWorks += "<li>The response is then returned by Lambda to display here.</li></ol>"
 
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
 
@@ -134,3 +135,27 @@ const TypingText = ({ text, flashingText = "", speed = 100 }) => {
 
   return <span>Hello@User:~$ {displayedText} <FlashingText text={flashingText}/></span>;
 };
+
+const testHtml = () => {
+  return "\
+  This is the summary:\
+East Coast Bow Thrusters: Overview and Services\
+Company Introduction\
+East Coast Bow Thrusters is a specialized service provider dedicated to the installation of bow thrusters and stern thrusters, with a commitment to delivering high-quality workmanship backed by over 50 years of experience in the marine industry. The company’s owner, Joe Molinaro, brings an extensive background in fiberglass repair, boat building, and thruster installations, establishing a reputation for excellence along the East Coast and the Great Lakes region.\
+Services Offered\
+The primary service provided by East Coast Bow Thrusters involves mobile installations of Vetus bow thrusters at various locations, including marinas and boatyards. Their trained crew travels throughout the East Coast, from Maine to Virginia, ensuring that customers receive professional, efficient service right at their location. The installation process guarantees not only the function but also the aesthetic appeal of the modifications being made, with personal oversight from Joe himself.\
+The company guarantees competitive pricing by utilizing a bulk purchasing strategy and a developed system for optimal installation efficiency. This allows them to provide complete installation quotes that cover all components, labor, and necessary cleanup, helping customers save money while receiving top-notch service.\
+Customer Commitment\
+East Coast Bow Thrusters prides itself on its commitment to customer satisfaction. With a focus on promptness and professionalism, the team ensures that installations are conducted in a timely manner without compromising quality. Each installation is meticulously overseen, reflecting Joe’s values and high standards in craftmanship.\
+The clientele includes a diverse range of boat owners, from those with custom sailboats to commercial vessels like trawlers and naval ships. This versatility speaks to the company's capability to handle a variety of needs, making them a go-to choice for boat enhancements.\
+Company Culture\
+The culture at East Coast Bow Thrusters reflects a deep passion for boating and craftsmanship. With over five decades of hands-on experience, there is a pronounced emphasis on professionalism, quality, and customer relationships. Joe's commitment to personally guiding each installation exemplifies the personalized approach taken towards customer service, enabling them to build lasting relationships and trust within the boating community.\
+Work Environment\
+The company is currently seeking new talent as indicated by a dedicated “Help Wanted” section on their website. It highlights their openness to bringing in fresh faces who are eager to learn and contribute to this established business. The inclusion of job opportunities emphasizes the company's growth and its values of fostering a supportive and skilled workforce.\
+Conclusion\
+East Coast Bow Thrusters stands out as a premier provider for bow and stern thruster installations. With a strong commitment to quality, customer satisfaction, and a wealth of experience, they continue to serve a wide array of customers along the East Coast and beyond. Whether you are looking to enhance your own vessel or seeking professional opportunities, East Coast Bow Thrusters delivers exceptional service and a collaborative work environment. For inquiries or quotes, customers and prospective employees are encouraged to reach out directly via phone.\
+For more information, visit East Coast Bow Thrusters.\
+undefined\
+Done typing!\
+"
+}
