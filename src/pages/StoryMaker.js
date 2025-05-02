@@ -71,7 +71,9 @@ function StoryMaker({theNav}) {
       try {
         setIsLoading(true);
         console.log("lambda call")
-        testPost(enteredUrl, setPostResponse, setIsLoading);
+        //testPost(enteredUrl, setPostResponse, setIsLoading);
+        setPostResponse("Functionality Coming Soon.")
+        setIsLoading(false)
       } catch (error) {
         console.error('Error fetching summary:', error);
       } 
@@ -88,7 +90,9 @@ function StoryMaker({theNav}) {
 
  
   var howAppWorks = "<h4>How it works:</h4> <ol>";
-  howAppWorks += "<li>Hasn't been built yet.</li></ol>"
+  howAppWorks += "<li>This functionality is coming soon.</li>";
+  howAppWorks += "<li>Essentially you will be able to create 3 characters with a wide variety of features and idiosyncracies, and enter an optional situation.</li>";
+  howAppWorks += "<li>OpenAI, Google Gemini and Anthropic Claude will then be called upon to play each of the characters, carrying out a converstaion and acting out a virtual 'skit' based on your inputs.</li></ol>";
 
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
 
@@ -102,9 +106,9 @@ function StoryMaker({theNav}) {
         <section className="body">
           <div className={"formDiv"}>
             <div className={"pageDescription"}>
-                <p>You will create 3 characters, using the following dropdowns to determine their characteristics.</p>
-                <p>They you can optionally enter a scenario.</p>
-                <p>This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
+                <p>You will create 3 characters, using the following dropdowns to determine their characteristics.
+                They you can optionally enter a scenario.
+                This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
             </div>
               {theNav}
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
