@@ -105,7 +105,7 @@ function HomeSummaryTool({theNav}) {
         </h2>
         <section className="body">
           <div className={"formDiv"}>
-            <p className={"directions"}>Please enter a website url.  
+            <p className={"pageDescription"}>Please enter a website url.  
               This tool will return a general summary of the homepage:</p>
               {theNav}
             <input className={inputClasses} onChange={handleInputChange} type="text"/>

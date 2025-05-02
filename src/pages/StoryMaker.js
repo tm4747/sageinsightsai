@@ -5,6 +5,7 @@ import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import Modal from "../components/Modal" 
 import FlashingText from '../components/FlashingText';
+import { Links } from 'react-router-dom';
 
 
 function StoryMaker({theNav}) {
@@ -101,8 +102,11 @@ function StoryMaker({theNav}) {
         </h2>
         <section className="body">
           <div className={"formDiv"}>
-            <p className={"directions"}>You will create 3 characters, using the following dropdowns to determine their characteristics.  They you can optionally enter a scenario.   
-              This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude:</p>
+            <div className={"pageDescription"}>
+                <p>You will create 3 characters, using the following dropdowns to determine their characteristics.</p>
+                <p>They you can optionally enter a scenario.</p>
+                <p>This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
+            </div>
               {theNav}
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>

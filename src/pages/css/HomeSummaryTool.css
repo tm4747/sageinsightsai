@@ -44,9 +44,10 @@ ol li {
   margin-bottom:1em;
 }
 
-.directions{
+.pageDescription{
   font-size:.85em;
   font-weight:bold;
+  padding-bottom:1em;
 }
 .textInput{
   padding:.75em 4em ;
@@ -107,4 +108,9 @@ ol li {
   background-color:ghostwhite;
   color:black;
   opacity:1;
+}
+.pageDescription p{
+  font-size:.85em;
+  padding:0;
+  margin:1em;
 }
