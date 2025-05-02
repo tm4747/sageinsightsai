@@ -5,7 +5,6 @@ import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import Modal from "../components/Modal" 
 import FlashingText from '../components/FlashingText';
-import { Links } from 'react-router-dom';
 
 
 function StoryMaker({theNav}) {
