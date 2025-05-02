@@ -7,7 +7,7 @@ import Modal from "../components/Modal"
 import FlashingText from '../components/FlashingText';
 
 
-function StoryMaker() {
+function StoryMaker({theNav}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
@@ -103,6 +103,7 @@ function StoryMaker() {
           <div className={"formDiv"}>
             <p className={"directions"}>You will create 3 characters, using the following dropdowns to determine their characteristics.  They you can optionally enter a scenario.   
               This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude:</p>
+              {theNav}
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
             {/* <span> error: {enteredUrlError}</span> */}
