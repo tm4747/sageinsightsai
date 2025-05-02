@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './css/HomeSummaryTool.css';
 import AILogo from '../components/AILogo';
-import { testPost } from '../lib/LambdaHelper';
+// TODO: build out function to pull from lambda - need new lambda
+//import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import Modal from "../components/Modal" 
 import FlashingText from '../components/FlashingText';
