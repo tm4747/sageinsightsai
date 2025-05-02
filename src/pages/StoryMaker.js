@@ -7,7 +7,7 @@ import Modal from "../components/Modal"
 import FlashingText from '../components/FlashingText';
 
 
-function AnotherTool() {
+function StoryMaker() {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
@@ -122,7 +122,7 @@ function AnotherTool() {
   );
 }
 
-export default AnotherTool;
+export default StoryMaker;
 
 
 

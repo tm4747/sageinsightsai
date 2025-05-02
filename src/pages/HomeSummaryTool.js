@@ -7,7 +7,7 @@ import Modal from "../components/Modal"
 import FlashingText from '../components/FlashingText';
 
 
-function HomeSummaryTool() {
+function HomeSummaryTool({testProp}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
@@ -106,7 +106,7 @@ function HomeSummaryTool() {
         <section className="body">
           <div className={"formDiv"}>
             <p className={"directions"}>Please enter a website url.  
-              This tool will return a general summary of the homepage:</p>
+              This tool will return a general summary of the homepage: {testProp}</p>
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
             {/* <span> error: {enteredUrlError}</span> */}

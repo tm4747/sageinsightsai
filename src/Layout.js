@@ -6,7 +6,7 @@ const Layout = () => {
   return (
     <div className="layout">
       <nav>
-        <Link to="/">Home Summary</Link> | <Link to="/other">Another Tool</Link>
+        <Link to="/">Home Page Summary</Link> | <Link to="/story-maker">Story Maker</Link>
       </nav>
       <main>
         <Outlet /> {/* This renders the current child route */}
