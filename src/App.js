@@ -8,26 +8,35 @@ import FlashingText from './components/FlashingText';
 
 
 function App() {
-  const [testHtmlText, setTestHtmlText] = useState(testHtml());
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [disableScroll, setDisableScroll] = useState(false);
+  
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
+  const [isStarted, setIsStarted] = useState(false);
+  //scroll vars
+  const messagesEndRef = useRef(null);
+  
 
   // update state values
   const handleInputChange = (event) => {
     setEnteredUrl(event.target.value);
   };
 
+  const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
+    <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
 
   //typing effect
   useEffect(() => {
-    if (!htmlReponse) return;  // No htmlReponse to display
-
+    if (!htmlReponse) return;  // No htmlReponse to display\
+    setDisableScroll(false)
+    setIsDone(false);
+    setIsStarted(true);
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
         setDisplayedText((prev) => prev + htmlReponse[currentIndex]);
@@ -37,6 +46,7 @@ function App() {
       if (currentIndex === htmlReponse.length) {
         clearInterval(typingInterval);
         setIsDone(true);
+        setIsStarted(false);
       }
     }, 1); // Adjust speed here (50ms per character)
 
@@ -51,12 +61,14 @@ function App() {
 
   // website summary call
   const callLambda = () => {
+    setPostResponse("");
+    setHtmlResponse("");
+    setDisplayedText("");
     if (enteredUrl < 3) {
       setEnteredUrlError(true);
     } else {
       setEnteredUrlError(false);
       try {
-        setPostResponse("");
         setIsLoading(true);
         console.log("lambda call")
         testPost(enteredUrl, setPostResponse, setIsLoading);
@@ -65,16 +77,13 @@ function App() {
       } 
     }  
   }
+  
 
-
-  // handle auto-scrolling when response/answer is written out
-  const messagesEndRef = useRef(null)
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  // Auto-scroll to bottom when new text is displayed
   useEffect(() => {
-    console.log('doScroll')
-    scrollToBottom()
+    if (!disableScroll) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [displayedText]);
 
  
@@ -105,14 +114,14 @@ function App() {
           <div className={"resultsDiv"} >
             <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
             <div>
-              {isDone && <p>Done typing!</p>}
-              {testHtmlText}
+              {isDone ? <p>Done!</p> : ""}
             </div>
           </div>
           <div ref={messagesEndRef}/>
       </section>
       </header>
       <Modal isLoading={isLoading}/>
+      {stopScrollButton}
     </div>
   );
 }
@@ -138,26 +147,3 @@ const TypingText = ({ text, flashingText = "", speed = 100 }) => {
 
   return <span>Hello@User:~$ {displayedText} <FlashingText text={flashingText}/></span>;
 };
-
-const testHtml = () => {
-  return ' \n' +
- 'This is the summary: \n' +
-'East Coast Bow Thrusters: Overview and Services \n' +
-'Company Introduction \n' +
-'East Coast Bow Thrusters is a specialized service provider dedicated to the installation of bow thrusters and stern thrusters, with a commitment to delivering high-quality workmanship backed by over 50 years of experience in the marine industry. The company’s owner, Joe Molinaro, brings an extensive background in fiberglass repair, boat building, and thruster installations, establishing a reputation for excellence along the East Coast and the Great Lakes region. \n' +
-'Services Offered \n' +
-'The primary service provided by East Coast Bow Thrusters involves mobile installations of Vetus bow thrusters at various locations, including marinas and boatyards. Their trained crew travels throughout the East Coast, from Maine to Virginia, ensuring that customers receive professional, efficient service right at their location. The installation process guarantees not only the function but also the aesthetic appeal of the modifications being made, with personal oversight from Joe himself. \n' +
-'The company guarantees competitive pricing by utilizing a bulk purchasing strategy and a developed system for optimal installation efficiency. This allows them to provide complete installation quotes that cover all components, labor, and necessary cleanup, helping customers save money while receiving top-notch service.\n' +
-'Customer Commitment \n' +
-'East Coast Bow Thrusters prides itself on its commitment to customer satisfaction. With a focus on promptness and professionalism, the team ensures that installations are conducted in a timely manner without compromising quality. Each installation is meticulously overseen, reflecting Joe’s values and high standards in craftmanship.\n' +
-'The clientele includes a diverse range of boat owners, from those with custom sailboats to commercial vessels like trawlers and naval ships. This versatility speaks to the companys capability to handle a variety of needs, making them a go-to choice for boat enhancements.\n' +
-'Company Culture \n' +
-'The culture at East Coast Bow Thrusters reflects a deep passion for boating and craftsmanship. With over five decades of hands-on experience, there is a pronounced emphasis on professionalism, quality, and customer relationships. Joes commitment to personally guiding each installation exemplifies the personalized approach taken towards customer service, enabling them to build lasting relationships and trust within the boating community \n' +
-'Work Environment \n' +
-'The company is currently seeking new talent as indicated by a dedicated “Help Wanted” section on their website. It highlights their openness to bringing in fresh faces who are eager to learn and contribute to this established business. The inclusion of job opportunities emphasizes the companys growth and its values of fostering a supportive and skilled workforce.\n' +
-'Conclusion \n' +
-'East Coast Bow Thrusters stands out as a premier provider for bow and stern thruster installations. With a strong commitment to quality, customer satisfaction, and a wealth of experience, they continue to serve a wide array of customers along the East Coast and beyond. Whether you are looking to enhance your own vessel or seeking professional opportunities, East Coast Bow Thrusters delivers exceptional service and a collaborative work environment. For inquiries or quotes, customers and prospective employees are encouraged to reach out directly via phone. \n' +
-'For more information, visit East Coast Bow Thrusters. \n' +
-'undefined \n' +
-'Done typing!'
-}
