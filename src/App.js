@@ -84,7 +84,7 @@ function App() {
     if (!disableScroll) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [displayedText]);
+  }, [disableScroll, displayedText]);
 
  
   var howAppWorks = "<h4>How it works:</h4> <ol>";
