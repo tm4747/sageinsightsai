@@ -12,7 +12,7 @@ import { getCharacterTypes, getHasAThings, getCharacterTraits, getLikesOrDislike
 function StoryMaker({theNav}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
-  const [enteredUrl, setEnteredUrl] = useState('');
+  const [enteredSituation, setEnteredSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
 
@@ -26,7 +26,7 @@ function StoryMaker({theNav}) {
 
   // update state values
   const handleInputChange = (event) => {
-    setEnteredUrl(event.target.value);
+    setEnteredSituation(event.target.value);
   };
 
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
@@ -68,7 +68,8 @@ function StoryMaker({theNav}) {
       try {
         setIsLoading(true);
         console.log("lambda call")
-        //testPost(enteredUrl, setPostResponse, setIsLoading);
+        //testPost(enteredSituation, setPostResponse, setIsLoading);
+        console.log(enteredSituation)
         setPostResponse("Functionality Coming Soon.")
         setIsLoading(false)
       } catch (error) {
@@ -113,7 +114,7 @@ function StoryMaker({theNav}) {
               <p>Optionally - enter the situation in which your characters have foud themselves:</p>
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
-            {/* <span> error: {enteredUrlError}</span> */}
+            {/* <span> error: {enteredSituationError}</span> */}
           </div>
           <div className={"resultsDiv"} >
             <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
