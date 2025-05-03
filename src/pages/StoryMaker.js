@@ -80,15 +80,20 @@ function StoryMaker({theNav}) {
         console.error('Error fetching summary:', error);
       } 
   }
+
+  const handleCharacterInputSubmit = () => {
+    setShowCharacterInput(showCharacterInput);
+    setCharacterInputs(characterInputs)
+  }
   
-  const characterInputGroup = showCharacterInput == 1 ? 
-  <CharacterConfigurator characterId={1} handleInputSubmit={setCharacterInputs}/> :
-  (showCharacterInput == 2 ? <CharacterConfigurator characterId={2} handleInputSubmit={setCharacterInputs}/> :
-    (showCharacterInput == 3 ? <CharacterConfigurator characterId={3} handleInputSubmit={setCharacterInputs}/> : ""
+  const characterInputGroup = showCharacterInput === 1 ? 
+  <CharacterConfigurator characterId={1} handleInputSubmit={handleCharacterInputSubmit}/> :
+  (showCharacterInput === 2 ? <CharacterConfigurator characterId={2} handleInputSubmit={handleCharacterInputSubmit}/> :
+    (showCharacterInput === 3 ? <CharacterConfigurator characterId={3} handleInputSubmit={handleCharacterInputSubmit}/> : ""
    ));
 
-   const submitInputGroup = showCharacterInput == 4 ? <><p>Optionally - enter the situation in which your characters have foud themselves:</p>
-   <input className={inputClasses} onChange={handleInputChange} type="text"/>
+   const submitInputGroup = showCharacterInput === 4 ? <><p>Optionally - enter the situation in which your characters have foud themselves:</p>
+   <input className={"textInput"} onChange={handleInputChange} type="text"/>
    <button className={"button"} onClick={callLambda}>Call Lambda</button></> : "";
   
 
@@ -105,7 +110,6 @@ function StoryMaker({theNav}) {
   howAppWorks += "<li>Essentially you will be able to create 3 characters with a wide variety of features and idiosyncracies, and enter an optional situation.</li>";
   howAppWorks += "<li>OpenAI, Google Gemini and Anthropic Claude will then be called upon to play each of the characters, carrying out a converstaion and acting out a virtual 'skit' based on your inputs.</li></ol>";
 
-  const inputClasses =  "textInput";
 
   return (
     <div className="App">
