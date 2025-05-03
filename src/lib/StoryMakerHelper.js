@@ -1,26 +1,30 @@
 export const getCharacterTypes = () => {
-    return ["man", "woman", "child", "princess", "king", "queen", "knight", "clown",
+    const list = ["man", "woman", "child", "princess", "king", "queen", "knight", "clown",
         "dog", "cat", "alien", "robot", 
         "orc", "gremlin", "leprechaun", 
         "dragon", "elf", "dwarf", 
         "goblin", "fairy", "centaur", "werewolf", "unicorn", 
         "phoenix", "giant", "skeleton", "ghost", 
-     ];
+    ];
+    list.sort();
+    return list;
 }
 
 
 export const getCharacterTraits = () => {
-    return [
+    const list = [
         "angry", "carefree", "belligerent", "deceitful", "apathetic",
         "stoic", "impulsive", "melancholy", "arrogant", "compassionate", "nervous", 
         "boastful", "naive", "witty", "pessimistic", "scheming", "sarcastic", 
         "inquisitive", "timid", "grumpy", "charming", "reckless", "dutiful", 
         "aloof", "optimistic", "manipulative", "earnest", "fearful", "obsessive",  
     ];
+    list.sort();
+    return list;
 }
 
 export const getHasAThings = () => {
-    return [
+    const list = [
         "a wooden leg", "a great set of eyeballs", "a very big and thoughtful brain", "a cabin in Utah",
         "a limp when they walk", "a missing ear", "glowing red eyes", 
         "a tail that won't stop twitching", "scales instead of skin", 
@@ -32,11 +36,13 @@ export const getHasAThings = () => {
         "crystals growing from their back", "an eye in the palm of their hand", 
         "wings too small for flight"
     ];
+    list.sort();
+    return list;
 }
 
 
 export const getLikesOrDislikes = () => {
-    return [
+    const list = [
         "to agree with what others have to say",
         "to chase mailmen and delivery people",
         "to dig deep holes in the backyard",
@@ -63,4 +69,6 @@ export const getLikesOrDislikes = () => {
         "to tell the same story over and over", 
         "to sleep in other people’s beds"
     ];
+    list.sort();
+    return list;
 }

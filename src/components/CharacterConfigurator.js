@@ -65,7 +65,7 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
                 <td className={"tdRight"}>                <select value={whoHas} onChange={(e) => setWhoHas(e.target.value)}>
                 <option value="">Select...</option>
                 {hasAThings.map((hasAThing) =>
-                    <option key={addDashes(hasAThing)} value={hasAThing}>{hasAThing}</option>
+                    <option key={addDashes(hasAThing)} value={hasAThing}>{capitalizeFirstLetter(hasAThing)}</option>
                 )}
                 </select>
                 </td>
@@ -84,7 +84,7 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
                 <td className={"tdRight"}>                <select value={whoLikesThing} onChange={(e) => setWhoLikesThing(e.target.value)}>
                 <option value="">Select...</option>
                 {likesAndDislikes.map((likeOrDislike) =>
-                    <option key={addDashes(likeOrDislike)} value={likeOrDislike}>{likeOrDislike}</option>
+                    <option key={addDashes(likeOrDislike)} value={likeOrDislike}>{capitalizeFirstLetter(likeOrDislike)}</option>
                 )}
                 </select>
                 </td>
