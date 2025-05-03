@@ -105,9 +105,9 @@ function HomeSummaryTool({theNav}) {
         </h2>
         <section className="body">
           <div className={"formDiv"}>
-            <p className={"pageDescription"}>Please enter a website url.  
-              This tool will return a general summary of the homepage:</p>
-              {theNav}
+          {theNav}
+            <div className={"pageDescription"}>Please enter a website url.  
+              This tool will return a general summary of the homepage:</div>
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
             {/* <span> error: {enteredUrlError}</span> */}

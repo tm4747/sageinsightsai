@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './css/HomeSummaryTool.css';
+import './css/StoryMaker.css';
 import AILogo from '../components/AILogo';
 // TODO: build out function to pull from lambda - need new lambda
 //import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import Modal from "../components/Modal" 
 import FlashingText from '../components/FlashingText';
+import { getCharacterTypes, getHasAThings, getCharacterTraits, getLikesOrDislikes } from '../lib/StoryMakerHelper';
 
 
 function StoryMaker({theNav}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
-  const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
-  
+
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
@@ -65,10 +65,6 @@ function StoryMaker({theNav}) {
     setPostResponse("");
     setHtmlResponse("");
     setDisplayedText("");
-    if (enteredUrl < 3) {
-      setEnteredUrlError(true);
-    } else {
-      setEnteredUrlError(false);
       try {
         setIsLoading(true);
         console.log("lambda call")
@@ -78,7 +74,6 @@ function StoryMaker({theNav}) {
       } catch (error) {
         console.error('Error fetching summary:', error);
       } 
-    }  
   }
   
 
@@ -95,7 +90,7 @@ function StoryMaker({theNav}) {
   howAppWorks += "<li>Essentially you will be able to create 3 characters with a wide variety of features and idiosyncracies, and enter an optional situation.</li>";
   howAppWorks += "<li>OpenAI, Google Gemini and Anthropic Claude will then be called upon to play each of the characters, carrying out a converstaion and acting out a virtual 'skit' based on your inputs.</li></ol>";
 
-  const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
+  const inputClasses =  "textInput";
 
   return (
     <div className="App">
@@ -106,12 +101,16 @@ function StoryMaker({theNav}) {
         </h2>
         <section className="body">
           <div className={"formDiv"}>
+          {theNav}
             <div className={"pageDescription"}>
                 <p>You will create 3 characters, using the following dropdowns to determine their characteristics.
                 They you can optionally enter a scenario.
                 This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
             </div>
-              {theNav}
+              <CharacterConfigurator characterId={1}/>
+              <CharacterConfigurator characterId={2}/>
+              <CharacterConfigurator characterId={3}/>
+              <p>Optionally - enter the situation in which your characters have foud themselves:</p>
             <input className={inputClasses} onChange={handleInputChange} type="text"/>
             <button className={"button"} onClick={callLambda}>Call Lambda</button>
             {/* <span> error: {enteredUrlError}</span> */}
@@ -152,3 +151,70 @@ const TypingText = ({ text, flashingText = "", speed = 100 }) => {
 
   return <span>Hello@User:~$ {displayedText} <FlashingText text={flashingText}/></span>;
 };
+
+
+const CharacterConfigurator = ({ characterId }) => {
+  const [characterType, setCharacterType] = useState('');
+  const [whoIs, setWhoIs] = useState('');
+  const [whoHas, setWhoHas] = useState('');
+  const [whoLikesType, setWhoLikesType] = useState('');
+  const [whoLikesThing, setWhoLikesThing] = useState('');
+
+  const characterTypes = getCharacterTypes();
+  const characterTraits = getCharacterTraits();
+  const hasAThings = getHasAThings();
+  const likesAndDislikes = getLikesOrDislikes();
+
+  return (
+    <div className="character-config">
+      <h3>Character {characterId}</h3>
+
+      <label>Character Type:</label>
+      <select value={characterType} onChange={(e) => setCharacterType(e.target.value)}>
+        <option value="">Select...</option>
+        {characterTypes.map((charType) =>
+          <option key={charType} value={charType}>{capitalizeFirstLetter(charType)}</option>
+        )}
+      </select>
+
+      <label>Who Is:</label>
+      <select value={whoIs} onChange={(e) => setWhoIs(e.target.value)}>
+        <option value="">Select...</option>
+        {characterTraits.map((charTrait) =>
+          <option key={charTrait} value={charTrait}>{capitalizeFirstLetter(charTrait)}</option>
+        )}
+      </select>
+
+      <label>Who Has A:</label>
+      <select value={whoHas} onChange={(e) => setWhoHas(e.target.value)}>
+        <option value="">Select...</option>
+        {hasAThings.map((hasAThing) =>
+          <option key={addDashes(hasAThing)} value={addDashes(hasAThing)}>{hasAThing}</option>
+        )}
+      </select>
+
+      <label>Who:</label>
+      <select value={whoLikesType} onChange={(e) => setWhoLikesType(e.target.value)}>
+        <option value="">Select...</option>
+        <option value="likes">Likes</option>
+        <option value="doesn't like">Doesn't like</option>
+      </select>
+
+      <label>...To:</label>
+      <select value={whoLikesThing} onChange={(e) => setWhoLikesThing(e.target.value)}>
+        <option value="">Select...</option>
+        {likesAndDislikes.map((likeOrDislike) =>
+          <option key={addDashes(likeOrDislike)} value={addDashes(likeOrDislike)}>{likeOrDislike}</option>
+        )}
+      </select>
+    </div>
+  );
+}
+
+function capitalizeFirstLetter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function addDashes(str) {
+  return str.replace(/\s+/g, '-');
+}
