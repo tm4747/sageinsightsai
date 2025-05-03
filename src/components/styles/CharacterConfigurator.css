@@ -1,0 +1,33 @@
+.character-config{
+    max-width:800px;
+    height:auto;
+    margin: 0 auto;
+    padding: 10px;
+    position: relative;
+}
+.inputContainer{
+    padding:0 15%;
+    width:100%
+}
+.inputDiv{
+
+}
+.tdLeft{
+    text-align:left;
+}
+.tdRight{
+    text-align:right;
+}
+label{
+    font-size:.85em;
+    padding:.5em;
+    font-weight:bold
+  }
+select{
+    color:ghostwhite;
+    padding: .25em .125em;
+    border:solid 1px #555;
+    border-radius:5px;
+    background-color:transparent;
+    text-align: right;
+  }

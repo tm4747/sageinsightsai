@@ -21,7 +21,7 @@ export const getCharacterTraits = () => {
 
 export const getHasAThings = () => {
     return [
-        "a wooden leg", "a great set of eyeballs", "a very big and thoughtful brain", 
+        "a wooden leg", "a great set of eyeballs", "a very big and thoughtful brain", "a cabin in Utah",
         "a limp when they walk", "a missing ear", "glowing red eyes", 
         "a tail that won't stop twitching", "scales instead of skin", 
         "a constantly bleeding nose", "an extra thumb", "feathers where hair should be", 
@@ -37,6 +37,7 @@ export const getHasAThings = () => {
 
 export const getLikesOrDislikes = () => {
     return [
+        "to agree with what others have to say",
         "to chase mailmen and delivery people",
         "to dig deep holes in the backyard",
         "to trap others in their hidden dimension",

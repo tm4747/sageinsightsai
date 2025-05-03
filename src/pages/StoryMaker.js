@@ -6,7 +6,7 @@ import AILogo from '../components/AILogo';
 import { marked } from 'marked';
 import Modal from "../components/Modal" 
 import FlashingText from '../components/FlashingText';
-import { getCharacterTypes, getHasAThings, getCharacterTraits, getLikesOrDislikes } from '../lib/StoryMakerHelper';
+import CharacterConfigurator from "../components/CharacterConfigurator"
 
 
 function StoryMaker({theNav}) {
@@ -15,6 +15,10 @@ function StoryMaker({theNav}) {
   const [enteredSituation, setEnteredSituation] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
+  const [showCharacterInput, setShowCharacterInput] = useState(1);
+  const [characterInputs, setCharacterInputs] = useState({1:[], 2:[], 3:[]});
+  console.log(characterInputs);
+  console.log('characterInputs');
 
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
@@ -77,6 +81,16 @@ function StoryMaker({theNav}) {
       } 
   }
   
+  const characterInputGroup = showCharacterInput == 1 ? 
+  <CharacterConfigurator characterId={1} handleInputSubmit={setCharacterInputs}/> :
+  (showCharacterInput == 2 ? <CharacterConfigurator characterId={2} handleInputSubmit={setCharacterInputs}/> :
+    (showCharacterInput == 3 ? <CharacterConfigurator characterId={3} handleInputSubmit={setCharacterInputs}/> : ""
+   ));
+
+   const submitInputGroup = showCharacterInput == 4 ? <><p>Optionally - enter the situation in which your characters have foud themselves:</p>
+   <input className={inputClasses} onChange={handleInputChange} type="text"/>
+   <button className={"button"} onClick={callLambda}>Call Lambda</button></> : "";
+  
 
   // Auto-scroll to bottom when new text is displayed
   useEffect(() => {
@@ -108,12 +122,8 @@ function StoryMaker({theNav}) {
                 They you can optionally enter a scenario.
                 This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
             </div>
-              <CharacterConfigurator characterId={1}/>
-              <CharacterConfigurator characterId={2}/>
-              <CharacterConfigurator characterId={3}/>
-              <p>Optionally - enter the situation in which your characters have foud themselves:</p>
-            <input className={inputClasses} onChange={handleInputChange} type="text"/>
-            <button className={"button"} onClick={callLambda}>Call Lambda</button>
+              {characterInputGroup}
+              {submitInputGroup}
             {/* <span> error: {enteredSituationError}</span> */}
           </div>
           <div className={"resultsDiv"} >
@@ -152,70 +162,3 @@ const TypingText = ({ text, flashingText = "", speed = 100 }) => {
 
   return <span>Hello@User:~$ {displayedText} <FlashingText text={flashingText}/></span>;
 };
-
-
-const CharacterConfigurator = ({ characterId }) => {
-  const [characterType, setCharacterType] = useState('');
-  const [whoIs, setWhoIs] = useState('');
-  const [whoHas, setWhoHas] = useState('');
-  const [whoLikesType, setWhoLikesType] = useState('');
-  const [whoLikesThing, setWhoLikesThing] = useState('');
-
-  const characterTypes = getCharacterTypes();
-  const characterTraits = getCharacterTraits();
-  const hasAThings = getHasAThings();
-  const likesAndDislikes = getLikesOrDislikes();
-
-  return (
-    <div className="character-config">
-      <h3>Character {characterId}</h3>
-
-      <label>Character Type:</label>
-      <select value={characterType} onChange={(e) => setCharacterType(e.target.value)}>
-        <option value="">Select...</option>
-        {characterTypes.map((charType) =>
-          <option key={charType} value={charType}>{capitalizeFirstLetter(charType)}</option>
-        )}
-      </select>
-
-      <label>Who Is:</label>
-      <select value={whoIs} onChange={(e) => setWhoIs(e.target.value)}>
-        <option value="">Select...</option>
-        {characterTraits.map((charTrait) =>
-          <option key={charTrait} value={charTrait}>{capitalizeFirstLetter(charTrait)}</option>
-        )}
-      </select>
-
-      <label>Who Has A:</label>
-      <select value={whoHas} onChange={(e) => setWhoHas(e.target.value)}>
-        <option value="">Select...</option>
-        {hasAThings.map((hasAThing) =>
-          <option key={addDashes(hasAThing)} value={addDashes(hasAThing)}>{hasAThing}</option>
-        )}
-      </select>
-
-      <label>Who:</label>
-      <select value={whoLikesType} onChange={(e) => setWhoLikesType(e.target.value)}>
-        <option value="">Select...</option>
-        <option value="likes">Likes</option>
-        <option value="doesn't like">Doesn't like</option>
-      </select>
-
-      <label>...To:</label>
-      <select value={whoLikesThing} onChange={(e) => setWhoLikesThing(e.target.value)}>
-        <option value="">Select...</option>
-        {likesAndDislikes.map((likeOrDislike) =>
-          <option key={addDashes(likeOrDislike)} value={addDashes(likeOrDislike)}>{likeOrDislike}</option>
-        )}
-      </select>
-    </div>
-  );
-}
-
-function capitalizeFirstLetter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function addDashes(str) {
-  return str.replace(/\s+/g, '-');
-}
