@@ -1,18 +1,18 @@
-import { Routes, Route, Link} from 'react-router-dom';
+import { useState } from 'react';
+import { Routes, Route} from 'react-router-dom';
 import './App.css';
 import Layout from './Layout';
 import HomeSummaryTool from './pages/HomeSummaryTool';
 import StoryMaker from './pages/StoryMaker';
 
 function App() {
-  const nav = (<nav className={"theNav"}>
-    <Link to="/">Home Page Summary</Link> | <Link to="/story-maker">Story Maker</Link>
-  </nav>);
+    const [isLoading, setIsLoading] = useState(false);
+  
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomeSummaryTool theNav={nav}/>} />
-        <Route path="story-maker" element={<StoryMaker theNav={nav} />}  />
+      <Route path="/" element={<Layout isLoading={isLoading} />}>
+        <Route index element={<HomeSummaryTool setIsLoading={setIsLoading}/>} />
+        <Route path="story-maker" element={<StoryMaker setIsLoading={setIsLoading}/>}  />
       </Route>
     </Routes>
   );

@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './css/HomeSummaryTool.css';
-import AILogo from '../components/AILogo';
 import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
-import Modal from "../components/Modal" 
-import FlashingText from '../components/FlashingText';
 
 
-function HomeSummaryTool({theNav}) {
+function HomeSummaryTool({setIsLoading}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   
   //typing effect
@@ -97,33 +93,23 @@ function HomeSummaryTool({theNav}) {
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2 className={"pageTitle"}>
-        <AILogo size={".75em"}/> &nbsp; 
-          <TypingText text={"Welcome to Sage Insights AI!"} flashingText={" _ "}/>
-        </h2>
-        <section className="body">
-          <div className={"formDiv"}>
-          {theNav}
-            <div className={"pageDescription"}>Please enter a website url.  
-              This tool will return a general summary of the homepage:</div>
-            <input className={inputClasses} onChange={handleInputChange} type="text"/>
-            <button className={"button"} onClick={callLambda}>Call Lambda</button>
-            {/* <span> error: {enteredUrlError}</span> */}
-          </div>
-          <div className={"resultsDiv"} >
-            <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
-            <div>
-              {isDone ? <p>Done!</p> : ""}
-            </div>
-          </div>
-          <div ref={messagesEndRef}/>
-      </section>
-      </header>
-      <Modal isLoading={isLoading}/>
+    <>
+      <div className={"formDiv"}>
+        <div className={"pageDescription"}>Please enter a website url.  
+          This tool will return a general summary of the homepage:</div>
+        <input className={inputClasses} onChange={handleInputChange} type="text"/>
+        <button className={"button"} onClick={callLambda}>Call Lambda</button>
+        {/* <span> error: {enteredUrlError}</span> */}
+      </div>
+      <div className={"resultsDiv"} >
+        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
+        <div>
+          {isDone ? <p>Done!</p> : ""}
+        </div>
+      </div>
+      <div ref={messagesEndRef}/>
       {stopScrollButton}
-    </div>
+    </>
   );
 }
 
@@ -131,20 +117,4 @@ export default HomeSummaryTool;
 
 
 
-const TypingText = ({ text, flashingText = "", speed = 100 }) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
 
-  useEffect(() => {
-    if (index < text.length) {
-      const timeoutId = setTimeout(() => {
-        setDisplayedText(prevText => prevText + text[index]);
-        setIndex(prevIndex => prevIndex + 1);
-      }, speed);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [index, text, speed]);
-
-  return <span>Hello@User:~$ {displayedText} <FlashingText text={flashingText}/></span>;
-};

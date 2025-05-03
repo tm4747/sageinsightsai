@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './css/StoryMaker.css';
-import AILogo from '../components/AILogo';
-// TODO: build out function to pull from lambda - need new lambda
-//import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
-import Modal from "../components/Modal" 
-import FlashingText from '../components/FlashingText';
 import CharacterConfigurator from "../components/CharacterConfigurator"
 
 
-function StoryMaker({theNav}) {
+function StoryMaker({setIsLoading}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredSituation, setEnteredSituation] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState({1:[], 2:[], 3:[]});
@@ -112,57 +106,27 @@ function StoryMaker({theNav}) {
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h2 className={"pageTitle"}>
-        <AILogo size={".75em"}/> &nbsp; 
-          <TypingText text={"Welcome to Sage Insights AI!"} flashingText={" _ "}/>
-        </h2>
-        <section className="body">
-          <div className={"formDiv"}>
-          {theNav}
-            <div className={"pageDescription"}>
-                <p>You will create 3 characters, using the following dropdowns to determine their characteristics.
-                They you can optionally enter a scenario.
-                This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
-            </div>
-              {characterInputGroup}
-              {submitInputGroup}
-            {/* <span> error: {enteredSituationError}</span> */}
-          </div>
-          <div className={"resultsDiv"} >
-            <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
-            <div>
-              {isDone ? <p>Done!</p> : ""}
-            </div>
-          </div>
-          <div ref={messagesEndRef}/>
-      </section>
-      </header>
-      <Modal isLoading={isLoading}/>
+    <>
+      <div className={"formDiv"}>
+        <div className={"pageDescription"}>
+            <p>You will create 3 characters, using the following dropdowns to determine their characteristics.
+            They you can optionally enter a scenario.
+            This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
+        </div>
+          {characterInputGroup}
+          {submitInputGroup}
+        {/* <span> error: {enteredSituationError}</span> */}
+      </div>
+      <div className={"resultsDiv"} >
+        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
+        <div>
+          {isDone ? <p>Done!</p> : ""}
+        </div>
+      </div>
+      <div ref={messagesEndRef}/>
       {stopScrollButton}
-    </div>
+    </>
   );
 }
 
 export default StoryMaker;
-
-
-
-const TypingText = ({ text, flashingText = "", speed = 100 }) => {
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    if (index < text.length) {
-      const timeoutId = setTimeout(() => {
-        setDisplayedText(prevText => prevText + text[index]);
-        setIndex(prevIndex => prevIndex + 1);
-      }, speed);
-
-      return () => clearTimeout(timeoutId);
-    }
-  }, [index, text, speed]);
-
-  return <span>Hello@User:~$ {displayedText} <FlashingText text={flashingText}/></span>;
-};
