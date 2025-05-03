@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './css/PageCommon.css';
 import './css/HomeSummaryTool.css';
 import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';

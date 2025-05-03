@@ -6,8 +6,8 @@
     text-decoration: none;
     font-weight:bold;
   }
-  a:hover {
-    color: #ADD8E6;
+  a:hover{
+    color: #cbe4ec;
     text-decoration: underline;
   }
   .App {

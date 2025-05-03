@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './css/PageCommon.css';
 import './css/StoryMaker.css';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
