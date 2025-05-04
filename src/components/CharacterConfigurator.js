@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getCharacterTypes, getHasAThings, getCharacterTraits, getLikesOrDislikes } from '../lib/StoryMakerHelper';
 import "./styles/CharacterConfigurator.css";
 
@@ -8,30 +8,38 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
     const [whoHas, setWhoHas] = useState('');
     const [whoLikesType, setWhoLikesType] = useState('');
     const [whoLikesThing, setWhoLikesThing] = useState('');
+    const [characterDescription, setCharacterDescription] = useState('');
   
     const characterTypes = getCharacterTypes();
     const characterTraits = getCharacterTraits();
     const hasAThings = getHasAThings();
     const likesAndDislikes = getLikesOrDislikes();
   
-    let previewData = "";
-    if(characterType){
-      if(whoIs){
-        previewData = "I am " + getAAn(whoIs) + " " + whoIs + " " + characterType;
-      } else {
-        previewData = "I am " + getAAn(characterType) + " " + characterType ;
-      }
-      if(whoHas){
-        if(whoLikesType && whoLikesThing){
-          previewData += " who has " + whoHas;
-          previewData += " and " + whoLikesType + " " + whoLikesThing + ".";
+    
+     useEffect(() => {
+      let previewData = "";
+      if(characterType){
+        if(whoIs){
+          previewData = "I am " + getAAn(whoIs) + " " + whoIs + " " + characterType;
         } else {
-          previewData += " who has " + whoHas;
+          previewData = "I am " + getAAn(characterType) + " " + characterType ;
         }
-      } else if(whoLikesType && whoLikesThing){
-        previewData += " who " + whoLikesType + " " + whoLikesThing + ".";
-      }
-      
+        if(whoHas){
+          if(whoLikesType && whoLikesThing){
+            previewData += " who has " + whoHas;
+            previewData += " and " + whoLikesType + " " + whoLikesThing + ".";
+          } else {
+            previewData += " who has " + whoHas;
+          }
+        } else if(whoLikesType && whoLikesThing){
+          previewData += " who " + whoLikesType + " " + whoLikesThing + ".";
+        }
+      } 
+      setCharacterDescription(previewData);
+      }, [characterType, whoIs, whoHas, whoLikesType, whoLikesThing]);
+
+    const handleCharacterDescriptionUpdated = (e) => {
+      setCharacterDescription(e.target.value);
     }
   
     return (
@@ -90,7 +98,7 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
                 </td>
             </tr>
         </table>
-        <p>{previewData}</p>
+        <p><input className={"text-input"} type="text" value={characterDescription} onChange={handleCharacterDescriptionUpdated} /></p>
       </div>
     );
   }
