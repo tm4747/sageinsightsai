@@ -3,6 +3,8 @@ import './css/PageCommon.css';
 import './css/HomeSummaryTool.css';
 import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 
 
 function HomeSummaryTool({setIsLoading}) {
@@ -11,6 +13,8 @@ function HomeSummaryTool({setIsLoading}) {
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+
   
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
@@ -83,27 +87,42 @@ function HomeSummaryTool({setIsLoading}) {
     }
   }, [disableScroll, displayedText]);
 
+  const handleShowHowItWorks = () => {
+    setShowHowItWorks(!showHowItWorks);
+  }
  
-  var howAppWorks = "<h4>How it works:</h4> <ol>";
-  howAppWorks += "<li>A valid url must be entered which is then submitted to a Lambda function via AWS API Gateway.</li>"
-  howAppWorks += "<li>The Lambda function then attempts to pull and parse all content from the site homepage.</li>"
-  howAppWorks += "<ul><li><strong>Please note:</strong> this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app.</li></ul>"
-  howAppWorks += "<li>The Lambda function then submits this content to OpenAI via API, requesting a summary.</li>"
-  howAppWorks += "<li>The response is then returned by Lambda to display here.</li></ol>"
+  var howAppWorksHtml = "<p class='' onclick='setShowHowItWorks(false)'>X</p><h4>How it works:</h4> <ol>";
+  howAppWorksHtml += "<li>A valid url must be entered which is then submitted to a Lambda function via AWS API Gateway.</li>"
+  howAppWorksHtml += "<li>The Lambda function then attempts to pull and parse all content from the site homepage.</li>"
+  howAppWorksHtml += "<ul><li><strong>Please note:</strong> this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app.</li></ul>"
+  howAppWorksHtml += "<li>The Lambda function then submits this content to OpenAI via API, requesting a summary.</li>"
+  howAppWorksHtml += "<li>The response is then returned by Lambda to display here.</li></ol>"
+
+  const howAppWorks = <div className={"showHowItWorksDiv"} dangerouslySetInnerHTML={{ __html: howAppWorksHtml }} />
+
 
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
+
 
   return (
     <>
       <div className={"formDiv"}>
-        <div className={"pageDescription"}>Please enter a website url.  
-          This tool will return a general summary of the homepage:</div>
+        <p className={"pageDescription"}>Please enter a website url.  
+          This tool will return a general summary of the homepage: 
+          <FontAwesomeIcon 
+                      className={"flashing-icon"}
+                      icon={faCircleQuestion} 
+                      onClick={handleShowHowItWorks} 
+                      title="How does it work?"
+                    />
+        </p>
+        {showHowItWorks ? howAppWorks : ""}
         <input className={inputClasses} onChange={handleInputChange} type="text"/>
         <button className={"button"} onClick={callLambda}>Call Lambda</button>
         {/* <span> error: {enteredUrlError}</span> */}
       </div>
       <div className={"resultsDiv"} >
-        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
+        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
         <div>
           {isDone ? <p>Done!</p> : ""}
         </div>

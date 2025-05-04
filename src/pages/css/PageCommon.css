@@ -68,4 +68,25 @@
     padding:0;
     margin:1em;
   }
+  .showHowItWorksDiv{
+    margin-top:2.5em;
+    border:solid #555 2px;
+    text-align:left;
+    border-radius:15px;
+    padding:1em;
+    font-size:.75em;
+  }
+  @keyframes flashInvert {
+    0%   { color: white; background-color: black; }
+    50%  { color: black; background-color: white; }
+    100% { color: white; background-color: black; }
+  }
+  .flashing-icon {
+    animation: flashInvert 1s infinite;
+    border-radius: 50%;
+    padding: 4px;
+    transition: color 0.5s ease, background-color 0.5s ease;
+    cursor: pointer;
+    margin-left: 8px; 
+  }
   

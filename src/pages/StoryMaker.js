@@ -3,6 +3,8 @@ import './css/PageCommon.css';
 import './css/StoryMaker.css';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 
 
 function StoryMaker({setIsLoading}) {
@@ -12,16 +14,16 @@ function StoryMaker({setIsLoading}) {
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState({1:[], 2:[], 3:[]});
-  console.log(characterInputs);
-  console.log('characterInputs');
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+
 
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+
   //scroll vars
   const messagesEndRef = useRef(null);
-  
 
   // update state values
   const handleInputChange = (event) => {
@@ -31,7 +33,7 @@ function StoryMaker({setIsLoading}) {
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
 
-  //typing effect
+  // Display results with typing effect
   useEffect(() => {
     if (!htmlReponse) return;  // No htmlReponse to display\
     setDisableScroll(false)
@@ -59,7 +61,7 @@ function StoryMaker({setIsLoading}) {
     setHtmlResponse(theHtmlResponse)
   }, [postResponse]);
 
-  // website summary call
+  // StoryMaker Labmda call
   const callLambda = () => {
     setPostResponse("");
     setHtmlResponse("");
@@ -76,20 +78,23 @@ function StoryMaker({setIsLoading}) {
       } 
   }
 
+  // handle each character input submit - should be 2 variables - a sentence of description and optional contextual situation
   const handleCharacterInputSubmit = () => {
     setShowCharacterInput(showCharacterInput);
     setCharacterInputs(characterInputs)
   }
   
+  // which character input (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
   <CharacterConfigurator characterId={1} handleInputSubmit={handleCharacterInputSubmit}/> :
   (showCharacterInput === 2 ? <CharacterConfigurator characterId={2} handleInputSubmit={handleCharacterInputSubmit}/> :
     (showCharacterInput === 3 ? <CharacterConfigurator characterId={3} handleInputSubmit={handleCharacterInputSubmit}/> : ""
    ));
 
+   // 4 shows the optional context/situation text input and submit button
    const submitInputGroup = showCharacterInput === 4 ? <><p>Optionally - enter the situation in which your characters have foud themselves:</p>
    <input className={"textInput"} onChange={handleInputChange} type="text"/>
-   <button className={"button"} onClick={callLambda}>Call Lambda</button></> : "";
+   <button className={"button"} onClick={callLambda}>Tell Me A Story!</button></> : "";
   
 
   // Auto-scroll to bottom when new text is displayed
@@ -99,27 +104,39 @@ function StoryMaker({setIsLoading}) {
     }
   }, [disableScroll, displayedText]);
 
+  const handleShowHowItWorks = () => {
+    setShowHowItWorks(!showHowItWorks);
+  }
  
-  var howAppWorks = "<h4>How it works:</h4> <ol>";
-  howAppWorks += "<li>This functionality is coming soon.</li>";
-  howAppWorks += "<li>Essentially you will be able to create 3 characters with a wide variety of features and idiosyncracies, and enter an optional situation.</li>";
-  howAppWorks += "<li>OpenAI, Google Gemini and Anthropic Claude will then be called upon to play each of the characters, carrying out a converstaion and acting out a virtual 'skit' based on your inputs.</li></ol>";
-
+  var howAppWorksHtml = "<h4>How it works:</h4> <ol>";
+  howAppWorksHtml += "<li>This functionality is coming soon.</li>";
+  howAppWorksHtml += "<li>Essentially you will be able to create 3 characters with a wide variety of features and idiosyncracies, and enter an optional situation.</li>";
+  howAppWorksHtml += "<li>OpenAI, Google Gemini and Anthropic Claude will then be called upon to play each of the characters, carrying out a converstaion and acting out a virtual 'skit' based on your inputs.</li></ol>";
+  const howAppWorks = <div className={"showHowItWorksDiv"} dangerouslySetInnerHTML={{ __html: howAppWorksHtml }} />
 
   return (
     <>
       <div className={"formDiv"}>
         <div className={"pageDescription"}>
-            <p>You will create 3 characters, using the following dropdowns to determine their characteristics.
-            They you can optionally enter a scenario.
-            This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini and Anthropic Claude.</p>
+        <p>
+          You will create 3 characters, using the following dropdowns to determine their characteristics.
+          Then you can optionally enter a scenario.
+          This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini, and Anthropic Claude.
+          <FontAwesomeIcon 
+            className={"flashing-icon"}
+            icon={faCircleQuestion} 
+            onClick={handleShowHowItWorks} 
+            title="How does it work?"
+          />
+        </p>
+            {showHowItWorks ? howAppWorks : ""}
         </div>
           {characterInputGroup}
           {submitInputGroup}
         {/* <span> error: {enteredSituationError}</span> */}
       </div>
       <div className={"resultsDiv"} >
-        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? howAppWorks : displayedText }} />
+        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
         <div>
           {isDone ? <p>Done!</p> : ""}
         </div>
