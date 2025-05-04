@@ -87,9 +87,9 @@ function StoryMaker({setIsLoading}) {
   
   // which character input (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
-  <CharacterConfigurator characterId={1} handleInputSubmit={handleCharacterInputSubmit}/> :
-  (showCharacterInput === 2 ? <CharacterConfigurator characterId={2} handleInputSubmit={handleCharacterInputSubmit}/> :
-    (showCharacterInput === 3 ? <CharacterConfigurator characterId={3} handleInputSubmit={handleCharacterInputSubmit}/> : ""
+  <CharacterConfigurator characterId={1} submittedData={handleCharacterInputSubmit}/> :
+  (showCharacterInput === 2 ? <CharacterConfigurator characterId={2} submittedData={handleCharacterInputSubmit}/> :
+    (showCharacterInput === 3 ? <CharacterConfigurator characterId={3} submittedData={handleCharacterInputSubmit}/> : ""
    ));
 
    // 4 shows the optional context/situation text input and submit button

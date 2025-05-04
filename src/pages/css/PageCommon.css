@@ -17,20 +17,7 @@
     border:solid 2px red;
     background-color:red;
   }
-  .button{
-    padding:.75em ;
-    border-radius:10px;
-    font-weight:bold;
-    margin-left:1em;
-    background-color:#ddd;
-    color:#333;
-    width:25%;
-    display:inline;
-  }
-  .button:hover{
-    background-color:ghostwhite;
-    color:black;
-  }
+ 
   .resultsDiv, .formDiv{
     width:100%;
     max-width:1400px;

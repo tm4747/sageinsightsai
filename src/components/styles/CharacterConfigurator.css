@@ -32,7 +32,13 @@ select, .text-input{
     text-align: left;
     width:100%;
   }
-  .text-input{
-    font-weight:bold;
-    padding:.5em;
+  .text-input {
+    margin-top:2em;
+    font-weight: bold;
+    padding: 0.25em;
+    padding-bottom:0;
+    resize: none;
+    overflow: hidden;
+    line-height: 2em;
   }
+  

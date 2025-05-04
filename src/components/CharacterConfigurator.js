@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { getCharacterTypes, getHasAThings, getCharacterTraits, getLikesOrDislikes } from '../lib/StoryMakerHelper';
 import "./styles/CharacterConfigurator.css";
 
-const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
+const CharacterConfigurator = ({ characterId, submittedData }) => {
     const [characterType, setCharacterType] = useState('');
     const [whoIs, setWhoIs] = useState('');
     const [whoHas, setWhoHas] = useState('');
@@ -13,7 +13,10 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
     const characterTypes = getCharacterTypes();
     const characterTraits = getCharacterTraits();
     const hasAThings = getHasAThings();
+    const likesOrDislikeChoices = ["likes", "doesn't like"];
     const likesAndDislikes = getLikesOrDislikes();
+    const textareaRef = useRef(null);
+
   
     
      useEffect(() => {
@@ -25,22 +28,67 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
           previewData = "I am " + getAAn(characterType) + " " + characterType ;
         }
         if(whoHas){
+          previewData += " who has " + whoHas;
           if(whoLikesType && whoLikesThing){
-            previewData += " who has " + whoHas;
             previewData += " and " + whoLikesType + " " + whoLikesThing + ".";
-          } else {
-            previewData += " who has " + whoHas;
+          } else if(whoLikesType ){
+            previewData += " and " + whoLikesType;
           }
-        } else if(whoLikesType && whoLikesThing){
-          previewData += " who " + whoLikesType + " " + whoLikesThing + ".";
+        } else {
+          if(whoLikesType && whoLikesThing){
+            previewData += " who " + whoLikesType + " " + whoLikesThing + ".";
+          } else if(whoLikesType ){
+            previewData += " who " + whoLikesType;
+          }
         }
       } 
       setCharacterDescription(previewData);
       }, [characterType, whoIs, whoHas, whoLikesType, whoLikesThing]);
 
-    const handleCharacterDescriptionUpdated = (e) => {
-      setCharacterDescription(e.target.value);
-    }
+      const handleCharacterDescriptionUpdated = (e) => {
+        const textarea = e.target;
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+        setCharacterDescription(e.target.value); // your state update
+      };
+
+      const handleInputSubmit = (input) => {
+        console.log('input');
+        console.log(input);
+        submittedData(input)
+      }
+
+      const clearInputs = () => {
+        setCharacterType('');
+        setWhoIs('');
+        setWhoHas('');
+        setWhoLikesType('');
+        setWhoLikesThing('');
+        setCharacterDescription('');
+        adjustTextareaSize();
+      };
+      
+      const getRandomChoices = () => {
+        clearInputs();
+        setCharacterType(getRandomValueFromArray(characterTypes));
+        setWhoIs(getRandomValueFromArray(characterTraits));
+        setWhoHas(getRandomValueFromArray(hasAThings));
+        setWhoLikesType(getRandomValueFromArray(likesOrDislikeChoices));
+        setWhoLikesThing(getRandomValueFromArray(likesAndDislikes));
+        adjustTextareaSize();
+      };
+
+      const adjustTextareaSize = () => {
+        const timer = setTimeout(() => {
+          const textarea = textareaRef.current;
+          if(textarea){
+            textarea.style.height = "auto";
+            textarea.style.height = textarea.scrollHeight + "px";
+          }
+        }, 125);
+        return () => clearTimeout(timer);
+      }
+      
   
     return (
       <div className={"character-config"}>
@@ -82,8 +130,9 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
                 <td className={"tdLeft"}><label>Who:</label></td>
                 <td className={"tdRight"}>                <select value={whoLikesType} onChange={(e) => setWhoLikesType(e.target.value)}>
                 <option value="">Select...</option>
-                <option value="likes">Likes</option>
-                <option value="doesn't like">Doesn't like</option>
+                {likesOrDislikeChoices.map((likesOrDislikeChoice) =>
+                    <option key={addDashes(likesOrDislikeChoice)} value={likesOrDislikeChoice}>{capitalizeFirstLetter(likesOrDislikeChoice)}</option>
+                )}
                 </select>
                 </td>
             </tr>
@@ -98,7 +147,13 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
                 </td>
             </tr>
         </table>
-        <p><input className={"text-input"} type="text" value={characterDescription} onChange={handleCharacterDescriptionUpdated} /></p>
+        <textarea ref={textareaRef} className="text-input" value={characterDescription} 
+          onChange={handleCharacterDescriptionUpdated} rows={1}/>
+        <div className="button-row">
+          <button className={"button"} onClick={getRandomChoices}>Get Random Choices</button>
+          {characterDescription ? <button className={"button"} onClick={clearInputs}>Clear Inputs</button> : ""}
+          {characterDescription ? <button className={"button"} onClick={() => handleInputSubmit(characterDescription)}>Submit</button> : ""}
+        </div>
       </div>
     );
   }
@@ -117,6 +172,14 @@ const CharacterConfigurator = ({ characterId, handleInputSubmit }) => {
     console.log('firstLetterToLower');
     console.log(firstLetterToLower);
     return vowels.includes(firstLetterToLower)?  "an" : "a";
+  }
+
+  function getRandomValueFromArray(array) {
+    if (array.length === 0) {
+      return undefined; // Return undefined for empty arrays
+    }
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
   }
   
   export default CharacterConfigurator;
