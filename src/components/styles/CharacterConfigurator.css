@@ -1,14 +1,21 @@
 .character-config{
-    max-width:800px;
+    max-width:768;
     height:auto;
     margin: 0 auto;
-    padding: 10px;
     position: relative;
 }
 .inputContainer{
+    padding:0 1em;
+    width:100%
+}
+
+@media screen and (min-width: 768px) {
+  .inputContainer{
     padding:0 15%;
     width:100%
 }
+}
+
 .inputDiv{
 
 }

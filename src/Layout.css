@@ -13,9 +13,15 @@
   .App {
     text-align: center;
   }
-  ol li {
-    padding-bottom:.75em;
+  ol li{
+    padding-top:.5em;
+    padding-bottom:.5em;
   }
+  ol li ul li {
+    padding-top:1em;
+    padding-bottom:0em;
+  }
+  
   
   
   .App-header {

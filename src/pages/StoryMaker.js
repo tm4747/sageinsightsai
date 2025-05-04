@@ -17,7 +17,6 @@ function StoryMaker({setIsLoading}) {
   const [characterInputs, setCharacterInputs] = useState({1:[], 2:[], 3:[]});
   const [showHowItWorks, setShowHowItWorks] = useState(false);
 
-
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
@@ -124,16 +123,20 @@ function StoryMaker({setIsLoading}) {
     </ol>
   </>
 
-  const howAppWorks = <div className={"showHowItWorksDiv"} >{howAppWorksHtml}</div>
+  const howAppWorks = (
+    <div className={`how-it-works-container ${showHowItWorks ? 'expanded' : 'collapsed'}`}>
+      {howAppWorksHtml}
+    </div>
+  );
+  
 
   return (
     <>
       <div className={"formDiv"}>
         <div className={"pageDescription"}>
         <p>
-          You will create 3 characters, using the following dropdowns to determine their characteristics.
-          Then you can optionally enter a scenario.
-          This tool will then carry out a conversation utilizing 3 different LLMs using OpenAI, Google Gemini, and Anthropic Claude.
+          You will create 3 characters, then optionally enter a scenario.
+          This tool will then tell you a stor with OpenAI, Google Gemini, and Anthropic Claude each playing one of the parts.
           <FontAwesomeIcon 
             className={"flashing-icon"}
             icon={faCircleQuestion} 
@@ -141,7 +144,8 @@ function StoryMaker({setIsLoading}) {
             title="How does it work?"
           />
         </p>
-            {showHowItWorks ? howAppWorks : ""}
+            {/* {showHowItWorks ? howAppWorks : ""} */}
+            {howAppWorks}
         </div>
           {characterInputGroup}
           {submitInputGroup}

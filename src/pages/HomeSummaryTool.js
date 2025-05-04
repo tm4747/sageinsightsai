@@ -106,7 +106,11 @@ function HomeSummaryTool({setIsLoading}) {
   <li>The Lambda function then submits this content to OpenAI via API, requesting a summary.</li>
   <li>The response is then returned by Lambda to display here.</li></ol></>
 
-  const howAppWorks = <div className={"showHowItWorksDiv"} >{howAppWorksHtml}</div>
+  const howAppWorks = (
+    <div className={`how-it-works-container ${showHowItWorks ? 'expanded' : 'collapsed'}`}>
+      {howAppWorksHtml}
+    </div>
+  );
 
 
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
@@ -124,7 +128,7 @@ function HomeSummaryTool({setIsLoading}) {
                       title="How does it work?"
                     />
         </p>
-        {showHowItWorks ? howAppWorks : ""}
+        {howAppWorks}
         <input className={inputClasses} onChange={handleInputChange} type="text"/>
         <button className={"button"} onClick={callLambda}>Call Lambda</button>
         {/* <span> error: {enteredUrlError}</span> */}
