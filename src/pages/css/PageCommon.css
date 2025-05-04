@@ -82,11 +82,14 @@
     100% { color: white; background-color: black; }
   }
   .flashing-icon {
-    animation: flashInvert 1s infinite;
+    animation: flashInvert 1.25s infinite;
     border-radius: 50%;
     padding: 4px;
     transition: color 0.5s ease, background-color 0.5s ease;
     cursor: pointer;
     margin-left: 8px; 
   }
+.close-icon{
+    float:right;
+}
   

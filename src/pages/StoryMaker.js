@@ -5,6 +5,7 @@ import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
 function StoryMaker({setIsLoading}) {
@@ -108,11 +109,22 @@ function StoryMaker({setIsLoading}) {
     setShowHowItWorks(!showHowItWorks);
   }
  
-  var howAppWorksHtml = "<h4>How it works:</h4> <ol>";
-  howAppWorksHtml += "<li>This functionality is coming soon.</li>";
-  howAppWorksHtml += "<li>Essentially you will be able to create 3 characters with a wide variety of features and idiosyncracies, and enter an optional situation.</li>";
-  howAppWorksHtml += "<li>OpenAI, Google Gemini and Anthropic Claude will then be called upon to play each of the characters, carrying out a converstaion and acting out a virtual 'skit' based on your inputs.</li></ol>";
-  const howAppWorks = <div className={"showHowItWorksDiv"} dangerouslySetInnerHTML={{ __html: howAppWorksHtml }} />
+  <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
+    title="Close"/>
+
+  var howAppWorksHtml = <>
+    <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
+      title="Close"/>
+    <h4>How it works:</h4> 
+    <ol>
+      <li>This functionality is coming soon.</li>
+      <li>Essentially you will be able to create 3 characters with a wide variety of features and idiosyncracies, and enter an optional situation.</li>
+      <li>OpenAI, Google Gemini and Anthropic Claude will then be called upon to play each of the characters, carrying out a converstaion and acting out a virtual 'skit' based on your inputs.</li>
+      <li>The response is then returned by Lambda to display here.</li>
+    </ol>
+  </>
+
+  const howAppWorks = <div className={"showHowItWorksDiv"} >{howAppWorksHtml}</div>
 
   return (
     <>

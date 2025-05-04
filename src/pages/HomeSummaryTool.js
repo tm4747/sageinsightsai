@@ -5,6 +5,8 @@ import { testPost } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+
 
 
 function HomeSummaryTool({setIsLoading}) {
@@ -91,14 +93,20 @@ function HomeSummaryTool({setIsLoading}) {
     setShowHowItWorks(!showHowItWorks);
   }
  
-  var howAppWorksHtml = "<p class='' onclick='setShowHowItWorks(false)'>X</p><h4>How it works:</h4> <ol>";
-  howAppWorksHtml += "<li>A valid url must be entered which is then submitted to a Lambda function via AWS API Gateway.</li>"
-  howAppWorksHtml += "<li>The Lambda function then attempts to pull and parse all content from the site homepage.</li>"
-  howAppWorksHtml += "<ul><li><strong>Please note:</strong> this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app.</li></ul>"
-  howAppWorksHtml += "<li>The Lambda function then submits this content to OpenAI via API, requesting a summary.</li>"
-  howAppWorksHtml += "<li>The response is then returned by Lambda to display here.</li></ol>"
+  var howAppWorksHtml = <>
+  <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
+  title="Close"/>
+  <h4>How it works:</h4> 
+  <ol>
+  <li>A valid url must be entered which is then submitted to a Lambda function via AWS API Gateway.</li>
+  <li>The Lambda function then attempts to pull and parse all content from the site homepage.
+  <ul>
+    <li><strong>Please note:</strong> this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app.</li>
+    </ul></li>
+  <li>The Lambda function then submits this content to OpenAI via API, requesting a summary.</li>
+  <li>The response is then returned by Lambda to display here.</li></ol></>
 
-  const howAppWorks = <div className={"showHowItWorksDiv"} dangerouslySetInnerHTML={{ __html: howAppWorksHtml }} />
+  const howAppWorks = <div className={"showHowItWorksDiv"} >{howAppWorksHtml}</div>
 
 
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
