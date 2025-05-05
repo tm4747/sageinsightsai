@@ -6,7 +6,7 @@ export const getCharacterTypes = (b_getEdgy = false) => {
         "goblin", "fairy", "centaur", "werewolf", "unicorn", 
         "phoenix", "giant", "skeleton", "ghost", 
     ];
-    const edgyList = [""];
+    const edgyList = [];
     const finalList = b_getEdgy ? [...list, ...edgyList] : list;
     finalList.sort();
     return finalList;
@@ -21,7 +21,7 @@ export const getCharacterTraits = (b_getEdgy = false) => {
         "inquisitive", "timid", "grumpy", "charming", "reckless", "dutiful", 
         "aloof", "optimistic", "manipulative", "earnest", "fearful", "obsessive",  
     ];
-    const edgyList = [""];
+    const edgyList = [];
     const finalList = b_getEdgy ? [...list, ...edgyList] : list;
     finalList.sort();
     return finalList;
@@ -99,7 +99,7 @@ export const getDislikes = (b_getEdgy = false) => {
         "being in photos with smiling people", 
         "smelling anything labeled 'citrus fresh'"
 ];
-const edgyList = [""];
+const edgyList = [];
 const finalList = b_getEdgy ? [...list, ...edgyList] : list;
 finalList.sort();
 return finalList;
