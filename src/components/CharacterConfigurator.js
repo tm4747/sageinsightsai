@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, getDislikes } from '../lib/StoryMakerHelper';
+import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, getDislikes } from '../lib/CharacterConfiguratorHelper';
 import "./styles/CharacterConfigurator.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBolt } from '@fortawesome/free-solid-svg-icons';
 
 const CharacterConfigurator = ({ characterId, submittedData }) => {
   
@@ -11,12 +13,13 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     const [characterLikes, setCharacterLikes] = useState('');
     const [characterDislikes, setCharacterDislikes] = useState('');
     const [characterDescription, setCharacterDescription] = useState('');
+    const [getEdgy, setGetEdgy] = useState(false);
   
-    const characterTypes = getCharacterTypes();
-    const characterTraits = getCharacterTraits();
-    const characterHasItems = getCharacterHasItems();
-    const likesChoices = getLikes(); 
-    const dislikesChoices = getDislikes();
+    const characterTypes = getCharacterTypes(getEdgy);
+    const characterTraits = getCharacterTraits(getEdgy);
+    const characterHasItems = getCharacterHasItems(getEdgy);
+    const likesChoices = getLikes(getEdgy); 
+    const dislikesChoices = getDislikes(getEdgy);
     const textareaRef = useRef(null);
 
   
@@ -102,6 +105,13 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     var nameDisplay = characterName ? characterName : "Character " + characterId;
     nameDisplay += characterType ? " the " + characterType : ""; 
 
+    const handleToggleGetEdgy = () => {
+      setGetEdgy(!getEdgy);
+    }
+
+    const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={"flashing-icon close-icon"} 
+        title="Close"/>
+
     return (
       <div className={"character-config"}>
         <h3>{nameDisplay}</h3>
@@ -175,6 +185,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
           <button className={"button"} onClick={getRandomChoices}>Get Random Choices</button>
           {characterDescription ? <button className={"button"} onClick={clearInputs}>Clear Inputs</button> : ""}
           {characterDescription ? <button className={"button"} onClick={() => handleInputSubmit(characterDescription)}>Submit</button> : ""}
+          {icon}
         </div>
       </div>
     );

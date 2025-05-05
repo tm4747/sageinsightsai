@@ -107,7 +107,7 @@ function StoryMaker({setIsLoading}) {
   const handleShowHowItWorks = () => {
     setShowHowItWorks(!showHowItWorks);
   }
- 
+//  todo: is this supposed to be here?
   <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
     title="Close"/>
 
