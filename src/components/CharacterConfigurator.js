@@ -36,21 +36,22 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
         if(characterHas){
           previewData += " who has " + characterHas;
           if(characterLikes && characterDislikes){
-            previewData += " and likes to " + characterLikes + " but doesn't like " + characterDislikes + ".";
+            previewData += " and likes " + characterLikes + " but doesn't like " + characterDislikes;
           } else if(characterLikes ){
-            previewData += " and likes to " + characterLikes;
+            previewData += " and likes " + characterLikes;
           } else if(characterDislikes){
             previewData += " and doesn't like " + characterDislikes;
           }
         } else {
           if(characterLikes && characterDislikes){
-            previewData += " who likes to " + characterLikes + " but doesn't like " + characterDislikes + ".";
+            previewData += " who likes " + characterLikes + " but doesn't like " + characterDislikes;
           } else if(characterLikes ){
-            previewData += " who likes to " + characterLikes;
+            previewData += " who likes " + characterLikes;
           } else if(characterDislikes){
             previewData += " who doesn't likes " + characterDislikes;
           }
         }
+        previewData += ".";
         adjustTextareaSize();
       } 
       setCharacterDescription(previewData);
@@ -109,7 +110,8 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
       setGetEdgy(!getEdgy);
     }
 
-    const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={"flashing-icon close-icon"} 
+    const iconClasses = getEdgy ? "flashing-icon close-icon red-border" : "flashing-icon close-icon black-border";
+    const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={iconClasses}
         title="Close"/>
 
     return (

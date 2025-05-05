@@ -51,4 +51,12 @@ select, .text-input{
   .no-padding{
     padding:0;
   }
-  
+  .red-border{
+    border:solid 2px black;
+  }
+  .black-border{
+    border:solid 2px red;
+  }
+  .close-icon{
+    font-size:.75em;
+  }
