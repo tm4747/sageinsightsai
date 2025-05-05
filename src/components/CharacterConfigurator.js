@@ -66,7 +66,10 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
         submittedData(input)
       }
 
-      const clearInputs = () => {
+      const clearInputs = (b_clearNames = true) => {
+        if(b_clearNames){
+          setCharacterName('');
+        } 
         setCharacterType('');
         setCharacterTrait('');
         setCharacterHas('');
@@ -77,7 +80,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
       };
       
       const getRandomChoices = () => {
-        clearInputs();
+        clearInputs(false);
         setCharacterType(getRandomValueFromArray(characterTypes));
         setCharacterTrait(getRandomValueFromArray(characterTraits));
         setCharacterHas(getRandomValueFromArray(characterHasItems));
@@ -106,7 +109,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
           <tr className={"inputDiv"}>
               <td className={"tdLeft"}><label>Character Name:</label></td>
               <td className={"tdRight"}>
-              <input className={"text-input no-padding"} type="text" onChange={(e) => setCharacterName(e.target.value)}/>
+              <input className={"text-input no-padding"}value={characterName} type="text" onChange={(e) => setCharacterName(e.target.value)}/>
               </td>
           </tr>
             <tr className={"inputDiv"}>
@@ -132,7 +135,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
                 </td>
             </tr>
             <tr className={"inputDiv"}>
-                <td className={"tdLeft"}><label>Who Has A:</label></td>
+                <td className={"tdLeft"}><label>Who Has:</label></td>
                 <td className={"tdRight"}>                <select value={characterHas} onChange={(e) => setCharacterHas(e.target.value)}>
                 <option value="">Select...</option>
                 {characterHasItems.map((hasAThing) =>
