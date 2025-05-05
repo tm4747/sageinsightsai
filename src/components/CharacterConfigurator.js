@@ -1,20 +1,22 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { getCharacterTypes, getHasAThings, getCharacterTraits, getLikesOrDislikes } from '../lib/StoryMakerHelper';
+import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, getDislikes } from '../lib/StoryMakerHelper';
 import "./styles/CharacterConfigurator.css";
 
 const CharacterConfigurator = ({ characterId, submittedData }) => {
+  
+    const [characterName, setCharacterName] = useState('');
     const [characterType, setCharacterType] = useState('');
-    const [whoIs, setWhoIs] = useState('');
-    const [whoHas, setWhoHas] = useState('');
-    const [whoLikesType, setWhoLikesType] = useState('');
-    const [whoLikesThing, setWhoLikesThing] = useState('');
+    const [characterTrait, setCharacterTrait] = useState('');
+    const [characterHas, setCharacterHas] = useState('');
+    const [characterLikes, setCharacterLikes] = useState('');
+    const [characterDislikes, setCharacterDislikes] = useState('');
     const [characterDescription, setCharacterDescription] = useState('');
   
     const characterTypes = getCharacterTypes();
     const characterTraits = getCharacterTraits();
-    const hasAThings = getHasAThings();
-    const likesOrDislikeChoices = ["likes", "doesn't like"];
-    const likesAndDislikes = getLikesOrDislikes();
+    const characterHasItems = getCharacterHasItems();
+    const likesChoices = getLikes(); 
+    const dislikesChoices = getDislikes();
     const textareaRef = useRef(null);
 
   
@@ -22,28 +24,34 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
      useEffect(() => {
       let previewData = "";
       if(characterType){
-        if(whoIs){
-          previewData = "I am " + getAAn(whoIs) + " " + whoIs + " " + characterType;
+        if(characterTrait){
+          previewData = "I am " + getAAn(characterTrait) + " " + characterTrait + " " + characterType;
         } else {
           previewData = "I am " + getAAn(characterType) + " " + characterType ;
         }
-        if(whoHas){
-          previewData += " who has " + whoHas;
-          if(whoLikesType && whoLikesThing){
-            previewData += " and " + whoLikesType + " " + whoLikesThing + ".";
-          } else if(whoLikesType ){
-            previewData += " and " + whoLikesType;
+        previewData += characterName ? " named " + characterName : "";
+        if(characterHas){
+          previewData += " who has " + characterHas;
+          if(characterLikes && characterDislikes){
+            previewData += " and likes to " + characterLikes + " but doesn't like " + characterDislikes + ".";
+          } else if(characterLikes ){
+            previewData += " and likes to " + characterLikes;
+          } else if(characterDislikes){
+            previewData += " and doesn't like " + characterDislikes;
           }
         } else {
-          if(whoLikesType && whoLikesThing){
-            previewData += " who " + whoLikesType + " " + whoLikesThing + ".";
-          } else if(whoLikesType ){
-            previewData += " who " + whoLikesType;
+          if(characterLikes && characterDislikes){
+            previewData += " who likes to " + characterLikes + " but doesn't like " + characterDislikes + ".";
+          } else if(characterLikes ){
+            previewData += " who likes to " + characterLikes;
+          } else if(characterDislikes){
+            previewData += " who doesn't likes " + characterDislikes;
           }
         }
+        adjustTextareaSize();
       } 
       setCharacterDescription(previewData);
-      }, [characterType, whoIs, whoHas, whoLikesType, whoLikesThing]);
+      }, [characterType, characterName, characterTrait, characterHas, characterLikes, characterDislikes]);
 
       const handleCharacterDescriptionUpdated = (e) => {
         const textarea = e.target;
@@ -60,10 +68,10 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
 
       const clearInputs = () => {
         setCharacterType('');
-        setWhoIs('');
-        setWhoHas('');
-        setWhoLikesType('');
-        setWhoLikesThing('');
+        setCharacterTrait('');
+        setCharacterHas('');
+        setCharacterLikes('');
+        setCharacterDislikes('');
         setCharacterDescription('');
         adjustTextareaSize();
       };
@@ -71,11 +79,10 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
       const getRandomChoices = () => {
         clearInputs();
         setCharacterType(getRandomValueFromArray(characterTypes));
-        setWhoIs(getRandomValueFromArray(characterTraits));
-        setWhoHas(getRandomValueFromArray(hasAThings));
-        setWhoLikesType(getRandomValueFromArray(likesOrDislikeChoices));
-        setWhoLikesThing(getRandomValueFromArray(likesAndDislikes));
-        adjustTextareaSize();
+        setCharacterTrait(getRandomValueFromArray(characterTraits));
+        setCharacterHas(getRandomValueFromArray(characterHasItems));
+        setCharacterLikes(getRandomValueFromArray(likesChoices));
+        setCharacterDislikes(getRandomValueFromArray(dislikesChoices));
       };
 
       const adjustTextareaSize = () => {
@@ -88,12 +95,20 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
         }, 125);
         return () => clearTimeout(timer);
       }
-      
-  
+
+    var nameDisplay = characterName ? characterName : "Character " + characterId;
+    nameDisplay += characterType ? " the " + characterType : ""; 
+
     return (
       <div className={"character-config"}>
-        <h3>Character {characterId}</h3>
+        <h3>{nameDisplay}</h3>
         <table className={"inputContainer"}>
+          <tr className={"inputDiv"}>
+              <td className={"tdLeft"}><label>Character Name:</label></td>
+              <td className={"tdRight"}>
+              <input className={"text-input no-padding"} type="text" onChange={(e) => setCharacterName(e.target.value)}/>
+              </td>
+          </tr>
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Character Type:</label></td>
                 <td className={"tdRight"}>
@@ -108,7 +123,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
 
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Who Is:</label></td>
-                <td className={"tdRight"}>                <select value={whoIs} onChange={(e) => setWhoIs(e.target.value)}>
+                <td className={"tdRight"}>                <select value={characterTrait} onChange={(e) => setCharacterTrait(e.target.value)}>
                 <option value="">Select...</option>
                 {characterTraits.map((charTrait) =>
                     <option key={charTrait} value={charTrait}>{capitalizeFirstLetter(charTrait)}</option>
@@ -118,37 +133,41 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
             </tr>
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Who Has A:</label></td>
-                <td className={"tdRight"}>                <select value={whoHas} onChange={(e) => setWhoHas(e.target.value)}>
+                <td className={"tdRight"}>                <select value={characterHas} onChange={(e) => setCharacterHas(e.target.value)}>
                 <option value="">Select...</option>
-                {hasAThings.map((hasAThing) =>
+                {characterHasItems.map((hasAThing) =>
                     <option key={addDashes(hasAThing)} value={hasAThing}>{capitalizeFirstLetter(hasAThing)}</option>
                 )}
                 </select>
                 </td>
             </tr>
             <tr className={"inputDiv"}>
-                <td className={"tdLeft"}><label>Who:</label></td>
-                <td className={"tdRight"}>                <select value={whoLikesType} onChange={(e) => setWhoLikesType(e.target.value)}>
+                <td className={"tdLeft"}><label>Who likes:</label></td>
+                <td className={"tdRight"}>                <select value={characterLikes} onChange={(e) => setCharacterLikes(e.target.value)}>
                 <option value="">Select...</option>
-                {likesOrDislikeChoices.map((likesOrDislikeChoice) =>
-                    <option key={addDashes(likesOrDislikeChoice)} value={likesOrDislikeChoice}>{capitalizeFirstLetter(likesOrDislikeChoice)}</option>
+                {likesChoices.map((likesChoice) =>
+                    <option key={addDashes(likesChoice)} value={likesChoice}>{capitalizeFirstLetter(likesChoice)}</option>
                 )}
                 </select>
                 </td>
             </tr>
             <tr className={"inputDiv"}>
-                <td className={"tdLeft"}> <label>...To:</label></td>
-                <td className={"tdRight"}>                <select value={whoLikesThing} onChange={(e) => setWhoLikesThing(e.target.value)}>
+                <td className={"tdLeft"}> <label>But doesn't like:</label></td>
+                <td className={"tdRight"}>                <select value={characterDislikes} onChange={(e) => setCharacterDislikes(e.target.value)}>
                 <option value="">Select...</option>
-                {likesAndDislikes.map((likeOrDislike) =>
-                    <option key={addDashes(likeOrDislike)} value={likeOrDislike}>{capitalizeFirstLetter(likeOrDislike)}</option>
+                {dislikesChoices.map((dislikesChoice) =>
+                    <option key={addDashes(dislikesChoice)} value={dislikesChoice}>{capitalizeFirstLetter(dislikesChoice)}</option>
                 )}
                 </select>
                 </td>
             </tr>
+            <tr className={"inputDiv"}>
+                <td colSpan={2} >
+                <textarea ref={textareaRef} className="text-input" value={characterDescription} 
+                  onChange={handleCharacterDescriptionUpdated} rows={1}/>
+                </td>
+            </tr>
         </table>
-        <textarea ref={textareaRef} className="text-input" value={characterDescription} 
-          onChange={handleCharacterDescriptionUpdated} rows={1}/>
         <div className="button-row">
           <button className={"button"} onClick={getRandomChoices}>Get Random Choices</button>
           {characterDescription ? <button className={"button"} onClick={clearInputs}>Clear Inputs</button> : ""}

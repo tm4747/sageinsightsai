@@ -23,7 +23,7 @@ export const getCharacterTraits = () => {
     return list;
 }
 
-export const getHasAThings = () => {
+export const getCharacterHasItems = () => {
     const list = [
         "a wooden leg", "a great set of eyeballs", "a very big and thoughtful brain", "a cabin in Utah",
         "a limp when they walk", "a missing ear", "glowing red eyes", 
@@ -41,7 +41,7 @@ export const getHasAThings = () => {
 }
 
 
-export const getLikesOrDislikes = () => {
+export const getLikes = () => {
     const list = [
         "to agree with what others have to say",
         "to chase mailmen and delivery people",
@@ -71,4 +71,31 @@ export const getLikesOrDislikes = () => {
     ];
     list.sort();
     return list;
+}
+
+export const getDislikes = () => {
+    const list = [
+        "waiting for elevators", 
+        "being asked to explain themselves", 
+        "walking near reflective surfaces", 
+        "hearing clocks tick", 
+        "touching anything slimy", 
+        "standing in straight lines", 
+        "seeing people blink too much", 
+        "folding laundry with corners", 
+        "making eye contact with statues", 
+        "opening gifts in front of others", 
+        "watching fireworks alone", 
+        "crossing bridges during fog", 
+        "listening to acoustic guitar covers", 
+        "wearing hats that fit perfectly", 
+        "watching people eat spaghetti", 
+        "passing by mannequins", 
+        "hearing windchimes at night", 
+        "drinking from glass cups", 
+        "being in photos with smiling people", 
+        "smelling anything labeled 'citrus fresh'"
+];
+list.sort();
+return list;
 }

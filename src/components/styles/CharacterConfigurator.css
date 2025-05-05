@@ -48,4 +48,7 @@ select, .text-input{
     overflow: hidden;
     line-height: 2em;
   }
+  .no-padding{
+    padding:0;
+  }
   
