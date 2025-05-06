@@ -29,18 +29,21 @@ export const getCharacterTraits = (b_getEdgy = false) => {
 
 export const getCharacterHasItems = (b_getEdgy = false) => {
     const list = [
-        "a powerful set of eyes", "a big thoughtful brain", "a cabin out in Utah",
-        "a limp when they walk", "glowing red eyes", 
-        "a tail that won't stop twitching", "scales instead of skin", 
-        "an extra thumb", "feathers where hair should be", 
-        "a spine that crackles loudly", "an unusually long neck", 
+        "a powerful set of eyes", 
+        "a limp when they walk", 
+        "glowing red eyes", 
+        "a tail that won't stop twitching", 
+        "scales instead of skin", 
+        "an extra thumb", 
+        "feathers where hair should be", 
+        "an unusually long neck", 
         "one arm much longer than the other", "claws instead of fingers", 
         "webbed hands and feet",
-        "wings too small for flight", "very poor vision"
+        "wings too small for flight",
     ];
     const edgyList = ["a missing ear", "a constantly bleeding nose","a metallic jaw", "a beard made of moss", "a wooden leg",
         "a translucent skull","a single enormous eyebrow", "crystals growing from their back", "an eye in the palm of their hand", 
-    "horns that curve into a spiral",];
+    "horns that curve into a spiral","a cabin out in Utah","a big thoughtful brain", "a spine that crackles loudly", "very poor vision" ];
     const finalList = b_getEdgy ? [...list, ...edgyList] : list;
     finalList.sort();
     return finalList;
@@ -49,10 +52,9 @@ export const getCharacterHasItems = (b_getEdgy = false) => {
 
 export const getLikes = (b_getEdgy = false) => {
     const list = [
-        "to agree with what others have to say",
+        "to agree with everything",
         "to chase mailmen and delivery people",
         "to dig deep holes in the backyard",
-        "to drive fast late at night",
         "to hoard cursed relics", 
         "to whisper into jars and seal them", 
         "to prank powerful beings", 
@@ -69,7 +71,8 @@ export const getLikes = (b_getEdgy = false) => {
         "to tell the same story over and over", 
     ];
     const edgyList = ["to trap others in their hidden dimension", "to swim in lava streams", "to howl at math equations",
-        "to eat things that are still moving","to make friends with shadows","to sharpen sticks for fun","to sleep in other people’s beds"
+        "to eat things that are still moving","to make friends with shadows","to sharpen sticks for fun",
+        "to sleep in other people’s beds", "to drive fast late at night",
     ];
     const finalList = b_getEdgy ? [...list, ...edgyList] : list;
     finalList.sort();
@@ -82,7 +85,6 @@ export const getDislikes = (b_getEdgy = false) => {
         "being asked to explain themselves", 
         "walking near reflective surfaces", 
         "hearing clocks tick", 
-        "touching anything slimy", 
         "standing in straight lines", 
         "seeing people blink too much", 
         "folding laundry with corners", 
@@ -99,7 +101,7 @@ export const getDislikes = (b_getEdgy = false) => {
         "being in photos with smiling people", 
         "smelling anything labeled 'citrus fresh'"
 ];
-const edgyList = [];
+const edgyList = ["touching anything slimy", ];
 const finalList = b_getEdgy ? [...list, ...edgyList] : list;
 finalList.sort();
 return finalList;
