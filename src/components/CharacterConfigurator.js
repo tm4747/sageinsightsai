@@ -108,16 +108,18 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
 
     const handleToggleGetEdgy = () => {
       setGetEdgy(!getEdgy);
+      console.log('getEdgy');
+      console.log(getEdgy);
     }
 
-    const iconClasses = getEdgy ? "flashing-icon close-icon red-border" : "flashing-icon close-icon black-border";
-    const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={iconClasses}
-        title="Close"/>
+    const iconClasses = getEdgy === true ? "flashing-icon close-icon red-border" : "flashing-icon close-icon black-border";
+    const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={iconClasses} title="Close"/>
 
     return (
       <div className={"character-config"}>
         <h3>{nameDisplay}</h3>
         <table className={"inputContainer"}>
+          <tbody>
           <tr className={"inputDiv"}>
               <td className={"tdLeft"}><label>Character Name:</label></td>
               <td className={"tdRight"}>
@@ -182,6 +184,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
                   onChange={handleCharacterDescriptionUpdated} rows={1}/>
                 </td>
             </tr>
+          </tbody>
         </table>
         <div className="button-row">
           <button className={"button"} onClick={getRandomChoices}>Get Random Choices</button>

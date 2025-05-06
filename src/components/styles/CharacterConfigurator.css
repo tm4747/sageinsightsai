@@ -52,10 +52,10 @@ select, .text-input{
     padding:0;
   }
   .red-border{
-    border:solid 2px black;
+    border:solid 2px red;
   }
   .black-border{
-    border:solid 2px red;
+    border:solid 2px black;
   }
   .close-icon{
     font-size:.75em;
