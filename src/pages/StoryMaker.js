@@ -145,7 +145,7 @@ function StoryMaker({setIsLoading}) {
 
   
   const characterInputsDisplay = characterInputs.map(function(input, i){
-    return <li key={i}>{input}</li>
+    return <li key={i}>Character {i+1}: {input}</li>
   });
 
   return (
@@ -163,9 +163,7 @@ function StoryMaker({setIsLoading}) {
             title="How does it work?"
           />
         </p>
-          {characterInputs ? '<ul>' : "no input"}
-          {characterInputsDisplay}
-          {characterInputs ? '</ul>' : ""}
+          {characterInputs ? <ul>{characterInputsDisplay}</ul> : "no input"}
             {/* {showHowItWorks ? howAppWorks : ""} */}
             {howAppWorks}
         </div>

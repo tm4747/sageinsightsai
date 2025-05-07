@@ -14,6 +14,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     const [characterDislikes, setCharacterDislikes] = useState('');
     const [characterDescription, setCharacterDescription] = useState('');
     const [getEdgy, setGetEdgy] = useState(false);
+    const [enterValues, setEnterValues] = useState(false);
   
     const characterTypes = getCharacterTypes(getEdgy);
     const characterTraits = getCharacterTraits(getEdgy);
@@ -112,7 +113,11 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
       console.log(getEdgy);
     }
 
-    const iconClasses = getEdgy === true ? "flashing-icon close-icon red-border" : "flashing-icon close-icon black-border";
+    const handleToggleEnterValues = () =>{
+      setEnterValues(!enterValues);
+    }
+
+    const iconClasses = getEdgy === true ? "flashing-icon edgy-icon red-border" : "flashing-icon edgy-icon black-border";
     const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={iconClasses} title="Close"/>
 
     return (
@@ -123,70 +128,85 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
           <tr className={"inputDiv"}>
               <td className={"tdLeft"}><label>Character Name:</label></td>
               <td className={"tdRight"}>
-              <input className={"text-input no-padding"}value={characterName} type="text" onChange={(e) => setCharacterName(e.target.value)}/>
+                <input className={"text-input"}value={characterName} type="text" onChange={(e) => setCharacterName(e.target.value)}/>
               </td>
           </tr>
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Character Type:</label></td>
                 <td className={"tdRight"}>
-                <select className={"select-input"} value={characterType} onChange={(e) => setCharacterType(e.target.value)}>
-                <option value="">Select...</option>
-                {characterTypes.map((charType) =>
-                    <option key={charType} value={charType}>{capitalizeFirstLetter(charType)}</option>
-                )}
-                </select>
+                {enterValues ? 
+                  <input className={"text-input"} value={characterType} type="text" onChange={(e) => setCharacterType(e.target.value)}/>
+                  : <select className={"select-input"} value={characterType} onChange={(e) => setCharacterType(e.target.value)}>
+                    <option value="">Select...</option>
+                    {characterTypes.map((charType) =>
+                        <option key={charType} value={charType}>{capitalizeFirstLetter(charType)}</option>
+                    )}
+                  </select>}
                 </td>
             </tr>
 
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Who Is:</label></td>
-                <td className={"tdRight"}>                <select value={characterTrait} onChange={(e) => setCharacterTrait(e.target.value)}>
-                <option value="">Select...</option>
-                {characterTraits.map((charTrait) =>
-                    <option key={charTrait} value={charTrait}>{capitalizeFirstLetter(charTrait)}</option>
-                )}
-                </select>
+                <td className={"tdRight"}>  
+                  {enterValues ? 
+                  <input className={"text-input"} value={characterTrait} type="text" onChange={(e) => setCharacterTrait(e.target.value)}/>
+                  : <select value={characterTrait} onChange={(e) => setCharacterTrait(e.target.value)}>
+                  <option value="">Select...</option>
+                  {characterTraits.map((charTrait) =>
+                      <option key={charTrait} value={charTrait}>{capitalizeFirstLetter(charTrait)}</option>
+                  )}
+                  </select>}
                 </td>
             </tr>
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Who Has:</label></td>
-                <td className={"tdRight"}>                <select value={characterHas} onChange={(e) => setCharacterHas(e.target.value)}>
-                <option value="">Select...</option>
-                {characterHasItems.map((hasAThing) =>
-                    <option key={addDashes(hasAThing)} value={hasAThing}>{capitalizeFirstLetter(hasAThing)}</option>
-                )}
-                </select>
+                <td className={"tdRight"}>  
+                  {enterValues ? 
+                    <input className={"text-input"} value={characterHas} type="text" onChange={(e) => setCharacterHas(e.target.value)}/>
+                    : <select value={characterHas} onChange={(e) => setCharacterHas(e.target.value)}>
+                    <option value="">Select...</option>
+                    {characterHasItems.map((characterHasItem) =>
+                        <option key={addDashes(characterHasItem)} value={characterHasItem}>{capitalizeFirstLetter(characterHasItem)}</option>
+                    )}
+                  </select>}
                 </td>
             </tr>
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Who likes:</label></td>
-                <td className={"tdRight"}>                <select value={characterLikes} onChange={(e) => setCharacterLikes(e.target.value)}>
-                <option value="">Select...</option>
-                {likesChoices.map((likesChoice) =>
-                    <option key={addDashes(likesChoice)} value={likesChoice}>{capitalizeFirstLetter(likesChoice)}</option>
-                )}
-                </select>
+                <td className={"tdRight"}>                
+                  {enterValues ? 
+                    <input className={"text-input"} value={characterLikes} type="text" onChange={(e) => setCharacterLikes(e.target.value)}/>
+                    : <select value={characterLikes} onChange={(e) => setCharacterLikes(e.target.value)}>
+                    <option value="">Select...</option>
+                    {likesChoices.map((likesChoice) =>
+                        <option key={addDashes(likesChoice)} value={likesChoice}>{capitalizeFirstLetter(likesChoice)}</option>
+                    )}
+                  </select>}
                 </td>
             </tr>
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}> <label>But doesn't like:</label></td>
-                <td className={"tdRight"}>                <select value={characterDislikes} onChange={(e) => setCharacterDislikes(e.target.value)}>
-                <option value="">Select...</option>
-                {dislikesChoices.map((dislikesChoice) =>
-                    <option key={addDashes(dislikesChoice)} value={dislikesChoice}>{capitalizeFirstLetter(dislikesChoice)}</option>
-                )}
-                </select>
+                <td className={"tdRight"}>  
+                  {enterValues ? 
+                    <input className={"text-input full-width"} value={characterDislikes} type="text" onChange={(e) => setCharacterDislikes(e.target.value)}/>
+                    : <select value={characterDislikes} onChange={(e) => setCharacterDislikes(e.target.value)}>
+                    <option value="">Select...</option>
+                    {dislikesChoices.map((dislikesChoice) =>
+                        <option key={addDashes(dislikesChoice)} value={dislikesChoice}>{capitalizeFirstLetter(dislikesChoice)}</option>
+                    )}
+                    </select>}
                 </td>
             </tr>
             <tr className={"inputDiv"}>
                 <td colSpan={2} >
-                <textarea ref={textareaRef} className="text-input" value={characterDescription} 
-                  onChange={handleCharacterDescriptionUpdated} rows={1}/>
+                <textarea ref={textareaRef} className="text-input textarea-input" value={characterDescription} 
+                  onChange={handleCharacterDescriptionUpdated} rows={1} readOnly={true}/>
                 </td>
             </tr>
           </tbody>
         </table>
         <div className="button-row">
+          <button className={"button"} onClick={handleToggleEnterValues}>{enterValues ? "Select From Presets" : "Enter Custom Values"}</button>
           <button className={"button"} onClick={getRandomChoices}>Get Random Choices</button>
           {characterDescription ? <button className={"button"} onClick={clearInputs}>Clear Inputs</button> : ""}
           {characterDescription ? <button className={"button"} onClick={() => handleInputSubmit(characterDescription)}>Submit</button> : ""}

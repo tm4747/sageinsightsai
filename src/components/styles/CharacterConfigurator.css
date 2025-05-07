@@ -9,13 +9,6 @@
     width:100%
 }
 
-@media screen and (min-width: 768px) {
-  .inputContainer{
-    padding:0 15%;
-    width:100%
-}
-}
-
 .inputDiv{
 
 }
@@ -39,7 +32,7 @@ select, .text-input{
     text-align: left;
     width:100%;
   }
-  .text-input {
+  .textarea-input {
     margin-top:2em;
     font-weight: bold;
     padding: 0.25em;
@@ -57,6 +50,32 @@ select, .text-input{
   .black-border{
     border:solid 2px black;
   }
-  .close-icon{
+  .edgy-icon{
     font-size:.75em;
+    display:block;
+    margin:auto;
+    margin-top:1em;
   }
+
+
+  .button{
+    width:90%;
+    margin-top:.25em;
+  }
+  .full-width{
+    width:100%;
+  }
+
+@media screen and (min-width: 768px) {
+  .inputContainer{
+    padding:0 15%;
+    width:100%
+  }
+  .button{
+    width:22.5%;
+  }
+  .edgy-icon{
+    float:right;
+    margin-top:0;
+  }
+}
