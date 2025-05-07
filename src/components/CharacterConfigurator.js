@@ -69,6 +69,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
         console.log(input);
         submittedData(input);
         clearInputs();
+        setEnterValues(false);
       }
 
       const clearInputs = (b_clearNames = true) => {
