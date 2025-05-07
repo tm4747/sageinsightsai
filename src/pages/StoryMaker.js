@@ -142,30 +142,34 @@ function StoryMaker({setIsLoading}) {
     </div>
   );
 
-
-  
-  const characterInputsDisplay = characterInputs.map(function(input, i){
-    return <li key={i}>Character {i+1}: {input}</li>
+  const characterInputsItems = characterInputs.map(function(input, i){
+    return <li key={i}>Character {i+1} is {input}</li>
   });
+
+  const characterInputsDisplay = (
+    <div className={`how-it-works-container expanded character-input-display`}>
+      {characterInputsItems}
+    </div>
+  );
+  
 
   return (
     <>
       <div className={"formDiv"}>
         <div className={"pageDescription"}>
-        <p>
-          You will create 3 characters, then optionally enter a scenario.
-          This tool will then carry out a story-like conversation with OpenAI, Google Gemini, and Anthropic Claude 
-          playing the parts of each character.
-          <FontAwesomeIcon 
-            className={"flashing-icon"}
-            icon={faCircleQuestion} 
-            onClick={handleShowHowItWorks} 
-            title="How does it work?"
-          />
-        </p>
+          <p>
+            You will create 3 characters, then optionally enter a scenario.
+            This tool will then carry out a story-like conversation with OpenAI, Google Gemini, and Anthropic Claude 
+            playing the parts of each character.
+            <FontAwesomeIcon 
+              className={"flashing-icon"}
+              icon={faCircleQuestion} 
+              onClick={handleShowHowItWorks} 
+              title="How does it work?"
+            />
+          </p>
+          {howAppWorks}
           {characterInputs ? <ul>{characterInputsDisplay}</ul> : "no input"}
-            {/* {showHowItWorks ? howAppWorks : ""} */}
-            {howAppWorks}
         </div>
           {characterInputGroup}
           {submitInputGroup}

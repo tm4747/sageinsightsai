@@ -28,9 +28,9 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
       let previewData = "";
       if(characterType){
         if(characterTrait){
-          previewData = "I am " + getAAn(characterTrait) + " " + characterTrait + " " + characterType;
+          previewData = getAAn(characterTrait) + " " + characterTrait + " " + characterType;
         } else {
-          previewData = "I am " + getAAn(characterType) + " " + characterType ;
+          previewData = getAAn(characterType) + " " + characterType ;
         }
         previewData += characterName ? " named " + characterName : "";
         if(characterHas){
@@ -200,7 +200,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
             </tr>
             <tr className={"inputDiv"}>
                 <td colSpan={2} >
-                <textarea ref={textareaRef} className="text-input textarea-input" value={characterDescription} 
+                <textarea ref={textareaRef} className="text-input textarea-input" value={characterDescription ? "Character " + characterId + " is " + characterDescription : ""} 
                   onChange={handleCharacterDescriptionUpdated} rows={1} readOnly={true}/>
                 </td>
             </tr>

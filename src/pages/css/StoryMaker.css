@@ -1,3 +1,9 @@
 .button-row{
     padding-top:.5em;
 }
+li{
+    padding:1em;
+}
+.character-input-display{
+    padding:1em;
+}
