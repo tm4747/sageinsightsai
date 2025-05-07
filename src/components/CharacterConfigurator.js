@@ -21,7 +21,6 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     const likesChoices = getLikes(getEdgy); 
     const dislikesChoices = getDislikes(getEdgy);
     const textareaRef = useRef(null);
-
   
     
      useEffect(() => {
@@ -67,7 +66,8 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
       const handleInputSubmit = (input) => {
         console.log('input');
         console.log(input);
-        submittedData(input)
+        submittedData(input);
+        clearInputs();
       }
 
       const clearInputs = (b_clearNames = true) => {
@@ -207,8 +207,6 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
   function getAAn(str){
     const vowels = "AEIOUaeiou";
     const firstLetterToLower = str.charAt(0);
-    console.log('firstLetterToLower');
-    console.log(firstLetterToLower);
     return vowels.includes(firstLetterToLower)?  "an" : "a";
   }
 

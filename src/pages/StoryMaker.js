@@ -14,7 +14,7 @@ function StoryMaker({setIsLoading}) {
   const [enteredSituation, setEnteredSituation] = useState('');
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
-  const [characterInputs, setCharacterInputs] = useState({1:[], 2:[], 3:[]});
+  const [characterInputs, setCharacterInputs] = useState([]);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   //typing effect
@@ -79,16 +79,29 @@ function StoryMaker({setIsLoading}) {
   }
 
   // handle each character input submit - should be 2 variables - a sentence of description and optional contextual situation
-  const handleCharacterInputSubmit = () => {
-    setShowCharacterInput(showCharacterInput);
-    setCharacterInputs(characterInputs)
+  const handleCharacterInputSubmit = (data, index) => {
+    console.log('data');
+    console.log(data);
+    console.log('index');
+    console.log(index);
+
+    const nextCharacterInputIndex = index + 1;
+    console.log('nextCharacterInputIndex');
+    console.log(nextCharacterInputIndex);
+    addNewValue(data)
+
+    setShowCharacterInput(nextCharacterInputIndex);
   }
+
+  const addNewValue = (newValue) => {
+    setCharacterInputs(characterInputs => [...characterInputs, newValue]);
+  };
   
   // which character input (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
-  <CharacterConfigurator characterId={1} submittedData={handleCharacterInputSubmit}/> :
-  (showCharacterInput === 2 ? <CharacterConfigurator characterId={2} submittedData={handleCharacterInputSubmit}/> :
-    (showCharacterInput === 3 ? <CharacterConfigurator characterId={3} submittedData={handleCharacterInputSubmit}/> : ""
+  <CharacterConfigurator characterId={1} submittedData={(data) => {handleCharacterInputSubmit(data, 1)}}/> :
+  (showCharacterInput === 2 ? <CharacterConfigurator characterId={2} submittedData={(data) => {handleCharacterInputSubmit(data, 2)}}/> :
+    (showCharacterInput === 3 ? <CharacterConfigurator characterId={3} submittedData={(data) => {handleCharacterInputSubmit(data, 3)}}/> : ""
    ));
 
    // 4 shows the optional context/situation text input and submit button
@@ -128,7 +141,12 @@ function StoryMaker({setIsLoading}) {
       {howAppWorksHtml}
     </div>
   );
+
+
   
+  const characterInputsDisplay = characterInputs.map(function(input, i){
+    return <li key={i}>{input}</li>
+  });
 
   return (
     <>
@@ -145,6 +163,9 @@ function StoryMaker({setIsLoading}) {
             title="How does it work?"
           />
         </p>
+          {characterInputs ? '<ul>' : "no input"}
+          {characterInputsDisplay}
+          {characterInputs ? '</ul>' : ""}
             {/* {showHowItWorks ? howAppWorks : ""} */}
             {howAppWorks}
         </div>
