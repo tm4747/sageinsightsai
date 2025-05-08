@@ -12,3 +12,35 @@
     background-color:ghostwhite;
     color:black;
   }
+  label{
+    font-size:.85em;
+    padding:.5em;
+    font-weight:bold
+  }
+select, .text-input{
+    color:ghostwhite;
+    padding: .25em .125em;
+    border:solid 1px #555;
+    border-radius:5px;
+    background-color:transparent;
+    text-align: left;
+    width:100%;
+  }
+  .textarea-input {
+    margin-top:2em;
+    font-weight: bold;
+    padding: 0.25em;
+    padding-bottom:0;
+    resize: none;
+    overflow: hidden;
+    line-height: 2em;
+  }
+  .no-padding{
+    padding:0;
+  }
+  .red-border{
+    border:solid 2px red;
+  }
+  .black-border{
+    border:solid 2px black;
+  }

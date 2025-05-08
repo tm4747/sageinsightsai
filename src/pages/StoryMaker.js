@@ -114,7 +114,7 @@ function StoryMaker({setIsLoading}) {
    ));
 
    // 4 shows the optional context/situation text input and submit button
-   const submitInputGroup = showCharacterInput === 4 ? <><p>Optionally - enter the situation in which your characters have foud themselves:</p>
+   const submitInputGroup = showCharacterInput === 4 ? <><p>Optionally - enter a situation in which your characters have found themselves:</p>
    <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleInputChange} rows={1}/>
    <button className={"button"} onClick={callLambda}>Tell Me A Story!</button>
@@ -158,8 +158,10 @@ function StoryMaker({setIsLoading}) {
   });
 
   const characterInputsDisplay = (
-    <div className={`how-it-works-container expanded character-input-display`}>
-      {characterInputsItems}
+    <div className={"how-it-works-container expanded character-input-display"}>
+      <ul>
+        {characterInputsItems}
+      </ul>
     </div>
   );
   
@@ -180,7 +182,7 @@ function StoryMaker({setIsLoading}) {
             />
           </p>
           {howAppWorks}
-          {characterInputs & characterInputs.length > 0 ? <ul>{characterInputsDisplay}</ul> : ""}
+          {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
         </div>
           {characterInputGroup}
           {submitInputGroup}

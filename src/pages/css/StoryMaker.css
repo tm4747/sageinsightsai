@@ -2,26 +2,15 @@
     padding-top:.5em;
 }
 li{
-    padding:1em;
-}
-.character-input-display{
-    padding:1em;
+    padding:.5em;
+    font-size:.85em;
 }
 .text-input{
-    color:ghostwhite;
-    padding: .25em .125em;
-    border:solid 1px #555;
-    border-radius:5px;
-    background-color:transparent;
-    text-align: left;
-    width:90%;
+    width:100%;
   }
 .textarea-input {
-    margin-top:2em;
-    font-weight: bold;
-    padding: 0.25em;
-    padding-bottom:0;
-    resize: none;
-    overflow: hidden;
-    line-height: 2em;
-  }
+
+}
+.storymaker-character-input-display{
+    padding:1.5em;
+}
