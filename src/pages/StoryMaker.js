@@ -16,6 +16,7 @@ function StoryMaker({setIsLoading}) {
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const textareaRef = useRef(null);
 
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
@@ -28,7 +29,16 @@ function StoryMaker({setIsLoading}) {
   // update state values
   const handleInputChange = (event) => {
     setEnteredSituation(event.target.value);
+    adjustTextareaSize();
   };
+
+  const adjustTextareaSize = () => {
+    const textarea = textareaRef.current;
+    if(textarea){
+      textarea.style.height = "auto";
+      textarea.style.height = textarea.scrollHeight + "px";
+    }
+  }
 
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
@@ -80,21 +90,20 @@ function StoryMaker({setIsLoading}) {
 
   // handle each character input submit - should be 2 variables - a sentence of description and optional contextual situation
   const handleCharacterInputSubmit = (data, index) => {
-    console.log('data');
-    console.log(data);
-    console.log('index');
-    console.log(index);
-
     const nextCharacterInputIndex = index + 1;
-    console.log('nextCharacterInputIndex');
-    console.log(nextCharacterInputIndex);
     addNewValue(data)
-
     setShowCharacterInput(nextCharacterInputIndex);
   }
 
   const addNewValue = (newValue) => {
     setCharacterInputs(characterInputs => [...characterInputs, newValue]);
+  };
+
+  const clearInputs = () => {
+    setEnteredSituation('');
+    setCharacterInputs([]);
+    adjustTextareaSize();
+    setShowCharacterInput(1);
   };
   
   // which character input (1, 2, or 3) should show
@@ -106,8 +115,10 @@ function StoryMaker({setIsLoading}) {
 
    // 4 shows the optional context/situation text input and submit button
    const submitInputGroup = showCharacterInput === 4 ? <><p>Optionally - enter the situation in which your characters have foud themselves:</p>
-   <input className={"textInput"} onChange={handleInputChange} type="text"/>
-   <button className={"button"} onClick={callLambda}>Tell Me A Story!</button></> : "";
+   <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
+                  onChange={handleInputChange} rows={1}/>
+   <button className={"button"} onClick={callLambda}>Tell Me A Story!</button>
+   <button className={"button"} onClick={clearInputs}>Clear Inputs</button></> : "";
   
 
   // Auto-scroll to bottom when new text is displayed
@@ -169,7 +180,7 @@ function StoryMaker({setIsLoading}) {
             />
           </p>
           {howAppWorks}
-          {characterInputs ? <ul>{characterInputsDisplay}</ul> : "no input"}
+          {characterInputs & characterInputs.length > 0 ? <ul>{characterInputsDisplay}</ul> : ""}
         </div>
           {characterInputGroup}
           {submitInputGroup}
