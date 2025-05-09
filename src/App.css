@@ -44,3 +44,6 @@ select, .text-input{
   .black-border{
     border:solid 2px black;
   }
+  .notice{
+    text-decoration: italic;
+  }

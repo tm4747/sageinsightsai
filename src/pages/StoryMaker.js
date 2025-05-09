@@ -6,12 +6,14 @@ import CharacterConfigurator from "../components/CharacterConfigurator"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { fetchStory } from '../lib/LambdaHelper';
 
 
 function StoryMaker({setIsLoading}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
-  const [enteredSituation, setEnteredSituation] = useState('');
+  // TODO: remove test data from next default
+  const [enteredSituation, setEnteredSituation] = useState('Everyone is eating hamburgers at mcdonalds.');
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
@@ -60,7 +62,8 @@ function StoryMaker({setIsLoading}) {
         setIsDone(true);
         setIsStarted(false);
       }
-    }, 1); // Adjust speed here (50ms per character)
+      // Todo: change the following back to 1
+    }, .1); // Adjust speed here (50ms per character)
 
     return () => clearInterval(typingInterval); // Cleanup the interval
   }, [htmlReponse]);
@@ -76,17 +79,41 @@ function StoryMaker({setIsLoading}) {
     setPostResponse("");
     setHtmlResponse("");
     setDisplayedText("");
+    if(haveValidData()){
       try {
+        const inputData = getDataArray();
         setIsLoading(true);
-        console.log("lambda call")
-        //testPost(enteredSituation, setPostResponse, setIsLoading);
-        console.log(enteredSituation)
-        setPostResponse("Functionality Coming Soon.")
+        console.log("lambda call next")
+        fetchStory(inputData, setPostResponse, setIsLoading);
         setIsLoading(false)
       } catch (error) {
         console.error('Error fetching summary:', error);
       } 
+    }
   }
+  
+
+  const getDataArray = () => {
+    const inputData = {
+      data:  {
+        situation: enteredSituation,
+        character1: characterInputs[0],
+        character2: characterInputs[1],
+        character3: characterInputs[2],
+      }
+    };
+    return inputData;
+  }
+
+
+  const haveValidData = () => {
+    let b_validData = true;
+    b_validData = (characterInputs[0] && characterInputs[0].length > 5) ? b_validData : false;
+    b_validData = (characterInputs[1] && characterInputs[1].length > 5) ? b_validData : false;
+    b_validData = (characterInputs[2] && characterInputs[2].length > 5) ? b_validData : false;
+    return b_validData;
+  }
+
 
   // handle each character input submit - should be 2 variables - a sentence of description and optional contextual situation
   const handleCharacterInputSubmit = (data, index) => {
@@ -164,8 +191,8 @@ function StoryMaker({setIsLoading}) {
       </ul>
     </div>
   );
-  
 
+   
   return (
     <>
       <div className={"formDiv"}>
@@ -181,6 +208,7 @@ function StoryMaker({setIsLoading}) {
               title="How does it work?"
             />
           </p>
+          <h3 className={"notice"}>The backend functionality is in development - please feel free to test out the frontend.</h3>
           {howAppWorks}
           {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
         </div>

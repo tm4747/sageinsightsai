@@ -97,4 +97,10 @@
     opacity: 1;
     visibility: visible;
 }
-  
+
+.notice{
+  text-decoration: underline;
+  font-size:.75em;
+  font-style:italic;
+  color:lightpink
+}

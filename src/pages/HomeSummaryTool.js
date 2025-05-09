@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './css/PageCommon.css';
 import './css/HomeSummaryTool.css';
-import { testPost } from '../lib/LambdaHelper';
+import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
@@ -74,7 +74,7 @@ function HomeSummaryTool({setIsLoading}) {
       try {
         setIsLoading(true);
         console.log("lambda call")
-        testPost(enteredUrl, setPostResponse, setIsLoading);
+        fetchWebSummary(enteredUrl, setPostResponse, setIsLoading);
       } catch (error) {
         console.error('Error fetching summary:', error);
       } 
