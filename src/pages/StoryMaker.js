@@ -76,20 +76,21 @@ function StoryMaker({setIsLoading}) {
 
   // StoryMaker Labmda call
   const callLambda = () => {
+    setIsLoading(true);
     setPostResponse("");
     setHtmlResponse("");
     setDisplayedText("");
     if(haveValidData()){
       try {
         const inputData = getDataArray();
-        setIsLoading(true);
         console.log("lambda call next")
         fetchStory(inputData, setPostResponse, setIsLoading);
-        setIsLoading(false)
       } catch (error) {
         console.error('Error fetching summary:', error);
+        setIsLoading(false);
       } 
     }
+    setIsLoading(false);
   }
   
 
