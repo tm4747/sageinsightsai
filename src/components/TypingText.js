@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react';
 import FlashingText from './FlashingText';
 
-const TypingText = ({ text, flashingText = "", speed = 100 }) => {
+const TypingText = ({ baseText, text, flashingText = "", speed = 100 }) => {
     const [displayedText, setDisplayedText] = useState('');
     const [index, setIndex] = useState(0);
+    const [isReady, setIsReady] = useState(false);
+
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsReady(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }, []); 
   
     useEffect(() => {
-      if (index < text.length) {
+      if (isReady && index < text.length) {
         const timeoutId = setTimeout(() => {
           setDisplayedText(prevText => prevText + text[index]);
           setIndex(prevIndex => prevIndex + 1);
@@ -14,9 +22,9 @@ const TypingText = ({ text, flashingText = "", speed = 100 }) => {
   
         return () => clearTimeout(timeoutId);
       }
-    }, [index, text, speed]);
+    }, [index, text, speed, isReady]);
   
-    return <span>Hello@User:~$ {displayedText} <FlashingText text={flashingText}/></span>;
+    return <span>{isReady ? "" : baseText} {displayedText} <FlashingText text={flashingText}/></span>;
   };
 
 export default TypingText

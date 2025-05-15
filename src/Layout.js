@@ -20,7 +20,7 @@ const Layout = ({isLoading}) => {
         <header className="App-header">
           <h2 className={"pageTitle"}>
           <AILogo size={".75em"}/> &nbsp; 
-            <TypingText text={"Welcome to Sage Insights AI!"} flashingText={" _ "}/>
+            <TypingText baseText={"Hello@User:~$"} text={"Welcome to Sage Insights AI!"} flashingText={" _ "}/>
           </h2>
           {nav}
           <section className="body">
