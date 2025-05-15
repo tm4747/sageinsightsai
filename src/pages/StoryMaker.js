@@ -134,6 +134,7 @@ function StoryMaker({setIsLoading}) {
     setShowCharacterInput(1);
   };
   
+  
   // which character input (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
   <CharacterConfigurator characterId={1} submittedData={(data) => {handleCharacterInputSubmit(data, 1)}}/> :
@@ -209,7 +210,6 @@ function StoryMaker({setIsLoading}) {
               title="How does it work?"
             />
           </p>
-          <h3 className={"notice"}>The backend functionality is in development - please feel free to test out the frontend.</h3>
           {howAppWorks}
           {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
         </div>

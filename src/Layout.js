@@ -1,15 +1,18 @@
 // src/components/Layout.js
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import './Layout.css'; // optional styling
 import AILogo from './components/AILogo';
 import Modal from "./components/Modal";
 import TypingText from './components/TypingText';
 
 const Layout = ({isLoading}) => {
+  const location = useLocation();
+  const path = location.pathname;
+  
 
   const nav = (<nav className={"theNav"}>
-    <Link to="/">Home Page Summary</Link> | <Link to="/story-maker">Story Maker</Link>
-  </nav>);
+    <Link className={"/" == path ? "activeLink" : ""} to="/">Home Page Summary</Link> | <Link className={"/story-maker" == path ? "activeLink" : ""} to="/story-maker">Story Maker</Link>
+    </nav>);
   return (
     <div className="layout">
       <main>
@@ -17,7 +20,7 @@ const Layout = ({isLoading}) => {
         <header className="App-header">
           <h2 className={"pageTitle"}>
           <AILogo size={".75em"}/> &nbsp; 
-            <TypingText text={"Welcome to Sage Insights AI!"} flashingText={" _ "}/>
+            <TypingText text={"Welcome to Sage Insights AI!"} flashingText={" _ "}/> {path}
           </h2>
           {nav}
           <section className="body">

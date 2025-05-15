@@ -6,7 +6,7 @@
     text-decoration: none;
     font-weight:bold;
   }
-  a:hover{
+  a:hover, .activeLink{
     color: #cbe4ec;
     text-decoration: underline;
   }

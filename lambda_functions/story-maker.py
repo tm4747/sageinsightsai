@@ -1,141 +1,214 @@
+# DEPENDENCIES/LAMBDA LAYER pip3.13 install requests openai beautifulsoup4 dotenv -t ./
 import json
 import os
 import requests
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-#from typing import List
+from typing import List
 import openai
-from openai import OpenAI
-import anthropic
 import logging
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-gpt_model = "gpt-4o-mini"
-claude_model = "claude-3-haiku-20240307"
-google_model = "gemini-2.0-flash-exp"
+# Initialize OpenAI client
+openai.api_key = os.environ.get("OPENAI_API_KEY")  
 
-# Initialize AI clients
-openai.api_key = os.environ.get("OPENAI_API_KEY") 
-claude = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY")) 
-gemini_via_openai_client = OpenAI(
-    api_key=os.environ.get("GOOGLE_API_KEY") , 
-    base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+# Constants
+MODEL = 'gpt-4o-mini'
+
+# Request headers for web scraping
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
+}
+
+# Class to scrape website data
+class Website:
+    def __init__(self, url):
+        self.url = url
+        response = requests.get(url, headers=headers)
+        self.body = response.content
+        soup = BeautifulSoup(self.body, 'html.parser')
+        self.title = soup.title.string if soup.title else "No title found"
+        if soup.body:
+            for irrelevant in soup.body(["script", "style", "img", "input"]):
+                irrelevant.decompose()
+            self.text = soup.body.get_text(separator="\n", strip=True)
+        else:
+            self.text = ""
+        links = [link.get('href') for link in soup.find_all('a')]
+        self.links = [link for link in links if link]
+
+    def get_contents(self):
+        return f"Webpage Title:\n{self.title}\nWebpage Contents:\n{self.text}\n\n"
+
+
+# System prompt for OpenAI
+link_system_prompt = (
+    "You are provided with a list of links found on a webpage. "
+    "You should respond in JSON as in this example:\n"
+    "{\n"
+    '  "links": [\n'
+    '    {"type": "about page", "url": "https://full.url/goes/here/about"},\n'
+    '    {"type": "careers page", "url": "https://another.full.url/careers"}\n'
+    "  ]\n"
+    "}"
 )
 
-# system_message = """
-# You are the Star Trek Enterprise computer.  You start every response with "Working".
-# Use incomplete sentences.
-# Have zero personality, be robotic as possible.
-# """
-# user_prompt = "Explain how to overcome Q and list the top three best things about being a part of the borg"
-# prompts = [
-#     {"role": "system", "content": system_message},
-#     {"role": "user", "content": user_prompt}
-#   ]
-
-
-
-gpt_messages = ["Hi there"]
-claude_messages = ["Hi"]
-google_messages = ["Aye"]
-
-def call_gpt():
-    messages = [{"role": "system", "content": gpt_system}]
-    for gpt, claude, google in zip(gpt_messages, claude_messages, google_messages):
-        messages.append({"role": "assistant", "content": gpt})
-        messages.append({"role": "user", "content": claude})
-        messages.append({"role": "user", "content": google})
-    completion = openai.chat.completions.create(
-        model=gpt_model,
-        messages=messages
+def get_links_user_prompt(website):
+    user_prompt = (
+        f"Here is the list of links on the website of {website.url} - "
+        "please respond with the full https URL in JSON format. "
+        "Do not include Terms of Service, Privacy, email links.\n"
+        "Links (some might be relative links):\n"
     )
-    return completion.choices[0].message.content
+    user_prompt += "\n".join(website.links)
+    return user_prompt
 
-def call_claude():
-    messages = []
-    for gpt, claude_message, google in zip(gpt_messages, claude_messages, google_messages):
-        messages.append({"role": "user", "content": gpt})
-        messages.append({"role": "assistant", "content": claude_message})
-        messages.append({"role": "user", "content": google})
-    messages.append({"role": "user", "content": gpt_messages[-1]})
-    message = claude.messages.create(
-        model=claude_model,
-        system=claude_system,
-        messages=messages,
-        max_tokens=500
+def get_links(url):
+    website = Website(url)
+    response = openai.chat.completions.create(
+        model=MODEL,
+        messages=[
+            {"role": "system", "content": link_system_prompt},
+            {"role": "user", "content": get_links_user_prompt(website)}
+        ],
+        response_format={"type": "json_object"}
     )
-    return message.content[0].text
+    result = response.choices[0].message.content
+    return json.loads(result)
 
-def call_google():
-    messages = [{"role": "system", "content": google_system}]
-    for gpt, claude_message, google in zip(gpt_messages, claude_messages, google_messages):
-        messages.append({"role": "user", "content": gpt})
-        messages.append({"role": "user", "content": claude_message})
-        messages.append({"role": "assistant", "content": google})
-    messages.append({"role": "user", "content": gpt_messages[-1]})
-    messages.append({"role": "user", "content": claude_messages[-1]})
-    completion = gemini_via_openai_client.chat.completions.create(
-        model=google_model,
-        messages=messages
-    )
-    return completion.choices[0].message.content
+def get_all_details(url):
+    result = "Landing page:\n"
+    result += Website(url).get_contents()
+    # links = get_links(url)
+    # for link in links.get("links", []):
+    #     result += f"\n\n{link.get('type')}\n"
+    #     result += Website(link.get("url")).get_contents()
+    #     secondary_links = get_links(link.get("url"))
+    #     for secondary_link in secondary_links.get("links", []):
+    #         result += f"\n\n{secondary_link.get('type')}\n"
+    #         result += Website(secondary_link.get("url")).get_contents()
+    return result
+
+
+# TODO: from here on out up till lambda handler, these functions must be changed to provide a summary of what the website is all about
+def get_summary_user_prompt(url):
+    user_prompt = f"You are looking at a the following website: {url}\n"
+    user_prompt += f"Here are the contents of some of its pages; use this information to summarize the purpose of the website and its details in 500 words or less\n"
+    user_prompt += get_all_details(url)
+    user_prompt = user_prompt[:5_000] # Truncate if more than 5,000 characters
+    return user_prompt
+
+
+def get_summary(url):
+    system_prompt = "You are an assistant that analyzes the contents of several relevant pages from a website \
+    and creates a summary for prospective customers or other interested parties. Respond in markdown.\
+    Include details of company culture, customers and careers/jobs if the website seems to be related to a company."
+    try:
+        response = openai.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": get_summary_user_prompt(url)}
+            ],
+        )
+        # Extract the content from the OpenAI response
+        # if response and 'choices' in response and len(response['choices']) > 0:
+        #     summary = response['choices'][0]['message']['content']
+        #     return summary
+        if response and response.choices and len(response.choices) > 0:
+            summary = response.choices[0].message.content
+            return summary
+        else:
+            logger.error("No valid summary found in OpenAI response.")
+            return "No summary found."
+        
+    except Exception as e:
+        logger.error(f"Error: {str(e)}")
+        raise
+    return ""
+
+
+def get_test_summary_user_prompt(url):
+    return """
+    Personal & Professional Service
+East Coast Bow Thrusters is committed to top-quality installations of bow thrusters and stern thrusters. We offer personal, prompt and professional service, bringing expertise based upon 50+ years of experience, while saving you, the boat owner, thousands of dollars on your thruster installation.
+You can be assured that all decisions pertaining to work on your boat are backed in
+OVER 50+ YEARS OF EXPERIENCE in FIBERGLASS REPAIR, BOAT BUILDING, CUSTOM FIBERGLASS MODIFICATION & FABRICATION.
+Click on the following pictures and see more of our work at
+What we do:
+Mobile Installations - East Coast Bow Thrusters' expert crew will travel to install bow and stern thrusters at your marina or boat yard. Our service area and dealer network includes the entire East Coast from Maine to Virginia and West to the Great Lakes.
+Joe Molinaro owner of East Coast Bow Thrusters, has been building, repairing and performing fiberglass fabrication on boats since 1970, and installing bow thrusters since 1990. His expertise, and commitment to quality workmanship and high customer satisfaction have made him well-known and highly respected throughout the East Coast.
+What sets East Coast Bow Thrusters above the competition - Joe personally installs or provides guidance for each and every bow thruster along with his well-trained crew, insuring that his high standards are maintained. Prompt, professional and personal service insures your installation is completed in a timely fashion, the end result being a structurally sound and aesthetically pleasing, optimally functional installation each and every time.
+Our Mission is to provide expert installations on top-of-the-line Vetus bow thrusters at a price that's affordable to many boat owners.
+We at East Coast Bow Thrusters specialize in thruster installation. We buy in quantity and have developed a system of procedures and specialized equipment through which we work at optimal efficiency. This translates into time and money saved on your installation, which we then pass along to our customers. Our pricing beats the competition and our work is second to none! All quotes provided are for complete installations, including installation of thruster, tube, components, wiring, and batteries as required, all labor and cleanup.
+Call Joe at 845-551-1975 for a quote today!
+"""
+
+def get_test_summary(url):
+    try:
+        response = openai.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": "give a summary of the content with markdown"},
+                {"role": "user", "content": get_test_summary_user_prompt(url)}
+            ]
+        )
+        # Extract the content from the OpenAI response
+        if response and 'choices' in response and len(response['choices']) > 0:
+            logger.error("about to try and extract api response.")
+            summary = response['choices'][0]['message']['content']
+            return summary
+        else:
+            logger.error("No valid summary found in OpenAI response.")
+            return "No summary found."
+    except Exception as e:
+        logger.error(f"Error: {str(e)}")
+        raise
+    return ""
+    
+
+
+def validate_and_format_url(url):
+    # Step 1: Ensure URL starts with https://
+    if not url.startswith(('http://', 'https://')):
+        url = 'https://' + url
+    
+    try:
+        # Step 2: Send a HEAD request first (faster than GET)
+        response = requests.head(url, timeout=5)
+        
+        # Step 3: If HEAD doesn't return good result, try GET
+        if response.status_code >= 400:
+            response = requests.get(url, timeout=5)
+        
+        if response.status_code < 400:
+            return url  # Valid URL
+        else:
+            return None  # Server responded but with an error (e.g., 404)
+    except requests.RequestException:
+        # Any error (connection, timeout, DNS failure, etc.)
+        return None
+
 
 def lambda_handler(event, context):
     print("Received event:", json.dumps(event))
     try: 
         body = json.loads(event.get('body', '{}'))
-        data = json.loads(body.get('data', '{}'))
-        # data = body.get('data')
-        # if isinstance(data, str):
-        #     data = json.loads(data)
-        
-        situation = data.get('situation')
-        character1 = data.get('character1')
-        character2 = data.get('character2')
-        character3 = data.get('character3')
-        # situation_prompt = " The situation is: " + situation
+        url = body.get('url')
+        url = validate_and_format_url(url)
 
-        # Set prompt variables
-        # gpt_system = "You are " + character1 + situation_prompt
-        # claude_system = "You are " + character2 + situation_prompt
-        # google_system = "You are " + character3 + situation_prompt
-
-        if not character1:
+        if not url:
             return {
                 'statusCode': 400,
-                'body': json.dumps({'error': 'Incomplete data provided.', 'data' : body})
+                'body': json.dumps({'error': 'No URL or invalid URL provided.'})
             }
 
-        responseMessage = '\n**Here is your story:**\n'
-        # responseMessage += (f"GPT:\n{gpt_messages[0]}\n")
-        # responseMessage += (f"Claude:\n{claude_messages[0]}\n")
-        # responseMessage += (f"Google:\n{google_messages[0]}\n")
-
-        # for i in range(1):
-        #     gpt_next = call_gpt()
-        #     responseMessage += (f"GPT:\n{gpt_next}\n")
-        #     gpt_messages.append(gpt_next)
-            
-        #     claude_next = call_claude()
-        #     responseMessage += (f"Claude:\n{claude_next}\n")
-        #     claude_messages.append(claude_next)
-
-        #     google_next = call_google()
-        #     google_next_final = google_next if google_next else "No comment"
-        #     responseMessage += (f"Google:\n{google_next_final}\n")
-        #     google_messages.append(google_next_final)
-
-
-        # responseMessage = '\n**Here is your input:**\n'
-        # responseMessage += situation + '\n'
-        # responseMessage += character1 + '\n'
-        # responseMessage += character2 + '\n'
-        # responseMessage += character3 + '\n'
-
-        # responseMessage += response 
-        logger.info(responseMessage)
-
+        # responseMessage = 'Url entered is: ' + url
+        responseMessage = '\n**This is the summary:**\n'
+        responseMessage += get_summary(url)
+        
         
         return {
             'statusCode': 200,
@@ -155,33 +228,3 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
         }
-
-
-# OPEN AI EXAMPLE RETURN
-# completion = openai.chat.completions.create(model='gpt-4o-mini', messages=prompts)
-# response = completion.choices[0].message.content
-
-# GOOGLE EXAMPLE RETURN
-# results = gemini_via_openai_client.chat.completions.create(
-#     model="gemini-2.0-flash-exp",
-#     messages=prompts
-# )
-# response = results.choices[0].message.content
-
-# ANTHROPIC EXAMPLE RETURN
-# message = claude.messages.create(
-#     model="claude-3-5-sonnet-latest",
-#     max_tokens=200,
-#     # temperature=0.7,
-#     system=system_message,
-#     messages=[
-#         {"role": "user", "content": user_prompt},
-#     ],
-# )
-# response = message.content[0].text
-
-
-### FOR TESTER
-#{
-#  "body": "{'data': {'situation': 'Everyone is eating hamburgers at mcdonalds.', 'character1': 'You are a belligerent werewolf who has glowing red eyes and likes to build statues of themselves but doesn't like passing by mannequins.', 'character2': 'You are a charming giant who has glowing red eyes and likes to tell the same story over and over but doesn't like opening gifts in front of others.', 'character3': 'You are an angry skeleton who has one arm much longer than the other and likes to sneak into libraries after hours but doesn't like hearing windchimes at night.'}}"
-#}
