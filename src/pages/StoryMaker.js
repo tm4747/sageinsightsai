@@ -6,7 +6,7 @@ import CharacterConfigurator from "../components/CharacterConfigurator"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { fetchStory } from '../lib/LambdaHelper';
+import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
 import { getRandomItem } from '../lib/CharacterConfiguratorHelper';
 
 
@@ -20,6 +20,8 @@ function StoryMaker({setIsLoading}) {
   const [characterInputs, setCharacterInputs] = useState([]);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const textareaRef = useRef(null);
+  const [audioUrl, setAudioUrl] = useState(null);
+
 
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
@@ -76,7 +78,7 @@ function StoryMaker({setIsLoading}) {
   }, [postResponse]);
 
   // StoryMaker Labmda call
-  const callLambda = () => {
+  const fetchStory = () => {
     setPostResponse("");
     setHtmlResponse("");
     setDisplayedText("");
@@ -85,12 +87,34 @@ function StoryMaker({setIsLoading}) {
         setIsLoading(true);
         const inputData = getDataArray();
         console.log("lambda call next")
-        fetchStory(inputData, setPostResponse, setIsLoading);
+        fetchStoryFromLambda(inputData, setPostResponse, setIsLoading);
       } catch (error) {
         console.error('Error fetching summary:', error);
       } 
     }
   }
+
+  // useEffect(() => {
+  //   if (htmlReponse && htmlReponse.length > 100) {
+  //     fetchAudio(htmlReponse); // This will call the getAudio function with the text and retrieve the audio
+  //   }
+  // }, [htmlReponse]);
+  
+  
+  const fetchAudio = async () => {
+    const text = "sample text"
+    try {
+      setIsLoading(true);
+      const audioUrl = await fetchAudioFromLambda(text); // Assuming this function returns the URL of the audio file
+  
+      // Set the audio URL
+      setAudioUrl(audioUrl); 
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching audio:", error);
+      setIsLoading(false);
+    }
+  };
   
 
   const getDataArray = () => {
@@ -142,11 +166,12 @@ function StoryMaker({setIsLoading}) {
    ));
 
    // 4 shows the optional context/situation text input and submit button
+   // TODO: remove fetchAudio button after testing
    const submitInputGroup = showCharacterInput === 4 ? <><p>Your characters have found themselves in the following situation.  Please feel free to change or delete it:</p>
    <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleInputChange} rows={1}/>
-   <button className={"button"} onClick={callLambda}>Tell Me A Story!</button>
-   <button className={"button"} onClick={clearInputs}>Clear Inputs</button></> : "";
+   <button className={"button"} onClick={fetchStory}>Tell Me A Story!</button>
+   <button className={"button"} onClick={clearInputs}>Clear Inputs</button></> : <button className={"button"} onClick={fetchAudio}>Fetch Audio</button>;
   
 
   // Auto-scroll to bottom when new text is displayed
@@ -220,6 +245,14 @@ function StoryMaker({setIsLoading}) {
         <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
         <div>
           {isDone ? <p>Done!</p> : ""}
+        </div>
+        <div className="audio-player-container">
+          {audioUrl && (
+            <audio controls>
+              <source src={audioUrl} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
+          )}
         </div>
       </div>
       <div ref={messagesEndRef}/>

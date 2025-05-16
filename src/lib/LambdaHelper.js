@@ -42,7 +42,7 @@ export const fetchWebSummary = async (enteredUrl, setResponse, setIsLoading) => 
 }
 
 
-export const fetchStory = async (input, setResponse, setIsLoading) => {
+export const fetchStoryFromLambda = async (input, setResponse, setIsLoading) => {
   const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/story-maker";
   console.log('input')
@@ -67,6 +67,33 @@ export const fetchStory = async (input, setResponse, setIsLoading) => {
       console.log(data.message)
     } catch (error) {
       setIsLoading(false);  
+      console.error('Error fetching data: ', error);
+    }
+}
+
+
+export const fetchAudioFromLambda = async (input) => {
+  //return "https://file-examples.com/storage/fe17a1467f68237299aa605/2017/11/file_example_MP3_700KB.mp3";
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/transcribe-to-audio";
+  try {
+      const res = await fetch(apiUrl, {
+        method: 'POST', 
+        headers: {
+          'x-api-key': apiKey, 
+        },
+        body: JSON.stringify(input)  // Add the request body here
+      });
+      const data = await res.json();
+      // Check if 'message' exists in the response
+      if (data.message) {
+        console.log("data.message:", data.message);
+        return data.message;
+      } else {
+        console.error("Message not found in the response.");
+        return null;
+      }
+    } catch (error) {
       console.error('Error fetching data: ', error);
     }
 }
