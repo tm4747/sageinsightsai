@@ -7,13 +7,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchStory } from '../lib/LambdaHelper';
+import { getRandomItem } from '../lib/CharacterConfiguratorHelper';
 
 
 function StoryMaker({setIsLoading}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   // TODO: remove test data from next default
-  const [enteredSituation, setEnteredSituation] = useState('Everyone is eating hamburgers at mcdonalds.');
+  const [enteredSituation, setEnteredSituation] = useState('On a quest to find a long lost ' + getRandomItem() + '.');
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
@@ -126,7 +127,7 @@ function StoryMaker({setIsLoading}) {
   };
 
   const clearInputs = () => {
-    setEnteredSituation('');
+    setEnteredSituation('On a quest to find a long lost ' + getRandomItem() + '.');
     setCharacterInputs([]);
     adjustTextareaSize();
     setShowCharacterInput(1);
@@ -141,7 +142,7 @@ function StoryMaker({setIsLoading}) {
    ));
 
    // 4 shows the optional context/situation text input and submit button
-   const submitInputGroup = showCharacterInput === 4 ? <><p>Optionally - enter a situation in which your characters have found themselves:</p>
+   const submitInputGroup = showCharacterInput === 4 ? <><p>Your characters have found themselves in the following situation.  Please feel free to change or delete it:</p>
    <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleInputChange} rows={1}/>
    <button className={"button"} onClick={callLambda}>Tell Me A Story!</button>

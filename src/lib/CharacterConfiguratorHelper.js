@@ -106,3 +106,50 @@ const finalList = b_getEdgy ? [...list, ...edgyList] : list;
 finalList.sort();
 return finalList;
 }
+
+export const getRandomItem = () => {
+    const randomItems = [
+        "egg roll",
+        "shoe",
+        "jar of mayonnaise",
+        "holy grail",
+        "fountain of youth",
+        "toothbrush",
+        "pillow",
+        "coffee mug",
+        "spoon",
+        "laundry detergent",
+        "notebook",
+        "socks",
+        "bike tire",
+        "canned beans",
+        "plunger",
+        "water bottle",
+        "flip-flop",
+        "sunglasses",
+        "paper clip",
+        "garbage can",
+        "dish towel",
+        "tape measure",
+        "light bulb",
+        "backpack",
+        "calculator",
+        "golden compass",
+        "phoenix feather",
+        "map to the lost city",
+        "crystal shard",
+        "ancient scroll",
+        "enchanted mirror",
+        "unicorn horn",
+        "silver key",
+        "magic carpet",
+        "cursed ruby",
+        "moonstone pendant",
+        "dragon's tooth",
+        "vampire's cloak",
+        "wishing well coin",
+        "secret recipe book"
+    ]
+    const randomIndex = Math.floor(Math.random() * randomItems.length);
+    return randomItems[randomIndex];
+}
