@@ -102,10 +102,10 @@ function StoryMaker({setIsLoading}) {
   
   
   const fetchAudio = async () => {
-    const text = "sample text"
+    const enteredText = "sample text"
     try {
       setIsLoading(true);
-      const audioUrl = await fetchAudioFromLambda(text); // Assuming this function returns the URL of the audio file
+      const audioUrl = await fetchAudioFromLambda(enteredText); // Assuming this function returns the URL of the audio file
   
       // Set the audio URL
       setAudioUrl(audioUrl); 
