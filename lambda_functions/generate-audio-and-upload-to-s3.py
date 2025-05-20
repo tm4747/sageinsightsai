@@ -51,6 +51,7 @@ def lambda_handler(event, context):
     # Get text and filename from the event (this will come from the first Lambda)
     text = event.get('text')
     file_name = event.get('file_name')
+    logger.info(f"text: {text} - file_name: {file_name}")
 
     if not text:
         return {
