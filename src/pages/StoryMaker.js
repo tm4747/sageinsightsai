@@ -9,18 +9,25 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
 import { getRandomItem } from '../lib/CharacterConfiguratorHelper';
 
+// todo: audioUrl must be an array of audio files, and map function must be used to play them all. 
 
 function StoryMaker({setIsLoading}) {
+
+  const getRandomSituation = () => {
+    return 'On a quest to find a long lost ' + getRandomItem() + '.';
+  }
+
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   // TODO: remove test data from next default
-  const [enteredSituation, setEnteredSituation] = useState('On a quest to find a long lost ' + getRandomItem() + '.');
+  const [enteredSituation, setEnteredSituation] = useState(getRandomSituation());
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const textareaRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [remainingStory, setRemainingStory] = useState("");
 
 
   //typing effect
@@ -31,7 +38,7 @@ function StoryMaker({setIsLoading}) {
   //scroll vars
   const messagesEndRef = useRef(null);
 
-  // update state values
+   // update state values
   const handleInputChange = (event) => {
     setEnteredSituation(event.target.value);
     adjustTextareaSize();
@@ -102,20 +109,35 @@ function StoryMaker({setIsLoading}) {
   
   
   const fetchAudio = async () => {
-    const enteredText = "sample text"
-    try {
-      setIsLoading(true);
-      const audioUrl = await fetchAudioFromLambda(enteredText); // Assuming this function returns the URL of the audio file
-  
-      // Set the audio URL
-      setAudioUrl(audioUrl); 
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching audio:", error);
-      setIsLoading(false);
+    if(postResponse){
+      try {
+        let useablePostResponse = removeSpecialChars(postResponse);
+        useablePostResponse = removeIntroMaterial(useablePostResponse);
+        const first4000Characters = useablePostResponse.substring(0,4000);
+        const remainingChars = useablePostResponse.substring(4000);
+        setRemainingStory(remainingChars);
+        console.log(["first4000Characters", first4000Characters])
+        setIsLoading(true);
+        const audioUrl = await fetchAudioFromLambda(first4000Characters); // Assuming this function returns the URL of the audio file
+    
+        // Set the audio URL
+        setAudioUrl(audioUrl); 
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching audio:", error);
+        setIsLoading(false);
+      }
     }
   };
   
+  const removeSpecialChars = (str) => {
+    return str.replace(/(\r\n|\n|\r)/g, "").replace(/"/g, "'");
+  }
+
+  const removeIntroMaterial = (str) => {
+    const index = str.indexOf("Here is your story");
+    return str.substring(index);
+  }
 
   const getDataArray = () => {
     const inputData = {
@@ -151,7 +173,7 @@ function StoryMaker({setIsLoading}) {
   };
 
   const clearInputs = () => {
-    setEnteredSituation('On a quest to find a long lost ' + getRandomItem() + '.');
+    setEnteredSituation(getRandomSituation());
     setCharacterInputs([]);
     adjustTextareaSize();
     setShowCharacterInput(1);
@@ -171,7 +193,7 @@ function StoryMaker({setIsLoading}) {
    <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleInputChange} rows={1}/>
    <button className={"button"} onClick={fetchStory}>Tell Me A Story!</button>
-   <button className={"button"} onClick={clearInputs}>Clear Inputs</button></> : <button className={"button"} onClick={fetchAudio}>Fetch Audio</button>;
+   <button className={"button"} onClick={clearInputs}>Clear Inputs</button>{postResponse ? <button className={"button"} onClick={fetchAudio}>Fetch Audio</button> : ""}</> : "";
   
 
   // Auto-scroll to bottom when new text is displayed
