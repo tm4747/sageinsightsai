@@ -130,7 +130,7 @@ function HomeSummaryTool({setIsLoading}) {
         </p>
         {howAppWorks}
         <input className={inputClasses} onChange={handleInputChange} type="text"/>
-        <button className={"button"} onClick={callLambda}>Call Lambda</button>
+        <button className={"button"} onClick={callLambda}>Get Summary</button>
         {/* <span> error: {enteredUrlError}</span> */}
       </div>
       <div className={"resultsDiv"} >

@@ -309,12 +309,10 @@ function StoryMaker({setIsLoading}) {
         <div>
           {isDone ? <p>Done!</p> : ""}
         </div>
-        
-        
-
       </div>
       <div ref={messagesEndRef}/>
       {stopScrollButton}
+      {audioUrlError && remainingStory ? <span>&nbsp;</span> : ""}
     </>
   );
 }
