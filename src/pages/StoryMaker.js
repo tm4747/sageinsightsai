@@ -27,6 +27,9 @@ function StoryMaker({setIsLoading}) {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const textareaRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [isAudioReady, setIsAudioReady] = useState(false); // Track if audio is ready
+  const [polling, setPolling] = useState(false); // Track if polling is active
+  const [audioUrlError, setAudioUrlError] = useState(false); // Error state in case audioUrl is still not valid
   const [remainingStory, setRemainingStory] = useState("");
 
 
@@ -122,6 +125,7 @@ function StoryMaker({setIsLoading}) {
     
         // Set the audio URL
         setAudioUrl(audioUrl); 
+        setPolling(true); // Start polling
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching audio:", error);
@@ -240,6 +244,32 @@ function StoryMaker({setIsLoading}) {
     </div>
   );
 
+   // Polling function to check if audio file is available
+   useEffect(() => {
+    let intervalId;
+
+    if (polling && audioUrl) {
+      intervalId = setInterval(async () => {
+        try {
+          const res = await fetch(audioUrl);
+          console.log("results", res);
+          if (res.ok) {
+            setIsAudioReady(true); // Audio file is available, enable the audio player
+            clearInterval(intervalId); // Stop polling
+          } else {
+            setAudioUrlError(true);
+          }
+        } catch (error) {
+          console.error('Error fetching audio:', error);
+        }
+      }, 5000); // Poll every 5 seconds
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId); // Cleanup on component unmount or when polling is stopped
+    };
+  }, [polling, audioUrl]);
+
    
   return (
     <>
@@ -261,6 +291,17 @@ function StoryMaker({setIsLoading}) {
         </div>
           {characterInputGroup}
           {submitInputGroup}
+          {audioUrl ? <div className="audio-player-container">
+            {audioUrl && !isAudioReady ? (
+              <p>Your audio is being processed, please wait...</p> // Display a waiting message until the file is ready
+            ) : (
+              <audio controls>
+                <source src={audioUrl} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            )}
+          </div> : ""}
+          
         {/* <span> error: {enteredSituationError}</span> */}
       </div>
       <div className={"resultsDiv"} >
@@ -268,14 +309,9 @@ function StoryMaker({setIsLoading}) {
         <div>
           {isDone ? <p>Done!</p> : ""}
         </div>
-        <div className="audio-player-container">
-          {audioUrl && (
-            <audio controls>
-              <source src={audioUrl} type="audio/mpeg" />
-              Your browser does not support the audio element.
-            </audio>
-          )}
-        </div>
+        
+        
+
       </div>
       <div ref={messagesEndRef}/>
       {stopScrollButton}
