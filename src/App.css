@@ -47,3 +47,8 @@ select, .text-input{
   .notice{
     text-decoration: italic;
   }
+  audio{
+    margin:1em;
+    border: solid 3px blue;
+    border-radius:30px;
+  }

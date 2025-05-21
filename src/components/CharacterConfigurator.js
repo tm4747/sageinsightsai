@@ -207,10 +207,10 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
           </tbody>
         </table>
         <div className="button-row">
-          <button className={"button"} onClick={handleToggleEnterValues}>{enterValues ? "Select From Presets" : "Enter Custom Values"}</button>
+          {characterDescription ? <button className={"button"} onClick={() => handleInputSubmit(characterDescription)}>Character {characterId} Done!</button> : ""}
           <button className={"button"} onClick={getRandomChoices}>Get Random Choices</button>
+          <button className={"button"} onClick={handleToggleEnterValues}>{enterValues ? "Select From Presets" : "Enter Custom Values"}</button>
           {characterDescription ? <button className={"button"} onClick={clearInputs}>Clear Inputs</button> : ""}
-          {characterDescription ? <button className={"button"} onClick={() => handleInputSubmit(characterDescription)}>Submit</button> : ""}
           {icon}
         </div>
       </div>

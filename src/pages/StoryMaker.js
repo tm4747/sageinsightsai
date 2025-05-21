@@ -7,20 +7,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
-import { getRandomItem } from '../lib/CharacterConfiguratorHelper';
+import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
+import AILogo from '../components/AILogo';
+
 
 // todo: audioUrl must be an array of audio files, and map function must be used to play them all. 
 
 function StoryMaker({setIsLoading}) {
 
-  const getRandomSituation = () => {
-    return 'On a quest to find a long lost ' + getRandomItem() + '.';
+  const getSituation = () => {
+    return getRandomSituation() + '.';
   }
 
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   // TODO: remove test data from next default
-  const [enteredSituation, setEnteredSituation] = useState(getRandomSituation());
+  const [enteredSituation, setEnteredSituation] = useState(getSituation());
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
@@ -177,7 +179,7 @@ function StoryMaker({setIsLoading}) {
   };
 
   const clearInputs = () => {
-    setEnteredSituation(getRandomSituation());
+    setEnteredSituation(getSituation());
     setCharacterInputs([]);
     adjustTextareaSize();
     setShowCharacterInput(1);
@@ -197,7 +199,8 @@ function StoryMaker({setIsLoading}) {
    <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleInputChange} rows={1}/>
    <button className={"button"} onClick={fetchStory}>Tell Me A Story!</button>
-   <button className={"button"} onClick={clearInputs}>Clear Inputs</button>{postResponse ? <button className={"button"} onClick={fetchAudio}>Fetch Audio</button> : ""}</> : "";
+   <button className={"button"} onClick={clearInputs}>Clear Inputs</button>{postResponse ? 
+   <button className={"button"} onClick={fetchAudio}>Fetch Audio</button> : ""}</> : "";
   
 
   // Auto-scroll to bottom when new text is displayed
@@ -293,7 +296,7 @@ function StoryMaker({setIsLoading}) {
           {submitInputGroup}
           {audioUrl ? <div className="audio-player-container">
             {audioUrl && !isAudioReady ? (
-              <p>Your audio is being processed, please wait...</p> // Display a waiting message until the file is ready
+              <p><AILogo size={".75em"}/> &nbsp; Your audio is being processed and might take a minute. Please wait...</p> // Display a waiting message until the file is ready
             ) : (
               <audio controls>
                 <source src={audioUrl} type="audio/mpeg" />
