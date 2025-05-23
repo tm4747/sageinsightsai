@@ -29,9 +29,13 @@ function StoryMaker({setIsLoading}) {
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const textareaRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
+  const [audioUrl2, setAudioUrl2] = useState(null);
   const [isAudioReady, setIsAudioReady] = useState(false); // Track if audio is ready
+  const [isAudioReady2, setIsAudioReady2] = useState(false); // Track if audio is ready
   const [polling, setPolling] = useState(false); // Track if polling is active
+  const [polling2, setPolling2] = useState(false); // Track if polling is active
   const [audioUrlError, setAudioUrlError] = useState(false); // Error state in case audioUrl is still not valid
+  const [audioUrlError2, setAudioUrlError2] = useState(false); // Error state in case audioUrl is still not valid
   const [remainingStory, setRemainingStory] = useState("");
 
 
@@ -119,15 +123,18 @@ function StoryMaker({setIsLoading}) {
         let useablePostResponse = removeSpecialChars(postResponse);
         useablePostResponse = removeIntroMaterial(useablePostResponse);
         const first4000Characters = useablePostResponse.substring(0,4000);
-        const remainingChars = useablePostResponse.substring(4000);
+        const remainingChars = useablePostResponse.substring(3980, 7980);
         setRemainingStory(remainingChars);
         console.log(["first4000Characters", first4000Characters])
         setIsLoading(true);
         const audioUrl = await fetchAudioFromLambda(first4000Characters); // Assuming this function returns the URL of the audio file
+        const audioUrl2 = await fetchAudioFromLambda(remainingChars); // Assuming this function returns the URL of the audio file
     
         // Set the audio URL
         setAudioUrl(audioUrl); 
+        setAudioUrl2(audioUrl2); 
         setPolling(true); // Start polling
+        setPolling2(true); // Start polling
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching audio:", error);
@@ -273,6 +280,33 @@ function StoryMaker({setIsLoading}) {
     };
   }, [polling, audioUrl]);
 
+
+   // Polling function to check if audio file is available
+   useEffect(() => {
+    let intervalId;
+
+    if (polling2 && audioUrl2) {
+      intervalId = setInterval(async () => {
+        try {
+          const res = await fetch(audioUrl2);
+          console.log("results", res);
+          if (res.ok) {
+            setIsAudioReady2(true); // Audio file is available, enable the audio player
+            clearInterval(intervalId); // Stop polling
+          } else {
+            setAudioUrlError2(true);
+          }
+        } catch (error) {
+          console.error('Error fetching audio:', error);
+        }
+      }, 5000); // Poll every 5 seconds
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId); // Cleanup on component unmount or when polling is stopped
+    };
+  }, [polling2, audioUrl2]);
+
    
   return (
     <>
@@ -296,10 +330,21 @@ function StoryMaker({setIsLoading}) {
           {submitInputGroup}
           {audioUrl ? <div className="audio-player-container">
             {audioUrl && !isAudioReady ? (
-              <p><AILogo size={".75em"}/> &nbsp; Your audio is being processed and might take a minute. Please wait...</p> // Display a waiting message until the file is ready
+              <p><AILogo size={".75em"}/> &nbsp; Your Part 1 Audio is being processed and might take a minute. Please wait...</p> // Display a waiting message until the file is ready
             ) : (
               <audio controls>
                 <source src={audioUrl} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            )}
+          </div> : ""}
+
+          {audioUrl2 ? <div className="audio-player-container">
+            {audioUrl2 && !isAudioReady2 ? (
+              <p><AILogo size={".75em"}/> &nbsp; Your Part 2 audio is being processed and might take a minute. Please wait...</p> // Display a waiting message until the file is ready
+            ) : (
+              <audio controls>
+                <source src={audioUrl2} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
             )}
@@ -315,7 +360,7 @@ function StoryMaker({setIsLoading}) {
       </div>
       <div ref={messagesEndRef}/>
       {stopScrollButton}
-      {audioUrlError && remainingStory ? <span>&nbsp;</span> : ""}
+      {audioUrlError && audioUrlError2 && remainingStory ? <span>&nbsp;</span> : ""}
     </>
   );
 }
