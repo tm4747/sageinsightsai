@@ -314,8 +314,8 @@ function StoryMaker({setIsLoading}) {
         <div className={"pageDescription"}>
           <p>
             You will create 3 characters, then optionally enter a scenario.
-            This tool will then carry out a story-like conversation with OpenAI, Google Gemini, and Anthropic Claude 
-            playing the parts of each character.
+            This tool will then carry out a story-like conversation using OpenAI, Google Gemini, and Anthropic Claude 
+            to play the roles of each character.
             <FontAwesomeIcon 
               className={"flashing-icon"}
               icon={faCircleQuestion} 
