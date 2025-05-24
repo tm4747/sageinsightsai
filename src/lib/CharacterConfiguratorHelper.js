@@ -166,5 +166,5 @@ export const getRandomSituation = (b_getEdgy = false) => {
     const edgyList = ["solving a murder mystery at a remote estate", "Eating hamburgers at McDonalds", ];
     const finalList = b_getEdgy ? [...list, ...edgyList] : list;
     const randomIndex = Math.floor(Math.random() * finalList.length);
-    return finalList[randomIndex];
+    return finalList[randomIndex] + '.';
 }
