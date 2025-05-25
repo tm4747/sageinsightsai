@@ -40,7 +40,7 @@
     padding:.5em;
     font-weight:bold
   }
-select, .text-input{
+select, .select-input, .text-input{
     color:ghostwhite;
     padding: .25em .125em;
     border:solid 1px #555;
@@ -77,4 +77,13 @@ select, .text-input{
   }
   .test-border{
     border:solid 2px grey;
+  }
+  .bold{
+    font-weight:bold;
+  }
+  .small-text{
+    font-size:small;
+  }
+  .italic{
+    font-style: italic;
   }

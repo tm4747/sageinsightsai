@@ -184,6 +184,7 @@ function StoryMaker({setIsLoading}) {
 
   const adjustTextareaHeight = () => { // dynamically adjust height of textarea boxes
     const textarea = textareaRef.current;
+    console.log("try resize textarea", textarea);
     if(textarea){
       textarea.style.height = "auto";
       textarea.style.height = textarea.scrollHeight + "px";
@@ -213,6 +214,10 @@ function StoryMaker({setIsLoading}) {
     setBegun(true);
   }
   
+  const handleGetDifferentSituation = () => {
+    setEnteredSituation(getRandomSituation());
+    adjustTextareaHeight();
+  }
 
 
 
@@ -260,11 +265,12 @@ function StoryMaker({setIsLoading}) {
 
   // 4 shows the optional context/situation text input and submit button
   // TODO: move fetchAudio button to different location 
-  const submitInputGroup = showCharacterInput === 4 ? <><p>Your characters have found themselves in the following situation.  Please feel free to alter or delete it:</p>
+  const submitInputGroup = showCharacterInput === 4 ? <><p>Your characters have found themselves in the following situation 
+    <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span></p>
   <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleSituationInputChange} rows={1}/>
   <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button>
-  <button className={"button yellow-button"} onClick={() => {setEnteredSituation(getRandomSituation())}}>Get A Different Situation</button>
+  <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button>
   <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button>{postResponse ? 
   <button className={"button"} onClick={fetchAudio}>Fetch Audio</button> : ""}</> : "";
 
@@ -289,9 +295,7 @@ function StoryMaker({setIsLoading}) {
 
   const descriptionOfPageFunction = (
     <p>
-      You will create 3 characters, then optionally enter a scenario.
-      This tool will then carry out a story-like conversation using OpenAI, Google Gemini, and Anthropic Claude 
-      to play the roles of each character.
+      You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.
       <FontAwesomeIcon 
         className={"flashing-icon"}
         icon={faCircleQuestion} 

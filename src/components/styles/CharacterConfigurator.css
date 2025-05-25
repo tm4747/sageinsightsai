@@ -13,9 +13,6 @@ h3{
     width:100%
 }
 
-.inputDiv{
-
-}
 .tdLeft{
     text-align:left;
 }
@@ -23,21 +20,30 @@ h3{
     text-align:right;
 }
 
-  .edgy-icon{
-    font-size:.5em;
-    display:block;
-    margin:auto;
-    margin-top:1em;
-  }
+.edgy-icon{
+  font-size:.5em;
+  display:block;
+  margin:auto;
+  margin-top:1em;
+}
 
 
-  .button{
-    width:90%;
-    margin-top:.25em;
-  }
-  .full-width{
-    width:100%;
-  }
+.button{
+  width:90%;
+  margin-top:.25em;
+}
+.full-width{
+  width:100%;
+}
+
+
+.select-input{
+  width:100%;
+}
+.text-input{
+  padding: .325em .125em;
+  min-width: 250px;
+}
 
 @media screen and (min-width: 768px) {
   .inputContainer{
@@ -50,5 +56,8 @@ h3{
   .edgy-icon{
     float:right;
     margin-top:0;
+  }
+  .text-input{
+    min-width:300px;
   }
 }

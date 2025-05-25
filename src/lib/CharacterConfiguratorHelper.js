@@ -24,7 +24,7 @@ export const getCharacterTypes = (levelOfRealism = 1, getEdgy = false) => {
         "robot", 
         "chicken",
         "pig",
-        "talking computer",
+        "supercomputer",
     ]
     const list3 = [
         "phoenix", 
