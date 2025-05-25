@@ -159,7 +159,7 @@ export const getLikes = (levelOfRealism = 1, getEdgy = false) => {
     ]
     const list3 = [
         "to prank powerful beings", 
-        "to howl at math equations",
+        "to howl at the moon",
         "to build statues of themselves", 
         "to make friends with shadows",
         "to whisper into jars and seal them", 
@@ -191,7 +191,7 @@ export const getDislikes = (levelOfRealism = 1, getEdgy = false) => {
         "people who can't make decisions", 
         "being interrupted while speaking", 
         "people who don’t clean up after themselves", 
-        "being late to an event", 
+        "being late to events", 
         "being in crowded spaces", 
         "having their personal space invaded", 
     ]
