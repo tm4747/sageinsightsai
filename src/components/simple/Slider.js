@@ -20,13 +20,13 @@ const Slider = ({ setValue, initialValue, showEdgy }) => {
     return level === 1
       ? "Realistic " + edgyText
       : level === 2
-      ? "Somewhat Fantastic" + edgyText
-      : ( showEdgy ? "Outlandish Strange" + edgyText : "Outlandish and Strange");
+      ?  ( showEdgy ? "Realistic, Somewhat Fantastic"  + edgyText : "Realistic and Somewhat Fantastic")
+      : ( showEdgy ? "Realistic, Somewhat Fantastic, Outlandish" + edgyText : "Realistic, Somewhat Fantastic and Outlandish");
   };
 
   return (
     <div>
-      <label htmlFor="slider">Set level of realism for character choices: </label>
+      <label htmlFor="slider">Set level of realism to include for character choices: </label>
       <input
         type="range"
         id="slider"

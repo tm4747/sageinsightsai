@@ -92,7 +92,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
         clearInputs(false);
         setCharacterType(getRandomValueFromArray(characterTypes));
         setCharacterTrait(getRandomValueFromArray(characterTraits));
-        setCharacterHas(getRandomValueFromArray(characterHasItems));
+        if(Math.random() < 0.65) setCharacterHas(getRandomValueFromArray(characterHasItems));
         // only set a dislike or a like
         Math.random() < 0.5 ? setCharacterLikes(getRandomValueFromArray(likesChoices)) : setCharacterDislikes(getRandomValueFromArray(dislikesChoices));
       };
