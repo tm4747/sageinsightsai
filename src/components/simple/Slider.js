@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Slider = ({ setValue, initialValue }) => {
+const Slider = ({ setValue, initialValue, showEdgy }) => {
   const [sliderValue, setSliderValue] = useState(initialValue);
   const [transitionKey, setTransitionKey] = useState(Date.now()); // Key to force re-render for transition effect
 
@@ -16,11 +16,12 @@ const Slider = ({ setValue, initialValue }) => {
   };
 
   const transformRealismLevel = (level) => {
+    const edgyText = showEdgy ? " and Edgy" : "";
     return level === 1
-      ? "Realistic"
+      ? "Realistic " + edgyText
       : level === 2
-      ? "Somewhat fantastic"
-      : "Outlandish and strange";
+      ? "Somewhat Fantastic" + edgyText
+      : ( showEdgy ? "Outlandish Strange" + edgyText : "Outlandish and Strange");
   };
 
   return (

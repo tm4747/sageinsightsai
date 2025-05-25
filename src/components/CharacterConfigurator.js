@@ -14,15 +14,16 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     const [characterLikes, setCharacterLikes] = useState('');
     const [characterDislikes, setCharacterDislikes] = useState('');
     const [characterDescription, setCharacterDescription] = useState('');
+    // todo: change this to levelOfRealism - HEREHERE
     const [getEdgy, setGetEdgy] = useState(false);
     const [enterValues, setEnterValues] = useState(false);
-    const [sliderValue, setSliderValue] = useState(1);
+    const [levelOfRealism, setLevelOfRealism] = useState(1);
   
-    const characterTypes = getCharacterTypes(getEdgy);
-    const characterTraits = getCharacterTraits(getEdgy);
-    const characterHasItems = getCharacterHasItems(getEdgy);
-    const likesChoices = getLikes(getEdgy); 
-    const dislikesChoices = getDislikes(getEdgy);
+    const characterTypes = getCharacterTypes(levelOfRealism, getEdgy);
+    const characterTraits = getCharacterTraits(levelOfRealism, getEdgy);
+    const characterHasItems = getCharacterHasItems(levelOfRealism, getEdgy);
+    const likesChoices = getLikes(levelOfRealism, getEdgy); 
+    const dislikesChoices = getDislikes(levelOfRealism, getEdgy);
     const textareaRef = useRef(null);
   
     
@@ -110,23 +111,30 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     var nameDisplay = characterName ? characterName : "Character " + characterId;
     nameDisplay += characterType ? " the " + characterType : ""; 
 
+
     const handleToggleGetEdgy = () => {
-      setGetEdgy(!getEdgy);
-      console.log('getEdgy');
-      console.log(getEdgy);
+      if(getEdgy){
+        setGetEdgy(false);
+      } else {
+        setGetEdgy(true);
+      }
+      
     }
+    let iconClasses = "flashing-icon edgy-icon";
+    iconClasses += getEdgy ? " red-border" : " black-border";
+    console.log('getEdgy');
+    console.log(getEdgy);
 
     const handleToggleEnterValues = () =>{
       setEnterValues(!enterValues);
     }
 
-    const iconClasses = getEdgy === true ? "flashing-icon edgy-icon red-border" : "flashing-icon edgy-icon black-border";
     const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={iconClasses} title="Close"/>
 
     return (
       <div className={"character-config"}>
         <h3>{nameDisplay}</h3>
-        <Slider setValue={setSliderValue} initialValue={sliderValue} />
+        <Slider setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
         <table className={"inputContainer"}>
           <tbody>
           <tr className={"inputDiv"}>
