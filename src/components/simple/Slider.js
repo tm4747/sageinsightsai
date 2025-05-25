@@ -26,7 +26,7 @@ const Slider = ({ setValue, initialValue, showEdgy }) => {
 
   return (
     <div>
-      <label htmlFor="slider">Set level of realism to include for character choices: </label>
+      <label htmlFor="slider">Set level of realism for character choices: </label>
       <input
         type="range"
         id="slider"

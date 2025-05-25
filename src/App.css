@@ -2,15 +2,38 @@
     padding:.75em ;
     border-radius:10px;
     font-weight:bold;
+    font-size:.6em;
     margin-left:1em;
     background-color:#ddd;
     color:#333;
     width:25%;
     display:inline;
+    transition: background-color 0.2s ease, color 0.2s ease; /* Added transition */
   }
   .button:hover{
     background-color:ghostwhite;
     color:black;
+  }
+
+  .green-button{
+    background-color:rgb(202, 247, 202);
+  }
+  .green-button:hover{
+    color:white;
+    background-color:rgb(0, 126, 0);
+  }
+  .yellow-button{
+    background-color:lightyellow;
+  }
+  .yellow-button:hover{
+    background-color:rgb(251, 251, 143);
+  }
+  .red-button{
+    background-color:rgb(245, 205, 211);
+  }
+  .red-button:hover{
+    color:white;
+    background-color:rgb(224, 8, 40);
   }
   label{
     font-size:.85em;
@@ -51,4 +74,7 @@ select, .text-input{
     margin:1em;
     border: solid 3px blue;
     border-radius:30px;
+  }
+  .test-border{
+    border:solid 2px grey;
   }

@@ -31,9 +31,9 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
       let previewData = "";
       if(characterType){
         if(characterTrait){
-          previewData = getAAn(characterTrait) + " " + characterTrait + " " + characterType;
+          previewData = getAOrAn(characterTrait) + " " + characterTrait + " " + characterType;
         } else {
-          previewData = getAAn(characterType) + " " + characterType ;
+          previewData = getAOrAn(characterType) + " " + characterType ;
         }
         previewData += characterName ? " named " + characterName : "";
         if(characterHas){
@@ -51,7 +51,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
           } else if(characterLikes ){
             previewData += " who likes " + characterLikes;
           } else if(characterDislikes){
-            previewData += " who doesn't likes " + characterDislikes;
+            previewData += " who doesn't like " + characterDislikes;
           }
         }
         previewData += ".";
@@ -218,10 +218,10 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
           </tbody>
         </table>
         <div className="button-row">
-          {characterDescription ? <button className={"button"} onClick={() => handleInputSubmit(characterDescription)}>Character {characterId} Done!</button> : ""}
-          <button className={"button"} onClick={getRandomChoices}>Get Random Choices</button>
-          <button className={"button"} onClick={handleToggleEnterValues}>{enterValues ? "Select From Presets" : "Enter Custom Values"}</button>
-          {characterDescription ? <button className={"button"} onClick={clearInputs}>Clear Inputs</button> : ""}
+          {characterDescription ? <button className={"button green-button"} onClick={() => handleInputSubmit(characterDescription)}>Character {characterId} Done!</button> : ""}
+          <button className={"button yellow-button"} onClick={getRandomChoices}>Get Random Choices</button>
+          <button className={"button yellow-button"} onClick={handleToggleEnterValues}>{enterValues ? "Select From Presets" : "Enter Custom Values"}</button>
+          {characterDescription ? <button className={"button red-button"} onClick={clearInputs}>Clear Character Choices</button> : ""}
           {icon}
         </div>
       </div>
@@ -236,7 +236,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     return str.replace(/\s+/g, '-');
   }
   
-  function getAAn(str){
+  function getAOrAn(str){
     const vowels = "AEIOUaeiou";
     const firstLetterToLower = str.charAt(0);
     return vowels.includes(firstLetterToLower)?  "an" : "a";

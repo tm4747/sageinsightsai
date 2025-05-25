@@ -14,6 +14,7 @@ import AWS from 'aws-sdk';
 
 function StoryMaker({setIsLoading}) {
 
+  const [begun, setBegun] = useState(false);
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredSituation, setEnteredSituation] = useState(getRandomSituation());
@@ -207,6 +208,12 @@ function StoryMaker({setIsLoading}) {
     setShowCharacterInput(1);
   };
 
+  const handleBegin = () => {
+    setShowHowItWorks(false);
+    setBegun(true);
+  }
+  
+
 
 
   /******** HELPER FUNCTIONS **********/
@@ -253,11 +260,12 @@ function StoryMaker({setIsLoading}) {
 
   // 4 shows the optional context/situation text input and submit button
   // TODO: move fetchAudio button to different location 
-  const submitInputGroup = showCharacterInput === 4 ? <><p>Your characters have found themselves in the following situation.  Please feel free to change or delete it:</p>
+  const submitInputGroup = showCharacterInput === 4 ? <><p>Your characters have found themselves in the following situation.  Please feel free to alter or delete it:</p>
   <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleSituationInputChange} rows={1}/>
-  <button className={"button"} onClick={fetchStory}>Tell Me A Story!</button>
-  <button className={"button"} onClick={clearInputs}>Clear Inputs</button>{postResponse ? 
+  <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button>
+  <button className={"button yellow-button"} onClick={() => {setEnteredSituation(getRandomSituation())}}>Get A Different Situation</button>
+  <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button>{postResponse ? 
   <button className={"button"} onClick={fetchAudio}>Fetch Audio</button> : ""}</> : "";
 
   var howAppWorksHtml = <>
@@ -279,6 +287,20 @@ function StoryMaker({setIsLoading}) {
     </div>
   );
 
+  const descriptionOfPageFunction = (
+    <p>
+      You will create 3 characters, then optionally enter a scenario.
+      This tool will then carry out a story-like conversation using OpenAI, Google Gemini, and Anthropic Claude 
+      to play the roles of each character.
+      <FontAwesomeIcon 
+        className={"flashing-icon"}
+        icon={faCircleQuestion} 
+        onClick={handleShowHowItWorks} 
+        title="How does it work?"
+      />
+    </p>
+  );
+
   // CHARACTER INPUT DISPLAY
   const characterInputsItems = characterInputs.map(function(input, i){
     return <li key={i}>Character {i+1} is {input}</li>
@@ -291,22 +313,22 @@ function StoryMaker({setIsLoading}) {
     </div>
   );
 
+  if(!begun) return(
+          <>
+           <div className={"formDiv"}>
+             <div className={"pageDescription"}>
+                {descriptionOfPageFunction}
+                {howAppWorks}
+                <button className={"button green-button"} onClick={handleBegin}>Begin!</button>
+            </div>
+           </div>
+          </>)
    
   return (
     <>
       <div className={"formDiv"}>
         <div className={"pageDescription"}>
-          <p>
-            You will create 3 characters, then optionally enter a scenario.
-            This tool will then carry out a story-like conversation using OpenAI, Google Gemini, and Anthropic Claude 
-            to play the roles of each character.
-            <FontAwesomeIcon 
-              className={"flashing-icon"}
-              icon={faCircleQuestion} 
-              onClick={handleShowHowItWorks} 
-              title="How does it work?"
-            />
-          </p>
+          {descriptionOfPageFunction}
           {howAppWorks}
           {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
         </div>
