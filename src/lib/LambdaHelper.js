@@ -72,7 +72,7 @@ export const fetchStoryFromLambda = async (input, setResponse, setIsLoading) => 
 }
 
 
-export const fetchAudioFromLambda = async (enteredText) => {
+export const fetchAudioFromLambda = async (fileUrl) => {
   //return "https://file-examples.com/storage/fe17a1467f68237299aa605/2017/11/file_example_MP3_700KB.mp3";
   const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/transcribe-to-audio";
@@ -82,7 +82,7 @@ export const fetchAudioFromLambda = async (enteredText) => {
         headers: {
           'x-api-key': apiKey, 
         },
-        body: JSON.stringify({ text: enteredText })  // Add the request body here
+        body: JSON.stringify({ url: fileUrl })  // Add the request body here
       });
       const data = await res.json();
       // Check if 'message' exists in the response

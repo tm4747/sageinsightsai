@@ -9,6 +9,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
 import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/AILogo';
+import AWS from 'aws-sdk';
 
 
 function StoryMaker({setIsLoading}) {
@@ -29,8 +30,19 @@ function StoryMaker({setIsLoading}) {
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  // scroll vars
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef(null); // scroll vars
+
+
+  /******** AWS S3 instance **********/
+  const S3_BUCKET = 'sageinsightsai-audio';  // Your bucket name
+  const REGION = 'us-east-1';
+  const s3 = new AWS.S3({
+    region: REGION,
+    credentials: new AWS.Credentials({
+      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+    }),
+  });
 
 
   /********* USE EFFECTS & API CALLS **********/
@@ -86,20 +98,33 @@ function StoryMaker({setIsLoading}) {
         useablePostResponse = removeIntroMaterial(useablePostResponse);
         console.log(["useablePostResponse", useablePostResponse])
         setIsLoading(true);
-        // CREATE FILENAME USING TIMESTAMP
-        // CREATE LOCAL TEMPORARY TEXT FILE 
-        // SEND FILE TO S3 
 
+        // Create filename for the text file
+        const timestamp = Math.floor(Date.now() / 1000);;
+        const s3FileName = `story-${timestamp}.txt`;
+        console.log('s3FileName');
+        console.log(s3FileName);
+
+        const s3Params = {
+          Bucket: S3_BUCKET,
+          Key: s3FileName,
+          Body: useablePostResponse,
+          ContentType: 'text/plain'
+        };
         try {
-          // send this filename to lambda
-          const audioUrl = await fetchAudioFromLambda(useablePostResponse); // Assuming this function returns the URL of the audio file
-      
+          console.log('Try to upload to S3:')
+          // Upload to S3
+          const s3Upload = await s3.upload(s3Params).promise();
+          console.log('Text file uploaded to S3:', s3Upload.Location);
+          // Now call fetchAudioFromLambda with the S3 URL
+          const audioUrl = await fetchAudioFromLambda(s3Upload.Location);
           // Set the audio URL
           setAudioUrl(audioUrl); 
           setPolling(true); // Start polling
           setIsLoading(false);
         } catch (error) {
-          console.error("Error fetching audio:", error);
+          console.log('s3Upload');
+          console.error("Error uploading to s3 or fetching audio:", error);
           setIsLoading(false);
         }
         setIsLoading(false);
