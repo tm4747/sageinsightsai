@@ -49,7 +49,7 @@ export const getCharacterTypes = (levelOfRealism = 1, getEdgy = false) => {
         "outlaw", 
         "pirate", 
     ];
-    const primaryList = levelOfRealism == 1 ? list1 : (levelOfRealism == 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
+    const primaryList = levelOfRealism === 1 ? list1 : (levelOfRealism === 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
     const finalList = getEdgy ? [...primaryList, ...edgyList] : primaryList;
     finalList.sort();
     return finalList;
@@ -125,7 +125,7 @@ export const getCharacterHasItems = (levelOfRealism = 1, getEdgy = false) => {
         "a wooden leg",
         "a single enormous eyebrow", 
     ];
-    const primaryList = levelOfRealism == 1 ? list1 : (levelOfRealism == 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
+    const primaryList = levelOfRealism === 1 ? list1 : (levelOfRealism === 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
     const finalList = getEdgy ? [...primaryList, ...edgyList] : primaryList;
     finalList.sort();
     return finalList;
@@ -176,7 +176,7 @@ export const getLikes = (levelOfRealism = 1, getEdgy = false) => {
         "to hoard cursed relics", 
         "to run their secret business late at night", 
     ];
-    const primaryList = levelOfRealism == 1 ? list1 : (levelOfRealism == 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
+    const primaryList = levelOfRealism === 1 ? list1 : (levelOfRealism === 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
     const finalList = getEdgy ? [...primaryList, ...edgyList] : primaryList;
     finalList.sort();
     return finalList;
@@ -224,7 +224,7 @@ export const getDislikes = (levelOfRealism = 1, getEdgy = false) => {
         "animals of any kind",
         "people in general",
     ];
-    const primaryList = levelOfRealism == 1 ? list1 : (levelOfRealism == 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
+    const primaryList = levelOfRealism === 1 ? list1 : (levelOfRealism === 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
     const finalList = getEdgy ? [...primaryList, ...edgyList] : primaryList;
     finalList.sort();
     return finalList;
@@ -279,7 +279,7 @@ export const getRandomSituation = (levelOfRealism = 1, getEdgy = false) => {
         "Defending a fortress under siege", 
         "Searching for a jar of special serum which is the only hope to end a great plague",
     ];
-    const primaryList = levelOfRealism == 1 ? list1 : (levelOfRealism == 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
+    const primaryList = levelOfRealism === 1 ? list1 : (levelOfRealism === 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
     const finalList = getEdgy ? [...primaryList, ...edgyList] : primaryList;
     const randomIndex = Math.floor(Math.random() * finalList.length);
     return finalList[randomIndex] + '.';
