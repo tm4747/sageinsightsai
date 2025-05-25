@@ -266,7 +266,7 @@ export const getRandomSituation = (levelOfRealism = 1, getEdgy = false) => {
         "Negotiating with an alien species who communicate in holograms they generate from their foreheads",
         "Trying to survive a night in a haunted mansion where the furniture comes to life",
         "Attempting to retrieve a mystical artifact guarded by a thousand-year-old dragon",
-        "Following a mysterious portal that opens to a parallel world of sentient shadows",
+        "Entering a mysterious portal to a parallel world of sentient shadows",
         "Battling through a time-warped labyrinth where the laws of physics constantly change",
         "Escaping a giant floating jellyfish that controls the tides of a rising ocean",
     ]

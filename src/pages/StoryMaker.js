@@ -10,6 +10,7 @@ import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper'
 import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/AILogo';
 import AWS from 'aws-sdk';
+import Slider from '../components/simple/Slider';
 
 
 function StoryMaker({setIsLoading}) {
@@ -17,7 +18,9 @@ function StoryMaker({setIsLoading}) {
   const [begun, setBegun] = useState(false);
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
-  const [enteredSituation, setEnteredSituation] = useState(getRandomSituation());
+  const [levelOfRealism, setLevelOfRealism] = useState(1);
+  const [getEdgy, setGetEdgy] = useState(false);
+  const [enteredSituation, setEnteredSituation] = useState(getRandomSituation(levelOfRealism, getEdgy));
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
@@ -27,6 +30,9 @@ function StoryMaker({setIsLoading}) {
   const [isAudioReady, setIsAudioReady] = useState(false); // Track if audio is ready
   const [polling, setPolling] = useState(false); // Track if polling is active
   const [audioUrlError, setAudioUrlError] = useState(false); // Error state in case audioUrl is still not valid
+ 
+  
+
   // for typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
@@ -203,7 +209,7 @@ function StoryMaker({setIsLoading}) {
   };
 
   const clearInputs = () => {
-    setEnteredSituation(getRandomSituation());
+    setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
     setCharacterInputs([]);
     adjustTextareaHeight();
     setShowCharacterInput(1);
@@ -215,7 +221,7 @@ function StoryMaker({setIsLoading}) {
   }
   
   const handleGetDifferentSituation = () => {
-    setEnteredSituation(getRandomSituation());
+    setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
     adjustTextareaHeight();
   }
 
@@ -258,9 +264,9 @@ function StoryMaker({setIsLoading}) {
 
   // which character input (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
-  <CharacterConfigurator characterId={1} submittedData={(data) => {handleCharacterInputSubmit(data, 1)}}/> :
-  (showCharacterInput === 2 ? <CharacterConfigurator characterId={2} submittedData={(data) => {handleCharacterInputSubmit(data, 2)}}/> :
-    (showCharacterInput === 3 ? <CharacterConfigurator characterId={3} submittedData={(data) => {handleCharacterInputSubmit(data, 3)}}/> : ""
+  <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={1} submittedData={(data) => {handleCharacterInputSubmit(data, 1)}}/> :
+  (showCharacterInput === 2 ? <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={2} submittedData={(data) => {handleCharacterInputSubmit(data, 2)}}/> :
+    (showCharacterInput === 3 ? <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={3} submittedData={(data) => {handleCharacterInputSubmit(data, 3)}}/> : ""
   ));
 
   // 4 shows the optional context/situation text input and submit button
@@ -334,6 +340,7 @@ function StoryMaker({setIsLoading}) {
         <div className={"pageDescription"}>
           {descriptionOfPageFunction}
           {howAppWorks}
+          <Slider setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
           {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
         </div>
           {characterInputGroup}

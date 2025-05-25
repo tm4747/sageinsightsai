@@ -3,9 +3,8 @@ import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, 
 import "./styles/CharacterConfigurator.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
-import Slider from './simple/Slider';
 
-const CharacterConfigurator = ({ characterId, submittedData }) => {
+const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, getEdgy, setGetEdgy }) => {
   
     const [characterName, setCharacterName] = useState('');
     const [characterType, setCharacterType] = useState('');
@@ -15,9 +14,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     const [characterDislikes, setCharacterDislikes] = useState('');
     const [characterDescription, setCharacterDescription] = useState('');
     // todo: change this to levelOfRealism - HEREHERE
-    const [getEdgy, setGetEdgy] = useState(false);
     const [enterValues, setEnterValues] = useState(false);
-    const [levelOfRealism, setLevelOfRealism] = useState(1);
   
     const characterTypes = getCharacterTypes(levelOfRealism, getEdgy);
     const characterTraits = getCharacterTraits(levelOfRealism, getEdgy);
@@ -134,7 +131,6 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     return (
       <div className={"character-config"}>
         <h3>{nameDisplay}</h3>
-        <Slider setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
         <table className={"inputContainer"}>
           <tbody>
           <tr className={"inputDiv"}>
