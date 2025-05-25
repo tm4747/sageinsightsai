@@ -3,6 +3,7 @@ import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, 
 import "./styles/CharacterConfigurator.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import Slider from './simple/Slider';
 
 const CharacterConfigurator = ({ characterId, submittedData }) => {
   
@@ -15,6 +16,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     const [characterDescription, setCharacterDescription] = useState('');
     const [getEdgy, setGetEdgy] = useState(false);
     const [enterValues, setEnterValues] = useState(false);
+    const [sliderValue, setSliderValue] = useState(1);
   
     const characterTypes = getCharacterTypes(getEdgy);
     const characterTraits = getCharacterTraits(getEdgy);
@@ -90,8 +92,8 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
         setCharacterType(getRandomValueFromArray(characterTypes));
         setCharacterTrait(getRandomValueFromArray(characterTraits));
         setCharacterHas(getRandomValueFromArray(characterHasItems));
-        setCharacterLikes(getRandomValueFromArray(likesChoices));
-        setCharacterDislikes(getRandomValueFromArray(dislikesChoices));
+        // only set a dislike or a like
+        Math.random() < 0.5 ? setCharacterLikes(getRandomValueFromArray(likesChoices)) : setCharacterDislikes(getRandomValueFromArray(dislikesChoices));
       };
 
       const adjustTextareaSize = () => {
@@ -124,6 +126,7 @@ const CharacterConfigurator = ({ characterId, submittedData }) => {
     return (
       <div className={"character-config"}>
         <h3>{nameDisplay}</h3>
+        <Slider setValue={setSliderValue} initialValue={sliderValue} />
         <table className={"inputContainer"}>
           <tbody>
           <tr className={"inputDiv"}>
