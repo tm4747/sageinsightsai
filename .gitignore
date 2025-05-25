@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# lambda layers
+/lambda_layers
+
 # testing
 /coverage
 
