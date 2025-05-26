@@ -11,6 +11,7 @@ import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/AILogo';
 import AWS from 'aws-sdk';
 import Slider from '../components/simple/Slider';
+import FlashingText from '../components/FlashingText';
 
 
 function StoryMaker({setIsLoading}) {
@@ -340,7 +341,7 @@ function StoryMaker({setIsLoading}) {
         <div className={"pageDescription"}>
           {descriptionOfPageFunction}
           {howAppWorks}
-          <Slider setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
+          <Slider label={"Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
           {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
         </div>
           {characterInputGroup}
@@ -349,10 +350,13 @@ function StoryMaker({setIsLoading}) {
             {audioUrl && !isAudioReady ? (
               <p><AILogo size={".75em"}/> &nbsp; Your Part 1 Audio is being processed and might take a minute. Please wait...</p> // Display a waiting message until the file is ready
             ) : (
+              <>
               <audio controls>
                 <source src={audioUrl} type="audio/mpeg" />
                 Your browser does not support the audio element.
-              </audio>
+              </audio> 
+              <h6 className={"no-margin-padding"}><FlashingText text={'&uarr; &nbsp; To download file click &nbsp; &#8942; &nbsp; &uarr;'} htmlEntities={true}/></h6>
+              </>
             )}
           </div> : ""}
       </div>

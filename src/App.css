@@ -87,3 +87,7 @@ select, .select-input, .text-input{
   .italic{
     font-style: italic;
   }
+  .no-margin-padding{
+    margin:0;
+    padding:0;
+  }

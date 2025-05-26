@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Slider = ({ setValue, initialValue, showEdgy }) => {
+const Slider = ({ setValue, initialValue, showEdgy, label }) => {
   const [sliderValue, setSliderValue] = useState(initialValue);
   const [transitionKey, setTransitionKey] = useState(Date.now()); // Key to force re-render for transition effect
 
@@ -26,7 +26,7 @@ const Slider = ({ setValue, initialValue, showEdgy }) => {
 
   return (
     <div>
-      <label htmlFor="slider">Set level of realism for character choices: </label>
+      <label htmlFor="slider">{label}</label>
       <input
         type="range"
         id="slider"
