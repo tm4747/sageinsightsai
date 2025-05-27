@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './css/PageCommon.css';
-import './css/HomeSummaryTool.css';
+import styles from './css/HomeSummaryTool.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-
 
 
 function HomeSummaryTool({setIsLoading}) {
@@ -16,7 +15,6 @@ function HomeSummaryTool({setIsLoading}) {
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
-
   
   //typing effect
   const [displayedText, setDisplayedText] = useState('');
@@ -24,7 +22,6 @@ function HomeSummaryTool({setIsLoading}) {
   const [isStarted, setIsStarted] = useState(false);
   //scroll vars
   const messagesEndRef = useRef(null);
-  
 
   // update state values
   const handleInputChange = (event) => {
@@ -117,7 +114,7 @@ function HomeSummaryTool({setIsLoading}) {
 
 
   return (
-    <>
+    <div className={styles.content}>
       <div className={"formDiv"}>
         <p className={"pageDescription"}>Please enter a website url.  
           This tool will return a general summary of the homepage: 
@@ -141,7 +138,7 @@ function HomeSummaryTool({setIsLoading}) {
       </div>
       <div ref={messagesEndRef}/>
       {stopScrollButton}
-    </>
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './css/PageCommon.css';
-import './css/StoryMaker.css';
+import styles from './css/StoryMaker.module.css';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -342,7 +342,7 @@ function StoryMaker({setIsLoading}) {
   );
 
   if(!begun) return(
-          <>
+          <div className={styles.content}>
            <div className={"formDiv"}>
              <div className={"pageDescription"}>
                 {descriptionOfPageFunction}
@@ -350,10 +350,10 @@ function StoryMaker({setIsLoading}) {
                 <button className={"button green-button"} onClick={handleBegin}>Begin!</button>
             </div>
            </div>
-          </>)
+          </div>)
    
   return (
-    <>
+    <div className={styles.content}>
       <div className={"formDiv"}>
         <div className={"pageDescription"}>
           {descriptionOfPageFunction}
@@ -389,7 +389,7 @@ function StoryMaker({setIsLoading}) {
       {stopScrollButton}
       {fetchAudioButtonBottom}
       {audioUrlError ? <span>&nbsp;</span> : ""}
-    </>
+    </div>
   );
 }
 

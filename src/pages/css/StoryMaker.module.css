@@ -1,0 +1,16 @@
+.content html, .content body, .content p, .content span, .content h1, .content h2, .content h3, .content h4, .content h5, .content h6, .content div{
+    font-family:fantasy;
+}
+.content .button-row{
+    padding-top:.5em;
+}
+.content li{
+    padding:.5em;
+    font-size:.85em;
+}
+.content .text-input{
+    width:100%;
+}
+.content .storymaker-character-input-display{
+    padding:1.5em;
+}
