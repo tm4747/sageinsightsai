@@ -11,6 +11,7 @@ import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/AILogo';
 import AWS from 'aws-sdk';
 import Slider from '../components/simple/Slider';
+import FlashingText from '../components/FlashingText';
 
 
 function StoryMaker({setIsLoading}) {
@@ -30,14 +31,12 @@ function StoryMaker({setIsLoading}) {
   const [isAudioReady, setIsAudioReady] = useState(false); // Track if audio is ready
   const [polling, setPolling] = useState(false); // Track if polling is active
   const [audioUrlError, setAudioUrlError] = useState(false); // Error state in case audioUrl is still not valid
- 
-  
-
   // for typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const messagesEndRef = useRef(null); // scroll vars
+  const audioPlayerRef = useRef(null); 
 
 
   /******** AWS S3 instance **********/
@@ -46,8 +45,8 @@ function StoryMaker({setIsLoading}) {
   const s3 = new AWS.S3({
     region: REGION,
     credentials: new AWS.Credentials({
-      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID_S3,
+      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY_S3,
     }),
   });
 
@@ -82,9 +81,7 @@ function StoryMaker({setIsLoading}) {
 
   // GET STORY TEXT LAMBDA
   const fetchStory = () => {
-    setPostResponse("");
-    setHtmlResponse("");
-    setDisplayedText("");
+    resetState();
     if(haveValidData()){
       try {
         setIsLoading(true);
@@ -95,6 +92,16 @@ function StoryMaker({setIsLoading}) {
         console.error('Error fetching summary:', error);
       } 
     }
+  }
+  
+  const resetState = () => {
+    setPostResponse("");
+    setHtmlResponse("");
+    setDisplayedText("");
+    setAudioUrl(null);
+    setIsAudioReady(false);
+    setPolling(false);
+    setAudioUrlError(false);
   }
 
   // GET STORY AUDIO LAMBDA - send text to text file in S3 and url to file
@@ -142,6 +149,15 @@ function StoryMaker({setIsLoading}) {
       
     }
   };
+
+  const fetchAudioAndScrollUp = () => {
+    // disable auto scrolling
+    setDisableScroll(true);
+    // scroll up to where audio element will appear
+    audioPlayerRef.current?.scrollIntoView({ behavior: "smooth" });
+    // fetch audio
+    fetchAudio();
+  }
   
   // POLLING function to check if audio file is available
   useEffect(() => {
@@ -260,7 +276,9 @@ function StoryMaker({setIsLoading}) {
 
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
-    <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
+    <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
+  const fetchAudioButton = (<button className={"button"} onClick={fetchAudio}>Get Audio</button>)
+  const fetchAudioButtonBottom = (postResponse) ? <button className={"button btnCancelScroll fetchAudioBottom"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
   // which character input (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
@@ -271,14 +289,14 @@ function StoryMaker({setIsLoading}) {
 
   // 4 shows the optional context/situation text input and submit button
   // TODO: move fetchAudio button to different location 
-  const submitInputGroup = showCharacterInput === 4 ? <><p>Your characters have found themselves in the following situation 
+  const submitInputGroup = showCharacterInput === 4 ? <><p className={"pStandard"}>Your characters have found themselves in the following situation 
     <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span></p>
   <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleSituationInputChange} rows={1}/>
   <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button>
   <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button>
   <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button>{postResponse ? 
-  <button className={"button"} onClick={fetchAudio}>Fetch Audio</button> : ""}</> : "";
+  fetchAudioButton : ""}</> : "";
 
   var howAppWorksHtml = <>
     <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
@@ -300,7 +318,7 @@ function StoryMaker({setIsLoading}) {
   );
 
   const descriptionOfPageFunction = (
-    <p>
+    <p className={"pStandard"}>
       You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.
       <FontAwesomeIcon 
         className={"flashing-icon"}
@@ -340,21 +358,26 @@ function StoryMaker({setIsLoading}) {
         <div className={"pageDescription"}>
           {descriptionOfPageFunction}
           {howAppWorks}
-          <Slider setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
-          {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
         </div>
+        <div className={"pageBody"}>
+          <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
+          {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
           {characterInputGroup}
           {submitInputGroup}
-          {audioUrl ? <div className="audio-player-container">
+          {audioUrl ? <div ref={audioPlayerRef} className="audio-player-container">
             {audioUrl && !isAudioReady ? (
-              <p><AILogo size={".75em"}/> &nbsp; Your Part 1 Audio is being processed and might take a minute. Please wait...</p> // Display a waiting message until the file is ready
+              <p><AILogo size={".75em"}/> &nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...</p> // Display a waiting message until the file is ready
             ) : (
+              <>
               <audio controls>
                 <source src={audioUrl} type="audio/mpeg" />
                 Your browser does not support the audio element.
-              </audio>
+              </audio> 
+              <h6 className={"no-margin-padding"}><FlashingText text={'&uarr; &nbsp; To download file click &nbsp; &#8942; &nbsp; &uarr;'} htmlEntities={true}/></h6>
+              </>
             )}
           </div> : ""}
+        </div>
       </div>
       <div className={"resultsDiv"} >
         <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
@@ -364,6 +387,7 @@ function StoryMaker({setIsLoading}) {
       </div>
       <div ref={messagesEndRef}/>
       {stopScrollButton}
+      {fetchAudioButtonBottom}
       {audioUrlError ? <span>&nbsp;</span> : ""}
     </>
   );

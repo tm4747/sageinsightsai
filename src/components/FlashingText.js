@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const FlashingText = ({ text, interval = 750 }) => {
+const FlashingText = ({ text, interval = 750, htmlEntities = false }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -11,7 +11,16 @@ const FlashingText = ({ text, interval = 750 }) => {
     return () => clearInterval(timer);
   }, [interval, isVisible]);
 
-  return <span className={isVisible ? 'fade-in' : 'fade-out' }>{text}</span>;
+  if(htmlEntities){
+    return (
+      <span
+        className={isVisible ? 'fade-in' : 'fade-out'}
+        dangerouslySetInnerHTML={{ __html: text }} // Render HTML content
+      />
+    );
+  } else {
+    return <span className={isVisible ? 'fade-in' : 'fade-out' }>{text}</span>;
+  }
 }
 
 export default FlashingText;
