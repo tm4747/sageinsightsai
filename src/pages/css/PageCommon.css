@@ -1,77 +1,83 @@
+.pStandard{
+  font-size:.75em;
+}
 .pageDescription{
-    font-size:.85em;
-    font-weight:bold;
-    padding-bottom:1em;
-  }
-  .textInput{
-    padding:.75em 4em ;
-    border-radius:10px;
-    width:50%;
-    display:inline;
-  }
-  .errorTextInput{
-    padding:.75em 4em ;
-    border-radius:10px;
-    width:50%;
-    display:inline;
-    border:solid 2px red;
-    background-color:red;
-  }
- 
-  .resultsDiv, .formDiv{
-    width:100%;
-    max-width:1400px;
-  }
-  .resultsDiv{
-    margin-top:2.5em;
-    border:solid #555 2px;
-    text-align:left;
-    border-radius:15px;
-    padding:1em;
-    font-size:.75em;
-  }
-  .btnCancelScroll{
-    padding:.75em ;
-    border-radius:10px;
-    font-weight:bold;
-    margin-left:1em;
-    background-color:#ddd;
-    color:#333;
-    width:25%;
-    display:inline;
-    position:fixed;
-    bottom: 25px;
-    right:50%;
-    transform: translateX(50%);
-    opacity:.75;
-  }
-  .btnCancelScroll:hover{
-    background-color:ghostwhite;
-    color:black;
-    opacity:1;
-  }
-  .pageDescription p{
-    font-size:.85em;
-    padding:0;
-    margin:1em;
-  }
-  @keyframes flashInvert {
-    0%   { color: white; background-color: black; }
-    50%  { color: black; background-color: white; }
-    100% { color: white; background-color: black; }
-  }
-  .flashing-icon {
-    animation: flashInvert 1.25s infinite;
-    border-radius: 50%;
-    padding: 4px;
-    transition: color 0.5s ease, background-color 0.5s ease;
-    cursor: pointer;
-    margin-left: 8px; 
-  }
+  font-weight:bold;
+  margin-bottom:1em;
+  padding-bottom:.5em;
+  border-bottom:solid 2px #444;
+}
+.pageDescription p{
+  padding:0;
+  margin:1em;
+}
+.textInput{
+  padding:.75em 4em ;
+  border-radius:10px;
+  width:50%;
+  display:inline;
+}
+.errorTextInput{
+  padding:.75em 4em ;
+  border-radius:10px;
+  width:50%;
+  display:inline;
+  border:solid 2px red;
+  background-color:red;
+}
+
+.resultsDiv, .formDiv{
+  width:100%;
+  max-width:1400px;
+}
+.resultsDiv{
+  margin-top:2.5em;
+  border:solid #555 2px;
+  text-align:left;
+  border-radius:15px;
+  padding:1em;
+  font-size:.75em;
+}
+.btnCancelScroll{
+  padding:.75em ;
+  border-radius:10px;
+  font-weight:bold;
+  margin-left:1em;
+  background-color:#ddd;
+  color:#333;
+  width:25%;
+  display:inline;
+  position:fixed;
+  bottom: 75px;
+  right:50%;
+  transform: translateX(50%);
+  opacity:.75;
+}
+.btnCancelScroll:hover{
+  background-color:ghostwhite;
+  color:black;
+  opacity:1;
+}
+.fetchAudioBottom{
+  bottom: 5px;
+}
+@keyframes flashInvert {
+  0%   { color: white; background-color: black; }
+  50%  { color: black; background-color: white; }
+  100% { color: white; background-color: black; }
+}
+.flashing-icon {
+  animation: flashInvert 1.25s infinite;
+  border-radius: 50%;
+  padding: 4px;
+  transition: color 0.5s ease, background-color 0.5s ease;
+  cursor: pointer;
+  margin-left: 8px; 
+}
 .flashing-icon:hover{
-    animation: none;
-    color:rgb(47, 47, 208);
-    background-color: white;
+  animation: none;
+  color:rgb(47, 47, 208);
+  background-color: white;
 }
 .close-icon{
     float:right;
@@ -97,7 +103,6 @@
     opacity: 1;
     visibility: visible;
 }
-
 .notice{
   text-decoration: underline;
   font-size:.75em;
