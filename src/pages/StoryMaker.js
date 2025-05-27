@@ -45,8 +45,8 @@ function StoryMaker({setIsLoading}) {
   const s3 = new AWS.S3({
     region: REGION,
     credentials: new AWS.Credentials({
-      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
+      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID_S3,
+      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY_S3,
     }),
   });
 
