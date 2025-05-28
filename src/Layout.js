@@ -10,7 +10,7 @@ const Layout = ({isLoading}) => {
   const path = location.pathname;
 
   const nav = (<nav className={"theNav"}>
-    <Link className={"/" === path ? "activeLink" : ""} to="/">Story Maker</Link> &nbsp;| &nbsp; 
+    <Link className={"/" === path ? "activeLink" : ""} to="/">Story Maker</Link>&nbsp;|&nbsp; 
     <Link className={"/story-maker" === path ? "activeLink" : ""} to="/web-summary">Home Page Summary</Link>
     </nav>);
   return (
@@ -19,8 +19,8 @@ const Layout = ({isLoading}) => {
       <div className="App">
         <header className="App-header">
           <h2 className={"pageTitle"}>
-          <AILogo size={".75em"}/> &nbsp; 
-            <TypingText baseText={"Hello@User:~$"} text={"Welcome to Sage Insights AI!"} flashingText={" _ "}/>
+          <AILogo size={".75em"}/>
+            <TypingText baseText={" Hello@User:~$"} text={"Welcome to Sage Insights AI!"} flashingText={"_ "}/>
           </h2>
           {nav}
           <section className="body">
