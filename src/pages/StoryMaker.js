@@ -314,7 +314,7 @@ function StoryMaker({setIsLoading}) {
     </ol>
   </>
 
-let howItWorksStyles = 'how-it-works-container' + " ";
+let howItWorksStyles = 'how-it-works-container ';
 howItWorksStyles += showHowItWorks ? 'expanded' : 'collapsed';
   const howAppWorks = (
     <div className={howItWorksStyles}>
