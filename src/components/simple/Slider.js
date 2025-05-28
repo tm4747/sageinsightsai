@@ -36,7 +36,7 @@ const Slider = ({ setValue, initialValue, showEdgy, label }) => {
         value={sliderValue}
         onChange={handleSliderChange}
       />
-      <p
+      <p className={"bold"}
         key={transitionKey} // Force re-render on value change for transition effect
         style={{
           opacity: 0,

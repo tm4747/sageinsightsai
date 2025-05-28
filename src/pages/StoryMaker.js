@@ -293,7 +293,7 @@ function StoryMaker({setIsLoading}) {
   // TODO: move fetchAudio button to different location 
   const getADifferentSituationButton = !postResponse ? <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button> : "";
   const tellMeAStoryButton = !postResponse ? <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button> : "";
-  const submitInputGroup = showCharacterInput === 4 ? <><p className={"pStandard"}>Your characters have found themselves in the following situation 
+  const submitInputGroup = showCharacterInput === 4 ? <><p className={"pStandard bold"}>Your characters have found themselves in the following situation 
     <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span></p>
   <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleSituationInputChange} rows={1}/>
@@ -336,7 +336,7 @@ howItWorksStyles += showHowItWorks ? 'expanded' : 'collapsed';
 
   // CHARACTER INPUT DISPLAY
   const characterInputsItems = characterInputs.map(function(input, i){
-    return <li key={i}>Character {i+1} is {input}</li>
+    return <li className={"bold"} key={i}>Character {i+1} is {input}</li>
   });
   const characterInputsDisplay = (
     <div className={"how-it-works-container expanded character-input-display"}>
