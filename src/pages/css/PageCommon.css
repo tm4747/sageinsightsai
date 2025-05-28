@@ -30,7 +30,7 @@
   width:100%;
   max-width:1400px;
 }
-.resultsDiv{
+.innerResultsDiv{
   margin-top:2.5em;
   border:solid #555 2px;
   text-align:left;
@@ -43,8 +43,6 @@
   border-radius:10px;
   font-weight:bold;
   margin-left:1em;
-  background-color:#ddd;
-  color:#333;
   width:25%;
   display:inline;
   position:fixed;
@@ -81,6 +79,9 @@
 }
 .close-icon{
     float:right;
+    height:.9em;
+    width:1em;
+    margin-top:1em;
 }
 .how-it-works-container {
     overflow: hidden;
@@ -97,11 +98,16 @@
     border:solid #555 2px;
     text-align:left;
     border-radius:15px;
-    padding:0 2em;
+    padding:0 1em;
     font-size:.75em;
-    max-height: 500px; /* or something high enough to contain your content */
+    max-height: 700px; /* or something high enough to contain your content */
     opacity: 1;
     visibility: visible;
+}
+@media (max-width: 768px) {
+  .how-it-works-container.expanded {
+    padding: 0 0;
+  }
 }
 .notice{
   text-decoration: underline;

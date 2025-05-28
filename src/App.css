@@ -55,6 +55,12 @@ html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
   color:white;
   background-color:rgb(224, 8, 40);
 }
+.purple-button{
+  background-color:rgb(203, 167, 203)
+}
+.purple-button:hover{
+  color:rgb(111, 71, 111)
+}
 label{
   font-size:.75em;
   padding:.5em;

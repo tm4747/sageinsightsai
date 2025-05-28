@@ -1,3 +1,5 @@
 .content html, .content body, .content p, .content span, .content h1, .content h2, .content h3, .content h4, .content h5, .content h6, .content div{
-    font-family:'Courier New', 'Courier Prime', Courier, monospace;
-  }
+  /* font-family:fantasy; */
+  font-family:'Courier New', 'Courier Prime', Courier, monospace;
+  font-weight:bold;
+}

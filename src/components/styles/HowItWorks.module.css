@@ -1,0 +1,22 @@
+.howItWorksContainer {
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    padding:0;
+    margin:0;
+}
+.how-it-works-container.expanded {
+    margin-top:1.5em;
+    margin-bottom:1.5em;
+    border:solid #555 2px;
+    text-align:left;
+    border-radius:15px;
+    padding:0 2em;
+    font-size:.75em;
+    max-height: 500px; /* or something high enough to contain your content */
+    opacity: 1;
+    visibility: visible;
+    
+}

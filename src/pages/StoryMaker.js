@@ -204,14 +204,17 @@ function StoryMaker({setIsLoading}) {
     adjustTextareaHeight();
   };
 
-  const adjustTextareaHeight = () => { // dynamically adjust height of textarea boxes
-    const textarea = textareaRef.current;
-    console.log("try resize textarea", textarea);
-    if(textarea){
-      textarea.style.height = "auto";
-      textarea.style.height = textarea.scrollHeight + "px";
-    }
-  }
+  const adjustTextareaHeight = () => {
+    setTimeout(() => {
+      const textarea = textareaRef.current;
+      console.log("try resize textarea", textarea);
+      if (textarea) {
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+      }
+    }, 250); // Delay by 250ms (0.25 seconds)
+  };
+  
 
   // handle each character input submit - should be 2 variables - a sentence of description and optional contextual situation
   const handleCharacterInputSubmit = (data, index) => {
@@ -277,8 +280,7 @@ function StoryMaker({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-  const fetchAudioButton = (<button className={"button"} onClick={fetchAudio}>Get Audio</button>)
-  const fetchAudioButtonBottom = (postResponse) ? <button className={"button btnCancelScroll fetchAudioBottom"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
+  const fetchAudioButtonBottom = (postResponse) ? <button className={"button btnCancelScroll fetchAudioBottom purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
   // which character input (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
@@ -289,14 +291,15 @@ function StoryMaker({setIsLoading}) {
 
   // 4 shows the optional context/situation text input and submit button
   // TODO: move fetchAudio button to different location 
+  const getADifferentSituationButton = !postResponse ? <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button> : "";
+  const tellMeAStoryButton = !postResponse ? <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button> : "";
   const submitInputGroup = showCharacterInput === 4 ? <><p className={"pStandard"}>Your characters have found themselves in the following situation 
     <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span></p>
   <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
                   onChange={handleSituationInputChange} rows={1}/>
-  <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button>
-  <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button>
-  <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button>{postResponse ? 
-  fetchAudioButton : ""}</> : "";
+  {tellMeAStoryButton}
+  {getADifferentSituationButton}
+  <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button></> : "";
 
   var howAppWorksHtml = <>
     <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
@@ -311,8 +314,10 @@ function StoryMaker({setIsLoading}) {
     </ol>
   </>
 
+let howItWorksStyles = 'how-it-works-container' + " ";
+howItWorksStyles += showHowItWorks ? 'expanded' : 'collapsed';
   const howAppWorks = (
-    <div className={`how-it-works-container ${showHowItWorks ? 'expanded' : 'collapsed'}`}>
+    <div className={howItWorksStyles}>
       {howAppWorksHtml}
     </div>
   );
@@ -380,9 +385,11 @@ function StoryMaker({setIsLoading}) {
         </div>
       </div>
       <div className={"resultsDiv"} >
-        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
-        <div>
-          {isDone ? <p>Done!</p> : ""}
+        <div className={"innerResultsDiv"}>
+          <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
+          <div>
+            {isDone ? <p>Done!</p> : ""}
+          </div>
         </div>
       </div>
       <div ref={messagesEndRef}/>
