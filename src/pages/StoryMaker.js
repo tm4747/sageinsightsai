@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './css/PageCommon.css';
 import styles from './css/StoryMaker.module.css';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
 import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/AILogo';
 import AWS from 'aws-sdk';
 import Slider from '../components/simple/Slider';
 import FlashingText from '../components/FlashingText';
+import HowItWorks from '../components/HowItWorks';
+import { getStoryMakerHowItWorks } from '../lib/DataHelper';
 
 
 function StoryMaker({setIsLoading}) {
-
   const [begun, setBegun] = useState(false);
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
@@ -94,16 +93,6 @@ function StoryMaker({setIsLoading}) {
     }
   }
   
-  const resetState = () => {
-    setPostResponse("");
-    setHtmlResponse("");
-    setDisplayedText("");
-    setAudioUrl(null);
-    setIsAudioReady(false);
-    setPolling(false);
-    setAudioUrlError(false);
-  }
-
   // GET STORY AUDIO LAMBDA - send text to text file in S3 and url to file
   const fetchAudio = async () => {
     if(postResponse){
@@ -146,19 +135,9 @@ function StoryMaker({setIsLoading}) {
         console.error("Error sending story text to S3:", error);
         setIsLoading(false);
       }
-      
     }
   };
 
-  const fetchAudioAndScrollUp = () => {
-    // disable auto scrolling
-    setDisableScroll(true);
-    // scroll up to where audio element will appear
-    audioPlayerRef.current?.scrollIntoView({ behavior: "smooth" });
-    // fetch audio
-    fetchAudio();
-  }
-  
   // POLLING function to check if audio file is available
   useEffect(() => {
     let intervalId;
@@ -197,8 +176,26 @@ function StoryMaker({setIsLoading}) {
   }
 
 
+  /********** DYNAMIC JS FUNCTIONS **********/ 
+  const resetState = () => {
+    setPostResponse("");
+    setHtmlResponse("");
+    setDisplayedText("");
+    setAudioUrl(null);
+    setIsAudioReady(false);
+    setPolling(false);
+    setAudioUrlError(false);
+  }
 
-  /********** DYNAMIC JS FUNCTIONS *********8*/ 
+  const fetchAudioAndScrollUp = () => {
+    // disable auto scrolling
+    setDisableScroll(true);
+    // scroll up to where audio element will appear
+    audioPlayerRef.current?.scrollIntoView({ behavior: "smooth" });
+    // fetch audio
+    fetchAudio();
+  }
+
   const handleSituationInputChange = (event) => {
     setEnteredSituation(event.target.value);
     adjustTextareaHeight();
@@ -215,7 +212,6 @@ function StoryMaker({setIsLoading}) {
     }, 250); // Delay by 250ms (0.25 seconds)
   };
   
-
   // handle each character input submit - should be 2 variables - a sentence of description and optional contextual situation
   const handleCharacterInputSubmit = (data, index) => {
     const nextCharacterInputIndex = index + 1;
@@ -243,7 +239,6 @@ function StoryMaker({setIsLoading}) {
     setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
     adjustTextareaHeight();
   }
-
 
 
   /******** HELPER FUNCTIONS **********/
@@ -282,15 +277,14 @@ function StoryMaker({setIsLoading}) {
     <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
   const fetchAudioButtonBottom = (postResponse) ? <button className={"button btnCancelScroll fetchAudioBottom purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
-  // which character input (1, 2, or 3) should show
+  // which showCharacterInput (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
   <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={1} submittedData={(data) => {handleCharacterInputSubmit(data, 1)}}/> :
   (showCharacterInput === 2 ? <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={2} submittedData={(data) => {handleCharacterInputSubmit(data, 2)}}/> :
     (showCharacterInput === 3 ? <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={3} submittedData={(data) => {handleCharacterInputSubmit(data, 3)}}/> : ""
   ));
 
-  // 4 shows the optional context/situation text input and submit button
-  // TODO: move fetchAudio button to different location 
+  // showCharacterInput 4 shows the optional context/situation text input and submit button
   const getADifferentSituationButton = !postResponse ? <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button> : "";
   const tellMeAStoryButton = !postResponse ? <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button> : "";
   const submitInputGroup = showCharacterInput === 4 ? <><p className={"pStandard bold"}>Your characters have found themselves in the following situation 
@@ -301,26 +295,8 @@ function StoryMaker({setIsLoading}) {
   {getADifferentSituationButton}
   <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button></> : "";
 
-  var howAppWorksHtml = <>
-    <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
-      title="Close"/>
-    <h4>How it works:</h4> 
-    <ol>
-      <li>First, you create 3 characters, either from a variety of presets, or by adding in your own custom values.</li>
-      <li>Next, a random situation will be suggested.  You are free to modify this or delete it altogether.</li>
-      <li>The characters and situation are then sent to a lambda function that will generate a story using LLMs from OpenAI, Google Gemini and Anthropic Claude, which each will be called to play each of the characters, carrying out a converstaion and acting out a virtual 'skit'.</li>
-      <li>When this text begins to appear, you have the option to generate an audio file where a narrator will read the story.  This is done through a series of calls to lambda, AWS S3 and openAI's audio model, as the story text will often exceed the 4096 character limit of Lambda, and the generation of the audio file will exceed the 30 second max response time of AWS API Gateway.</li>
-      <li>Audio file generation can take up to a couple minutes.  There is a polling funcitionality in place to check every 5 seconds to see if the file is ready.  Once it's ready, you'll be able to play it through the audio player which appears.</li>
-    </ol>
-  </>
-
-let howItWorksStyles = 'how-it-works-container ';
-howItWorksStyles += showHowItWorks ? 'expanded' : 'collapsed';
-  const howAppWorks = (
-    <div className={howItWorksStyles}>
-      {howAppWorksHtml}
-    </div>
-  );
+  const howItWorksData = getStoryMakerHowItWorks(); 
+  const howAppWorks = (<HowItWorks title={"How it works:"} data={howItWorksData} showHowItWorks={showHowItWorks} setShowHowItWorks={setShowHowItWorks} showCloseButton={true}/>);
 
   const descriptionOfPageFunction = (
     <p className={"pStandard"}>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './css/PageCommon.css';
 import styles from './css/HomeSummaryTool.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import HowItWorks from '../components/HowItWorks';
+import { getHomeSummaryHowItWorks } from '../lib/DataHelper';
 
 
 function HomeSummaryTool({setIsLoading}) {
@@ -15,24 +15,16 @@ function HomeSummaryTool({setIsLoading}) {
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
-  
-  //typing effect
+    //typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   //scroll vars
   const messagesEndRef = useRef(null);
 
-  // update state values
-  const handleInputChange = (event) => {
-    setEnteredUrl(event.target.value);
-  };
 
-  const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
-    <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-
-  //typing effect
-  useEffect(() => {
+  /********* USE EFFECTS & API CALLS **********/
+  useEffect(() => {  //typing effect
     if (!htmlReponse) return;  // No htmlReponse to display\
     setDisableScroll(false)
     setIsDone(false);
@@ -77,7 +69,6 @@ function HomeSummaryTool({setIsLoading}) {
       } 
     }  
   }
-  
 
   // Auto-scroll to bottom when new text is displayed
   useEffect(() => {
@@ -86,30 +77,23 @@ function HomeSummaryTool({setIsLoading}) {
     }
   }, [disableScroll, displayedText]);
 
+
+  /********** DYNAMIC JS FUNCTIONS **********/ 
+  const handleInputChange = (event) => {
+    setEnteredUrl(event.target.value);
+  };
+
   const handleShowHowItWorks = () => {
     setShowHowItWorks(!showHowItWorks);
   }
- 
-  var howAppWorksHtml = <>
-  <FontAwesomeIcon icon={faXmark} onClick={() => {setShowHowItWorks(false)}} className={"flashing-icon close-icon"} 
-  title="Close"/>
-  <h4>How it works:</h4> 
-  <ol>
-  <li>A valid url must be entered which is then submitted to a Lambda function via AWS API Gateway.</li>
-  <li>The Lambda function then attempts to pull and parse all content from the site homepage.
-  <ul>
-    <li><strong>Please note:</strong> this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app.</li>
-    </ul></li>
-  <li>The Lambda function then submits this content to OpenAI via API, requesting a summary.</li>
-  <li>The response is then returned by Lambda to display here.</li></ol></>
-
-  const howAppWorks = (
-    <div className={`how-it-works-container ${showHowItWorks ? 'expanded' : 'collapsed'}`}>
-      {howAppWorksHtml}
-    </div>
-  );
 
 
+  /********** DISPLAY FUNCTIONS ***********/
+  const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
+    <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
+
+  const howItWorksData = getHomeSummaryHowItWorks(); 
+  const howAppWorks = (<HowItWorks title={"How it works:"} data={howItWorksData} showHowItWorks={showHowItWorks} setShowHowItWorks={setShowHowItWorks} showCloseButton={true}/>);
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
 
 
@@ -143,7 +127,3 @@ function HomeSummaryTool({setIsLoading}) {
 }
 
 export default HomeSummaryTool;
-
-
-
-
