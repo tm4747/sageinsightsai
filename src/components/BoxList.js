@@ -18,7 +18,7 @@ const BoxList = ({showBoxList, setShowBoxList, title, data, showCloseButton = fa
                 <strong>{item.heading}</strong> {item.text}
                 <ul>
                   {item.children.map((child, idx) => (
-                    <li key={idx}>{child}</li>
+                    <li key={idx}><strong>{child.heading}</strong> {child.text}</li>
                   ))}
                 </ul>
               </li>

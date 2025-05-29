@@ -31,7 +31,12 @@ export const getHomeSummaryHowItWorks = () => {
                 },
                 {
                     "text": "The Lambda function then attempts to pull and parse all content from the site homepage.",
-                    "children": ["Please note: this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app."]
+                    "children": [
+                        {
+                            "heading": "Please note: ",
+                            "text": "this tool may not be able to retrieve site content if it is loaded via JavaScript such as is the case for a ReactJS app.",
+                        },
+                    ],
                 },
                 {
                     "text": "The Lambda function then submits this content to OpenAI via API, requesting a summary.",
