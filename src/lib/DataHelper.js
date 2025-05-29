@@ -4,7 +4,6 @@ export const getStoryMakerHowItWorks = () => {
             "data": [
               {
                 "text": "First, you create 3 characters, either from a variety of presets, or by adding in your own custom values.",
-                "children": ["child1", "child2"]
               },
               {
                 "text": "Next, a random situation will be suggested. You are free to modify this or delete it altogether.",

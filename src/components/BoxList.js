@@ -1,11 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import styles from "./styles/HowItWorks.module.css"; // Import CSS Module styles
+import styles from "./styles/BoxList.module.css"; // Import CSS Module styles
 
 
-const HowItWorks = ({showHowItWorks, setShowHowItWorks, title, data, showCloseButton = false, listType = "ol"}) => {
+const BoxList = ({showBoxList, setShowBoxList, title, data, showCloseButton = false, listType = "ol"}) => {
     const closeButton = showCloseButton ? 
-    <FontAwesomeIcon icon={faXmark} onClick={() => { setShowHowItWorks(false); }} className={`${styles.closeIcon} flashing-icon`} title="Close"/> 
+    <FontAwesomeIcon icon={faXmark} onClick={() => { setShowBoxList(false); }} className={`${styles.closeIcon} flashing-icon`} title="Close"/> 
     : "";
 
     const allListItems = (() => {
@@ -15,7 +15,7 @@ const HowItWorks = ({showHowItWorks, setShowHowItWorks, title, data, showCloseBu
           if (item.children && item.children.length > 0) {  // Check if the item has children
             listItems.push(  // Render a list item and its sub-list
               <li key={i}>
-                {item.text}
+                <strong>{item.heading}</strong> {item.text}
                 <ul>
                   {item.children.map((child, idx) => (
                     <li key={idx}>{child}</li>
@@ -24,13 +24,13 @@ const HowItWorks = ({showHowItWorks, setShowHowItWorks, title, data, showCloseBu
               </li>
             );
           } else {
-            listItems.push(<li key={i}>{item.text}</li>);  // Render just the item without children
+            listItems.push(<li key={i}><strong>{item.heading}</strong> {item.text}</li>);  // Render just the item without children
           }
         }
         return listItems;
       })();
 
-    var howAppWorksHtml = <>
+    var boxListHtml = <>
     {closeButton}
     <h4>{title}</h4>
     {listType === "ol" ? (
@@ -44,13 +44,13 @@ const HowItWorks = ({showHowItWorks, setShowHowItWorks, title, data, showCloseBu
     )}
 
     </>;
-    let howItWorksStyles = `${styles.howItWorksContainer} ${showHowItWorks ? styles.expanded : styles.collapsed}`;
+    let boxListStyles = `${styles.boxListContainer} ${showBoxList ? styles.expanded : styles.collapsed}`;
 
     return (
-        <div className={howItWorksStyles}>
-        {howAppWorksHtml}
+        <div className={boxListStyles}>
+        {boxListHtml}
         </div>
     );
 };
 
-export default HowItWorks;
+export default BoxList;

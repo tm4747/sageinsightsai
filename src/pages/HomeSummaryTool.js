@@ -4,7 +4,7 @@ import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
-import HowItWorks from '../components/HowItWorks';
+import BoxList from '../components/BoxList';
 import { getHomeSummaryHowItWorks } from '../lib/DataHelper';
 
 
@@ -14,7 +14,7 @@ function HomeSummaryTool({setIsLoading}) {
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
-  const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [showBoxList, setShowBoxList] = useState(false);
     //typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
@@ -84,7 +84,7 @@ function HomeSummaryTool({setIsLoading}) {
   };
 
   const handleShowHowItWorks = () => {
-    setShowHowItWorks(!showHowItWorks);
+    setShowBoxList(!showBoxList);
   }
 
 
@@ -93,7 +93,7 @@ function HomeSummaryTool({setIsLoading}) {
     <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
 
   const howItWorksData = getHomeSummaryHowItWorks(); 
-  const howAppWorks = (<HowItWorks title={"How it works:"} data={howItWorksData} showHowItWorks={showHowItWorks} setShowHowItWorks={setShowHowItWorks} showCloseButton={true}/>);
+  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
 
 

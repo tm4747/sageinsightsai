@@ -10,7 +10,7 @@ import AILogo from '../components/AILogo';
 import AWS from 'aws-sdk';
 import Slider from '../components/simple/Slider';
 import FlashingText from '../components/FlashingText';
-import HowItWorks from '../components/HowItWorks';
+import BoxList from '../components/BoxList';
 import { getStoryMakerHowItWorks } from '../lib/DataHelper';
 
 
@@ -24,7 +24,7 @@ function StoryMaker({setIsLoading}) {
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
-  const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [showBoxList, setShowBoxList] = useState(false);
   const textareaRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [isAudioReady, setIsAudioReady] = useState(false); // Track if audio is ready
@@ -172,7 +172,7 @@ function StoryMaker({setIsLoading}) {
   }, [disableScroll, displayedText]);
 
   const handleShowHowItWorks = () => {
-    setShowHowItWorks(!showHowItWorks);
+    setShowBoxList(!showBoxList);
   }
 
 
@@ -231,7 +231,7 @@ function StoryMaker({setIsLoading}) {
   };
 
   const handleBegin = () => {
-    setShowHowItWorks(false);
+    setShowBoxList(false);
     setBegun(true);
   }
   
@@ -296,7 +296,7 @@ function StoryMaker({setIsLoading}) {
   <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button></> : "";
 
   const howItWorksData = getStoryMakerHowItWorks(); 
-  const howAppWorks = (<HowItWorks title={"How it works:"} data={howItWorksData} showHowItWorks={showHowItWorks} setShowHowItWorks={setShowHowItWorks} showCloseButton={true}/>);
+  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
 
   const descriptionOfPageFunction = (
     <p className={"pStandard"}>
@@ -310,17 +310,18 @@ function StoryMaker({setIsLoading}) {
     </p>
   );
 
-  // CHARACTER INPUT DISPLAY
-  const characterInputsItems = characterInputs.map(function(input, i){
-    return <li className={"bold"} key={i}>Character {i+1} is {input}</li>
-  });
-  const characterInputsDisplay = (
-    <div className={"how-it-works-container expanded character-input-display"}>
-      <ul>
-        {characterInputsItems}
-      </ul>
-    </div>
-  );
+  const datafyCharacterInputs = (data) => {
+    const dataArray = [];
+    for(var x = 0; x < data.length; x++){
+      dataArray.push({"heading": "Character " + (x + 1) + ": ", "text" : data[x]});
+    }
+    return { "data": dataArray};
+  }
+
+  const formattedCharacterData = datafyCharacterInputs(characterInputs);
+  const characterInputsDisplay = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
+  setShowBoxList={() => {return null;}} showCloseButton={false} listType={"ul"}/>
+
 
   if(!begun) return(
           <div className={styles.content}>

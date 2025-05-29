@@ -4,7 +4,7 @@
     width:1em;
     margin-top:1em;
 }
-.howItWorksContainer {
+.boxListContainer {
     overflow: hidden;
     transition: max-height 0.5s ease, opacity 0.5s ease;
     max-height: 0;
@@ -13,7 +13,7 @@
     padding:0;
     margin:0;
 }
-.howItWorksContainer.expanded {
+.boxListContainer.expanded {
     margin-top:1.5em;
     margin-bottom:1.5em;
     border:solid #555 2px;
@@ -26,7 +26,7 @@
     visibility: visible;
 }
 @media (max-width: 768px) {
-  .howItWorksContainer.expanded {
+  .boxListContainer.expanded {
     padding: 0 1em;
   }
 }
