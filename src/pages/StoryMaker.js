@@ -35,7 +35,7 @@ function StoryMaker({setIsLoading}) {
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const messagesEndRef = useRef(null); // scroll vars
-  const audioPlayerRef = useRef(null); 
+  const pageBodyRef = useRef(null); 
 
 
   /******** AWS S3 instance **********/
@@ -79,20 +79,11 @@ function StoryMaker({setIsLoading}) {
   }, [postResponse]);
 
   // GET STORY TEXT LAMBDA
-  // TODO: we had a resetState function which did the following.  Need to think through app data flow.
-  // setPostResponse("");
-  //   setHtmlResponse("");
-  //   setDisplayedText("");
-  //   setAudioUrl(null);
-  //   setIsAudioReady(false);
-  //   setPolling(false);
-  //   setAudioUrlError(false);
   const fetchStory = () => {
     if(haveValidData()){
       try {
         setIsLoading(true);
         const inputData = getDataArray();
-        console.log("lambda call next")
         fetchStoryFromLambda(inputData, setPostResponse, setIsLoading);
       } catch (error) {
         console.error('Error fetching summary:', error);
@@ -106,14 +97,11 @@ function StoryMaker({setIsLoading}) {
       try {
         let useablePostResponse = removeSpecialChars(postResponse);
         useablePostResponse = removeIntroMaterial(useablePostResponse);
-        console.log(["useablePostResponse", useablePostResponse])
         setIsLoading(true);
 
         // Create filename for the text file
         const timestamp = Math.floor(Date.now() / 1000);;
         const s3FileName = `story-${timestamp}.txt`;
-        console.log('s3FileName');
-        console.log(s3FileName);
 
         const s3Params = {
           Bucket: S3_BUCKET,
@@ -122,7 +110,6 @@ function StoryMaker({setIsLoading}) {
           ContentType: 'text/plain'
         };
         try {
-          console.log('Try to upload to S3:')
           // Upload to S3
           const s3Upload = await s3.upload(s3Params).promise();
           console.log('Text file uploaded to S3:', s3Upload.Location);
@@ -130,13 +117,10 @@ function StoryMaker({setIsLoading}) {
           const audioUrl = await fetchAudioFromLambda(s3Upload.Location);
           // Set the audio URL
           setAudioUrl(audioUrl);
-          setTimeout(() => {
-            audioPlayerRef.current?.scrollIntoView({ behavior: "smooth" });
-          }, 250);
+          scrollToPageBody();
           setPolling(true); // Start polling
           setIsLoading(false);
         } catch (error) {
-          console.log('s3Upload');
           console.error("Error uploading to s3 or fetching audio:", error);
           setIsLoading(false);
         }
@@ -151,7 +135,6 @@ function StoryMaker({setIsLoading}) {
   // POLLING function to check if audio file is available
   useEffect(() => {
     let intervalId;
-
     if (polling && audioUrl) {
       intervalId = setInterval(async () => {
         try {
@@ -187,6 +170,11 @@ function StoryMaker({setIsLoading}) {
 
 
   /********** DYNAMIC JS FUNCTIONS **********/ 
+  const scrollToPageBody = () => {
+    setTimeout(() => {
+      pageBodyRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 250);
+  }
   const resetState = () => {
     setHtmlResponse("");
     setPostResponse("");
@@ -218,7 +206,6 @@ function StoryMaker({setIsLoading}) {
   const adjustTextareaHeight = () => {
     setTimeout(() => {
       const textarea = textareaRef.current;
-      console.log("try resize textarea", textarea);
       if (textarea) {
         textarea.style.height = "auto";
         textarea.style.height = textarea.scrollHeight + "px";
@@ -231,6 +218,7 @@ function StoryMaker({setIsLoading}) {
     const nextCharacterInputIndex = index + 1;
     addNewCharacter(data)
     setShowCharacterInput(nextCharacterInputIndex);
+    scrollToPageBody();
   }
 
   const addNewCharacter = (newValue) => {
@@ -240,6 +228,7 @@ function StoryMaker({setIsLoading}) {
   const handleBegin = () => {
     setShowBoxList(false);
     setBegun(true);
+    scrollToPageBody();
   }
   
   const handleGetDifferentSituation = () => {
@@ -276,6 +265,14 @@ function StoryMaker({setIsLoading}) {
     b_validData = (characterInputs[1] && characterInputs[1].length > 5) ? b_validData : false;
     b_validData = (characterInputs[2] && characterInputs[2].length > 5) ? b_validData : false;
     return b_validData;
+  }
+
+  const datafyCharacterInputs = (data) => {
+    const dataArray = [];
+    for(var x = 0; x < data.length; x++){
+      dataArray.push({"heading": "Character " + (x + 1) + ": ", "text" : data[x]});
+    }
+    return { "data": dataArray};
   }
 
 
@@ -320,34 +317,31 @@ function StoryMaker({setIsLoading}) {
     </p>
   );
 
-  const datafyCharacterInputs = (data) => {
-    const dataArray = [];
-    for(var x = 0; x < data.length; x++){
-      dataArray.push({"heading": "Character " + (x + 1) + ": ", "text" : data[x]});
-    }
-    return { "data": dataArray};
-  }
-
   const formattedCharacterData = datafyCharacterInputs(characterInputs);
   const characterInputsDisplay = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
   setShowBoxList={() => {return null;}} showCloseButton={false} listType={"ul"}/>
 
-  const displayAudio = (audioUrl ? <div ref={audioPlayerRef} className="audio-player-container">
+  const displayAudio = (audioUrl ? <div className="audio-player-container">
   {audioUrl && !isAudioReady ? (
-    <p><AILogo size={".75em"}/> &nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...</p> // Display a waiting message until the file is ready
+    <p>
+      <AILogo size={".75em"}/> 
+      
+      <FlashingText text={'&nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...'} htmlEntities={true}/>
+    </p> // Display a waiting message until the file is ready
   ) : (
     <>
     <audio controls>
       <source src={audioUrl} type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio> 
-    <h6 className={"no-margin-padding"}><FlashingText text={'&uarr; &nbsp; To download file click &nbsp; &#8942; &nbsp; &uarr;'} htmlEntities={true}/></h6>
+    <h6 className={"no-margin-padding"}>
+      <FlashingText text={'&uarr; &nbsp; To download file click &nbsp; &#8942; &nbsp; &uarr;'} htmlEntities={true}/>
+    </h6>
     </>
   )}
 </div> : "")
 
 const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
-
 
 
   if(!begun) return(
@@ -368,7 +362,7 @@ const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={se
           {descriptionOfPageFunction}
           {howAppWorks}
         </div>
-        <div className={"pageBody"}>
+        <div ref={pageBodyRef}  className={"pageBody"}>
           {!postResponse ? displaySlider : ""}
           {!postResponse && characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
           {!postResponse ? characterInputGroup : ""}
