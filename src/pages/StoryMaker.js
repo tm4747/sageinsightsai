@@ -79,8 +79,15 @@ function StoryMaker({setIsLoading}) {
   }, [postResponse]);
 
   // GET STORY TEXT LAMBDA
+  // TODO: we had a resetState function which did the following.  Need to think through app data flow.
+  // setPostResponse("");
+  //   setHtmlResponse("");
+  //   setDisplayedText("");
+  //   setAudioUrl(null);
+  //   setIsAudioReady(false);
+  //   setPolling(false);
+  //   setAudioUrlError(false);
   const fetchStory = () => {
-    resetState();
     if(haveValidData()){
       try {
         setIsLoading(true);
@@ -178,13 +185,21 @@ function StoryMaker({setIsLoading}) {
 
   /********** DYNAMIC JS FUNCTIONS **********/ 
   const resetState = () => {
-    setPostResponse("");
     setHtmlResponse("");
-    setDisplayedText("");
+    setPostResponse("");
+    setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
+    setDisableScroll(false);
+    setShowCharacterInput(1);
+    setCharacterInputs([]);
+    setShowBoxList(false);
     setAudioUrl(null);
     setIsAudioReady(false);
     setPolling(false);
     setAudioUrlError(false);
+    setDisplayedText("");
+    setIsDone(false);
+    setIsStarted(false);
+    adjustTextareaHeight();
   }
 
   const fetchAudioAndScrollUp = () => {
@@ -221,13 +236,6 @@ function StoryMaker({setIsLoading}) {
 
   const addNewCharacter = (newValue) => {
     setCharacterInputs(characterInputs => [...characterInputs, newValue]);
-  };
-
-  const clearInputs = () => {
-    setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
-    setCharacterInputs([]);
-    adjustTextareaHeight();
-    setShowCharacterInput(1);
   };
 
   const handleBegin = () => {
@@ -275,7 +283,7 @@ function StoryMaker({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-  const fetchAudioButtonBottom = (postResponse) ? <button className={"button btnCancelScroll fetchAudioBottom purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
+  const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? <button className={"button btnCancelScroll fetchAudioBottom purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
   // which showCharacterInput (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
@@ -285,15 +293,17 @@ function StoryMaker({setIsLoading}) {
   ));
 
   // showCharacterInput 4 shows the optional context/situation text input and submit button
-  const getADifferentSituationButton = !postResponse ? <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button> : "";
-  const tellMeAStoryButton = !postResponse ? <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button> : "";
-  const submitInputGroup = showCharacterInput === 4 ? <><p className={"pStandard bold"}>Your characters have found themselves in the following situation 
+  const situationHtml = !postResponse ? <><p className={"pStandard bold"}>Your characters have found themselves in the following situation 
     <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span></p>
   <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
-                  onChange={handleSituationInputChange} rows={1}/>
+                  onChange={handleSituationInputChange} rows={1}/></> : "";
+  const getADifferentSituationButton = !postResponse ? <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button> : "";
+  const tellMeAStoryButton = !postResponse ? <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button> : "";
+  const submitInputGroup = showCharacterInput === 4 ? <>
+  {situationHtml}
   {tellMeAStoryButton}
   {getADifferentSituationButton}
-  <button className={"button red-button"} onClick={clearInputs}>Clear And Start Over</button></> : "";
+  <button className={"button red-button"} onClick={resetState}>Clear And Start Over</button></> : "";
 
   const howItWorksData = getStoryMakerHowItWorks(); 
   const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
@@ -322,6 +332,23 @@ function StoryMaker({setIsLoading}) {
   const characterInputsDisplay = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
   setShowBoxList={() => {return null;}} showCloseButton={false} listType={"ul"}/>
 
+  const displayAudio = (audioUrl ? <div ref={audioPlayerRef} className="audio-player-container">
+  {audioUrl && !isAudioReady ? (
+    <p><AILogo size={".75em"}/> &nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...</p> // Display a waiting message until the file is ready
+  ) : (
+    <>
+    <audio controls>
+      <source src={audioUrl} type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio> 
+    <h6 className={"no-margin-padding"}><FlashingText text={'&uarr; &nbsp; To download file click &nbsp; &#8942; &nbsp; &uarr;'} htmlEntities={true}/></h6>
+    </>
+  )}
+</div> : "")
+
+const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
+
+
 
   if(!begun) return(
           <div className={styles.content}>
@@ -342,23 +369,11 @@ function StoryMaker({setIsLoading}) {
           {howAppWorks}
         </div>
         <div className={"pageBody"}>
-          <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
-          {characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
-          {characterInputGroup}
+          {!postResponse ? displaySlider : ""}
+          {!postResponse && characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
+          {!postResponse ? characterInputGroup : ""}
           {submitInputGroup}
-          {audioUrl ? <div ref={audioPlayerRef} className="audio-player-container">
-            {audioUrl && !isAudioReady ? (
-              <p><AILogo size={".75em"}/> &nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...</p> // Display a waiting message until the file is ready
-            ) : (
-              <>
-              <audio controls>
-                <source src={audioUrl} type="audio/mpeg" />
-                Your browser does not support the audio element.
-              </audio> 
-              <h6 className={"no-margin-padding"}><FlashingText text={'&uarr; &nbsp; To download file click &nbsp; &#8942; &nbsp; &uarr;'} htmlEntities={true}/></h6>
-              </>
-            )}
-          </div> : ""}
+          {displayAudio}
         </div>
       </div>
       <div className={"resultsDiv"} >

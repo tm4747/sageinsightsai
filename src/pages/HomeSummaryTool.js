@@ -115,9 +115,11 @@ function HomeSummaryTool({setIsLoading}) {
         {/* <span> error: {enteredUrlError}</span> */}
       </div>
       <div className={"resultsDiv"} >
-        <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
-        <div>
-          {isDone ? <p>Done!</p> : ""}
+        <div className={"innerResultsDiv"}>
+          <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
+          <div>
+            {isDone ? <p>Done!</p> : ""}
+          </div>
         </div>
       </div>
       <div ref={messagesEndRef}/>

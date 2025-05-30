@@ -187,6 +187,9 @@ audio{
 .fetchAudioBottom{
   bottom: 5px;
 }
+.divFixedBottom{
+  
+}
 @keyframes flashInvert {
   0%   { color: white; background-color: black; }
   50%  { color: black; background-color: white; }
