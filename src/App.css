@@ -170,25 +170,22 @@ audio{
   padding:.75em ;
   border-radius:10px;
   font-weight:bold;
-  margin-left:1em;
   width:25%;
   display:inline;
-  position:fixed;
-  bottom: 75px;
-  right:50%;
-  transform: translateX(50%);
-  opacity:.75;
+  opacity:.85;
 }
 .btnCancelScroll:hover{
   background-color:ghostwhite;
   color:black;
   opacity:1;
 }
-.fetchAudioBottom{
-  bottom: 5px;
-}
 .divFixedBottom{
-  
+  text-align: center;
+  position:fixed;
+  bottom:5px;
+  margin:auto;
+  width:100%;
+  max-width: 1400px;
 }
 @keyframes flashInvert {
   0%   { color: white; background-color: black; }

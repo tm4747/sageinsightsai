@@ -129,7 +129,10 @@ function StoryMaker({setIsLoading}) {
           // Now call fetchAudioFromLambda with the S3 URL
           const audioUrl = await fetchAudioFromLambda(s3Upload.Location);
           // Set the audio URL
-          setAudioUrl(audioUrl); 
+          setAudioUrl(audioUrl);
+          setTimeout(() => {
+            audioPlayerRef.current?.scrollIntoView({ behavior: "smooth" });
+          }, 250);
           setPolling(true); // Start polling
           setIsLoading(false);
         } catch (error) {
@@ -203,11 +206,7 @@ function StoryMaker({setIsLoading}) {
   }
 
   const fetchAudioAndScrollUp = () => {
-    // disable auto scrolling
     setDisableScroll(true);
-    // scroll up to where audio element will appear
-    audioPlayerRef.current?.scrollIntoView({ behavior: "smooth" });
-    // fetch audio
     fetchAudio();
   }
 
@@ -283,7 +282,8 @@ function StoryMaker({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-  const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? <button className={"button btnCancelScroll fetchAudioBottom purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
+  const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? 
+    <button className={"button btnCancelScroll purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
   // which showCharacterInput (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
@@ -385,9 +385,11 @@ const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={se
         </div>
       </div>
       <div ref={messagesEndRef}/>
-      {stopScrollButton}
-      {fetchAudioButtonBottom}
-      {audioUrlError ? <span>&nbsp;</span> : ""}
+      <div className={"divFixedBottom"}>
+        {stopScrollButton}
+        {fetchAudioButtonBottom} 
+        {audioUrlError ? <span>&nbsp;</span> : ""}
+      </div>
     </div>
   );
 }
