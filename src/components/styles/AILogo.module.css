@@ -1,7 +1,4 @@
-
-
-
-@keyframes App-logo-spin {
+@keyframes AppLogoSpin {
     from {
       transform: rotate(0deg);
     }
@@ -10,19 +7,14 @@
     }
   }
   
-  .App-logo {
+  .AppLogo {
     height: 40vmin;
     pointer-events: none;
     opacity:.75
   }
   
   @media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-      animation: App-logo-spin infinite 7s linear;
+    .AppLogo {
+      animation: AppLogoSpin infinite 7s linear;
     }
-  }
-  
-  
-  .App-logo{
-    display:inline;
   }
