@@ -10,7 +10,7 @@ const Layout = ({isLoading}) => {
 
   const nav = (<nav className={"theNav"}>
     <Link className={"/" === path ? "activeLink" : ""} to="/">Story Maker</Link>&nbsp;|&nbsp; 
-    <Link className={"/story-maker" === path ? "activeLink" : ""} to="/web-summary">Home Page Summary</Link>
+    <Link className={"/web-summary" === path ? "activeLink" : ""} to="/web-summary">Home Page Summary</Link>
     </nav>);
   return (
     <div className="layout">

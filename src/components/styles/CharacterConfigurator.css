@@ -1,16 +1,12 @@
 .character-config{
-    max-width:768;
-    height:auto;
-    margin: 0 auto;
-    position: relative;
-    padding-top:0;
+  max-width:768;
+  height:auto;
+  margin: 0 auto;
+  position: relative;
+  padding-top:0;
 }
 h3{
   margin-top:0;
-}
-.inputContainer{
-    padding:0 1em;
-    width:100%
 }
 .tdLeft{
     text-align:left;
@@ -18,40 +14,44 @@ h3{
 .tdRight{
     text-align:right;
 }
-.edgy-icon{
-  font-size:.5em;
-  display:block;
-  margin:auto;
-  margin-top:1em;
-}
-.button{
-  width:90%;
-  margin-top:.25em;
-}
 .full-width{
   width:100%;
 }
 .select-input{
   width:100%;
 }
+.inputContainer{
+  width:100%;
+  padding:0 15%;
+}
+.button{
+  margin-top:.25em;
+  width:22.5%;
+}
+.edgy-icon{
+  font-size:.5em;
+  display:block;
+  margin:auto;
+  margin-top:20px;
+  float:right;
+}
 .text-input{
   padding: .325em .125em;
-  min-width: 250px;
+  min-width:300px;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (max-width: 768px) {
   .inputContainer{
-    padding:0 15%;
-    width:100%
+    padding:0 1em;
   }
   .button{
-    width:22.5%;
+    width:90%;
   }
   .edgy-icon{
-    float:right;
-    margin-top:0;
+    margin-top:1em;
+    float:none;
   }
   .text-input{
-    min-width:300px;
+    min-width: 200px;
   }
 }
