@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styles from './css/HomeSummaryTool.module.css';
+import styles from './css/PageStyles.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -97,19 +97,25 @@ function HomeSummaryTool({setIsLoading}) {
   const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
 
 
+  const descriptionOfPageFunction = (
+    <p className={"pStandard"}>
+      Please enter a website url. This tool will return a general summary of the homepage:
+      <FontAwesomeIcon 
+        className={"flashing-icon"}
+        icon={faCircleQuestion} 
+        onClick={handleShowHowItWorks} 
+        title="How does it work?"
+      />
+    </p>
+  );
+
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <p className={"pageDescription"}>Please enter a website url.  
-          This tool will return a general summary of the homepage: 
-          <FontAwesomeIcon 
-                      className={"flashing-icon"}
-                      icon={faCircleQuestion} 
-                      onClick={handleShowHowItWorks} 
-                      title="How does it work?"
-                    />
-        </p>
-        {howAppWorks}
+        <div className={"pageDescription border-bottom"}> 
+          {descriptionOfPageFunction}
+          {howAppWorks}
+        </div>
         <input className={inputClasses} onChange={handleInputChange} type="text"/>
         <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
         {/* <span> error: {enteredUrlError}</span> */}

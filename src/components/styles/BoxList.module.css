@@ -21,7 +21,7 @@
     border-radius:15px;
     padding:0 2em;
     font-size:.75em;
-    max-height: 700px; /* or something high enough to contain your content */
+    max-height: 1000px; /* or something high enough to contain your content */
     opacity: 1;
     visibility: visible;
 }

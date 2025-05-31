@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styles from './css/StoryMaker.module.css';
+import styles from './css/PageStyles.module.css';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

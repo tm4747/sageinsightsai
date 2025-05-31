@@ -244,13 +244,13 @@ audio{
   font-size:.75em;
 }
 .pageDescription{
-  font-weight:bold;
   margin-bottom:1em;
   padding-bottom:.5em;
 }
 .pageDescription p{
   padding:0;
   margin:1em;
+  font-weight:bold;
 }
 .resultsDiv, .formDiv{
   width:100%;
