@@ -279,7 +279,7 @@ function StoryMaker({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-  const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? 
+  const fetchAudioButtonBottom = (true || postResponse && (!polling && !isAudioReady)) ? 
     <button className={"button btnCancelScroll purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
   // which showCharacterInput (1, 2, or 3) should show
