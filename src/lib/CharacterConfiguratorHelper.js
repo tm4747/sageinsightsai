@@ -168,13 +168,12 @@ export const getLikes = (levelOfRealism = 1, getEdgy = false) => {
     ]
     const edgyList = [
         "to trap others in their hidden dimension", 
-        "to swim in lava streams", 
         "to eat things that are still moving", 
         "to sharpen sticks for fun",
-        "to sleep in other people’s beds", 
+        "to sleep in other people’s garages", 
         "to drive fast late at night",
         "to hoard cursed relics", 
-        "to run their secret business late at night", 
+        "to conduct secret experiments late at night", 
     ];
     const primaryList = levelOfRealism === 1 ? list1 : (levelOfRealism === 2 ? [...list1, ...list2] : [...list1, ...list2, ...list3])
     const finalList = getEdgy ? [...primaryList, ...edgyList] : primaryList;
@@ -275,7 +274,7 @@ export const getRandomSituation = (levelOfRealism = 1, getEdgy = false) => {
         "Driving a nuclear submarine into enemy territory",
         "Exterminating the last of the armadillos",
         "Escaping a collapsing building after a massive earthquake",
-        "Racing on horses to stop a runaway train before it plunges off a missing bridge",
+        "Racing on horses to stop a runaway train before it plunges off a collapsed bridge",
         "Defending a fortress under siege", 
         "Searching for a jar of special serum which is the only hope to end a great plague",
     ];

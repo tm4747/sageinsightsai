@@ -43,14 +43,6 @@ html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
 .App {
   text-align: center;
 }
-ol li{
-  padding-top:.5em;
-  padding-bottom:.5em;
-}
-ol li ul li {
-  padding-top:1em;
-  padding-bottom:0em;
-}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -66,6 +58,14 @@ ol li ul li {
 }
 .pageTitle{
   margin-bottom:1em;
+}
+ol li{
+  padding-top:.5em;
+  padding-bottom:.5em;
+}
+ol li ul li {
+  padding-top:1em;
+  padding-bottom:0em;
 }
 /** LINKS **/
 a{
@@ -164,54 +164,6 @@ audio{
   border: solid 3px blue;
   border-radius:30px;
 }
-/* GENERAL ELEMENT CSS */
-.no-padding{
-  padding:0;
-}
-.red-border{
-  border:solid 2px red;
-}
-.black-border, .test-border{
-  border:solid 2px black;
-}
-.notice{
-  text-decoration: italic;
-}
-.bold{
-  font-weight:bold;
-}
-.small-text{
-  font-size:small;
-}
-.italic{
-  font-style: italic;
-}
-.no-margin-padding{
-  margin:0;
-  padding:0;
-}
-.fade-in {
-  opacity: 1;
-  transition: opacity 750ms ease-in-out;
-}
-.fade-out {
-  opacity: .25;
-  transition: opacity 750ms ease-in-out;
-}
-
-.pStandard{
-  font-size:.75em;
-}
-.pageDescription{
-  font-weight:bold;
-  margin-bottom:1em;
-  padding-bottom:.5em;
-  border-bottom:solid 2px #444;
-}
-.pageDescription p{
-  padding:0;
-  margin:1em;
-}
 .textInput{
   padding:.75em 4em ;
   border-radius:10px;
@@ -223,29 +175,8 @@ audio{
   border-radius:10px;
   width:50%;
   display:inline;
-  border:solid 2px red;
-  background-color:red;
-}
-
-.resultsDiv, .formDiv{
-  width:100%;
-  max-width:1400px;
-}
-.innerResultsDiv{
-  margin-top:2.5em;
-  border:solid #555 2px;
-  text-align:left;
-  border-radius:15px;
-  padding:1em;
-  font-size:.75em;
-}
-.divFixedBottom{
-  text-align: center;
-  position:fixed;
-  bottom:5px;
-  margin:auto;
-  width:100%;
-  max-width: 1400px;
+  border:solid 2px var(--red);
+  background-color:var(--red);
 }
 @keyframes flashInvert {
   0%   { color: white; background-color: black; }
@@ -271,41 +202,77 @@ audio{
   font-style:italic;
   color:lightpink
 }
+/* GENERAL ELEMENT CSS */
+.no-padding{
+  padding:0;
+}
+.red-border{
+  border:solid 2px var(--red);
+}
+.black-border, .test-border{
+  border:solid 2px black;
+}
+.border-bottom{
+  border-bottom:solid 2px #444;
+}
+.notice{
+  text-decoration: italic;
+}
+.bold{
+  font-weight:bold;
+}
+.small-text{
+  font-size:small;
+}
+.italic{
+  font-style: italic;
+}
+.no-margin-padding{
+  margin:0;
+  padding:0;
+}
+.fade-in {
+  opacity: 1;
+  transition: opacity 750ms ease-in-out;
+}
+.fade-out {
+  opacity: .25;
+  transition: opacity 750ms ease-in-out;
+}
+/* DIV and P SPECIFIC */
+.pStandard{
+  font-size:.75em;
+}
+.pageDescription{
+  font-weight:bold;
+  margin-bottom:1em;
+  padding-bottom:.5em;
+}
+.pageDescription p{
+  padding:0;
+  margin:1em;
+}
+.resultsDiv, .formDiv{
+  width:100%;
+  max-width:1400px;
+}
+.innerResultsDiv{
+  margin-top:2.5em;
+  border:solid #555 2px;
+  text-align:left;
+  border-radius:15px;
+  padding:1em;
+  font-size:.75em;
+}
+.divFixedBottom{
+  text-align: center;
+  position:fixed;
+  bottom:5px;
+  margin:auto;
+  width:100%;
+  max-width: 1400px;
+}
 .preContentDiv{
   width:100%;
   border:solid 2px white;
 }
-/* REMOVE NEXT 4 */
-/*
-.close-icon{
-    float:right;
-    height:.9em;
-    width:1em;
-    margin-top:1em;
-}
-.how-it-works-container {
-    overflow: hidden;
-    transition: max-height 0.5s ease, opacity 0.5s ease;
-    max-height: 0;
-    opacity: 0;
-    visibility: hidden;
-    padding:0;
-    margin:0;
-}
-.how-it-works-container.expanded {
-    margin-top:1.5em;
-    margin-bottom:1.5em;
-    border:solid #555 2px;
-    text-align:left;
-    border-radius:15px;
-    padding:0 1em;
-    font-size:.75em;
-    max-height: 700px;
-    opacity: 1;
-    visibility: visible;
-}
-@media (max-width: 768px) {
-  .how-it-works-container.expanded {
-    padding: 0 0;
-  }
-}*/

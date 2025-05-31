@@ -1,6 +1,5 @@
 // src/components/Layout.js
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import './Layout.css'; // optional styling
 import AILogo from './components/AILogo';
 import Modal from "./components/Modal";
 import TypingText from './components/TypingText';

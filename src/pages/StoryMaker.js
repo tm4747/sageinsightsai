@@ -358,7 +358,7 @@ const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={se
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <div className={"pageDescription"}>
+        <div className={"pageDescription border-bottom"}>
           {descriptionOfPageFunction}
           {howAppWorks}
         </div>
