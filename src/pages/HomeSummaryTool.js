@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import BoxList from '../components/BoxList';
 import { getHomeSummaryHowItWorks } from '../lib/DataHelper';
+import FlashingText from '../components/FlashingText';
 
 
 function HomeSummaryTool({setIsLoading}) {
@@ -13,6 +14,7 @@ function HomeSummaryTool({setIsLoading}) {
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
+  const [validUrl, setValidUrl] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   const [showBoxList, setShowBoxList] = useState(false);
     //typing effect
@@ -56,7 +58,7 @@ function HomeSummaryTool({setIsLoading}) {
     setPostResponse("");
     setHtmlResponse("");
     setDisplayedText("");
-    if (enteredUrl < 3) {
+    if (haveValidData()) {
       setEnteredUrlError(true);
     } else {
       setEnteredUrlError(false);
@@ -80,13 +82,31 @@ function HomeSummaryTool({setIsLoading}) {
 
   /********** DYNAMIC JS FUNCTIONS **********/ 
   const handleInputChange = (event) => {
-    setEnteredUrl(event.target.value);
+    const enteredValue = event.target.value.trim();
+    setEnteredUrl(enteredValue);
+    if(enteredValue.length === 0 ){
+      setEnteredUrlError(false);
+      setValidUrl(false);
+    } else if (haveValidData(enteredValue)) {
+      setEnteredUrlError(false);
+      setValidUrl(true);
+    } else {
+      setEnteredUrlError(true);
+      setValidUrl(false);
+    }  
   };
 
   const handleShowHowItWorks = () => {
     setShowBoxList(!showBoxList);
   }
 
+  /***********HELPER FUNCTIONS ************/
+  const haveValidData = (enteredValue) => {
+    const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[^\s]*)?$/;
+    let b_validData = enteredValue.length > 3 && urlPattern.test(enteredValue);
+    return b_validData;
+  };
+  
 
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
@@ -94,8 +114,7 @@ function HomeSummaryTool({setIsLoading}) {
 
   const howItWorksData = getHomeSummaryHowItWorks(); 
   const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
-  const inputClasses = enteredUrlError ? "errorTextInput" : "textInput";
-
+  const inputClasses = enteredUrlError ? "errorTextInput textInput" : (validUrl ? "inputSuccess textInput" : "textInput");
 
   const descriptionOfPageFunction = (
     <p className={"pStandard"}>
@@ -118,7 +137,9 @@ function HomeSummaryTool({setIsLoading}) {
         </div>
         <input className={inputClasses} onChange={handleInputChange} type="text"/>
         <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
-        {/* <span> error: {enteredUrlError}</span> */}
+        <p>
+          <FlashingText interval={750} text={"Entered url: " + enteredUrl}/>
+        </p>
       </div>
       <div className={"resultsDiv"} >
         <div className={"innerResultsDiv"}>

@@ -16,7 +16,7 @@ import { getStoryMakerHowItWorks } from '../lib/DataHelper';
 
 function StoryMaker({setIsLoading}) {
   const [begun, setBegun] = useState(false);
-  const [htmlReponse, setHtmlResponse] = useState('');
+  const [htmlResponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [levelOfRealism, setLevelOfRealism] = useState(1);
   const [getEdgy, setGetEdgy] = useState(false);
@@ -53,24 +53,26 @@ function StoryMaker({setIsLoading}) {
   /********* USE EFFECTS & API CALLS **********/
   // TYPING EFFECT DISPLAY RESULTS 
   useEffect(() => {
-    if (!htmlReponse) return;
+    if (!htmlResponse) return;
     setDisableScroll(false)
     setIsDone(false);
     setIsStarted(true);
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
-        setDisplayedText((prev) => prev + htmlReponse[currentIndex]);
+        // and advanced currentIndex to where it should then be (character after last piece of html tag)
+        setDisplayedText((prev) => prev + htmlResponse[currentIndex]);
         currentIndex += 1;
       // If we've added all characters, stop the typing effect
-      if (currentIndex === htmlReponse.length) { 
+      if (currentIndex === htmlResponse.length) { 
         clearInterval(typingInterval);
+        setDisplayedText(htmlResponse);
         setIsDone(true);
         setIsStarted(false);
       }
     }, .1); // Adjust speed here (50ms per character)
 
     return () => clearInterval(typingInterval); // Cleanup the interval
-  }, [htmlReponse]);
+  }, [htmlResponse]);
 
   // converts response from lambda to marked-up HTML
   useEffect(() => {
@@ -372,7 +374,7 @@ const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={se
       </div>
       <div className={"resultsDiv"} >
         <div className={"innerResultsDiv"}>
-          <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
+          <div dangerouslySetInnerHTML={{ __html: !htmlResponse ? "Results Will Display Here." : displayedText }} />
           <div>
             {isDone ? <p>Done!</p> : ""}
           </div>

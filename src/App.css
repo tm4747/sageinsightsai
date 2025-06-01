@@ -4,6 +4,7 @@
   --off-black: #333;
   --light-blue: #c6dcf3;
   --blue: #80b4e8;
+  --very-light-green:#e4ebd2;
   --light-green:#bcd187;
   --green: #B1D25E;
   --dark-green:#96bc37;
@@ -42,7 +43,7 @@ html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
 .pageTitle{
   margin-bottom:1em;
 }
-ol li{
+ol li, ul li{
   padding-top:.5em;
   padding-bottom:.5em;
 }
@@ -151,14 +152,15 @@ audio{
   border-radius:10px;
   width:50%;
   display:inline;
+  border:solid 2px var(--off-white);
 }
 .errorTextInput{
-  padding:.75em 4em ;
-  border-radius:10px;
-  width:50%;
-  display:inline;
-  border:solid 2px var(--red);
-  background-color:var(--red);
+  background-color: var(--light-red);
+  border-color: var(--red);
+}
+.inputSuccess{
+  background-color:var(--very-light-green);
+  border-color: var(--green);
 }
 @keyframes flashInvert {
   0%   { color: white; background-color: black; }
@@ -212,14 +214,6 @@ audio{
 .no-margin-padding{
   margin:0;
   padding:0;
-}
-.fade-in {
-  opacity: 1;
-  transition: opacity 750ms ease-in-out;
-}
-.fade-out {
-  opacity: .25;
-  transition: opacity 750ms ease-in-out;
 }
 /* DIV and P SPECIFIC */
 .pStandard{
