@@ -262,7 +262,7 @@ export const getRandomSituation = (levelOfRealism = 1, getEdgy = false) => {
         "Trying to win a game of wits against a cunning supernatural opponent",
         "Following a glowing unicorn through a dense, foggy forest",
         "Flying to a floating city on dragonback as it floats towards a great portal",
-        "Negotiating with an alien species who communicate in holograms they generate from their foreheads",
+        "Negotiating with an alien species who communicate in holograms they project from their heads",
         "Trying to survive a night in a haunted mansion where the furniture comes to life",
         "Attempting to retrieve a mystical artifact guarded by a thousand-year-old dragon",
         "Entering a mysterious portal to a parallel world of sentient shadows",

@@ -128,6 +128,8 @@ function HomeSummaryTool({setIsLoading}) {
     </p>
   );
 
+  const enteredUrlDisplay = !enteredUrl ? "Please enter url" : ( validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl);
+
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
@@ -138,7 +140,7 @@ function HomeSummaryTool({setIsLoading}) {
         <input className={inputClasses} onChange={handleInputChange} type="text"/>
         <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
         <p>
-          <FlashingText interval={750} text={"Entered url: " + enteredUrl}/>
+          <FlashingText interval={750} text={enteredUrlDisplay}/>
         </p>
       </div>
       <div className={"resultsDiv"} >
