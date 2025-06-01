@@ -3,7 +3,7 @@ import styles from './css/PageStyles.module.css';
 import BoxList from '../components/BoxList';
 import { getDifficultChoiceMakerHowItWorks } from '../lib/DataHelper';
 import PageDescription from '../components/PageDescription';
-
+// todo: test - remove
 
 function DifficultChoiceMaker({setIsLoading}) {
   const [showBoxList, setShowBoxList] = useState(false);
