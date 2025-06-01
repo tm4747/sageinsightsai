@@ -37,7 +37,7 @@ function HomeSummaryTool({setIsLoading}) {
         currentIndex += 1;
 
       // If we've added all characters, stop the typing effect
-      if (currentIndex === htmlReponse.length) {
+      if (htmlReponse && currentIndex === htmlReponse.length) {
         clearInterval(typingInterval);
         setIsDone(true);
         setIsStarted(false);
@@ -84,7 +84,7 @@ function HomeSummaryTool({setIsLoading}) {
   const handleInputChange = (event) => {
     const enteredValue = event.target.value.trim();
     setEnteredUrl(enteredValue);
-    if(enteredValue.length === 0 ){
+    if(enteredValue && enteredValue.length === 0 ){
       setEnteredUrlError(false);
       setValidUrl(false);
     } else if (haveValidData(enteredValue)) {
@@ -103,7 +103,7 @@ function HomeSummaryTool({setIsLoading}) {
   /***********HELPER FUNCTIONS ************/
   const haveValidData = (enteredValue) => {
     const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[^\s]*)?$/;
-    let b_validData = enteredValue.length > 3 && urlPattern.test(enteredValue);
+    let b_validData = enteredValue && enteredValue.length > 3 && urlPattern.test(enteredValue);
     return b_validData;
   };
   
