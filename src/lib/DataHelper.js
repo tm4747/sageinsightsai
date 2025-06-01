@@ -22,7 +22,7 @@ export const getStoryMakerHowItWorks = () => {
     );
 }
 
-export const getHomeSummaryHowItWorks = () => {
+export const getWebSummaryHowItWorks = () => {
     return (
         {
             "data": [
@@ -44,6 +44,29 @@ export const getHomeSummaryHowItWorks = () => {
                 {
                     "text": "The response is finally returned by Lambda to display here.",
                 },
+            ]
+        }
+    );
+}
+
+
+
+export const getDifficultChoiceMakerHowItWorks = () => {
+    return (
+        {
+            "data": [
+              {
+                "text": "First, .",
+              },
+              {
+                "text": "Next, .",
+              },
+              {
+                "text": "Then, .",
+              },
+              {
+                "text": "Finally, .",
+              },
             ]
         }
     );

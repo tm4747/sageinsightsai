@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './css/PageStyles.module.css';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
 import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/AILogo';
@@ -12,6 +10,7 @@ import Slider from '../components/simple/Slider';
 import FlashingText from '../components/FlashingText';
 import BoxList from '../components/BoxList';
 import { getStoryMakerHowItWorks } from '../lib/DataHelper';
+import PageDescription from '../components/PageDescription';
 
 
 function StoryMaker({setIsLoading}) {
@@ -306,30 +305,18 @@ function StoryMaker({setIsLoading}) {
 
   const howItWorksData = getStoryMakerHowItWorks(); 
   const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
-
-  const descriptionOfPageFunction = (
-    <p className={"pStandard"}>
-      You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.
-      <FontAwesomeIcon 
-        className={"flashing-icon"}
-        icon={faCircleQuestion} 
-        onClick={handleShowHowItWorks} 
-        title="How does it work?"
-      />
-    </p>
-  );
-
+  const pageDescText = "You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.";
+  const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
   const formattedCharacterData = datafyCharacterInputs(characterInputs);
   const characterInputsDisplay = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
   setShowBoxList={() => {return null;}} showCloseButton={false} listType={"ul"}/>
 
   const displayAudio = (audioUrl ? <div className="audio-player-container">
-  {audioUrl && !isAudioReady ? (
+  {audioUrl && !isAudioReady ? ( // Display a waiting message until the file is ready
     <p>
       <AILogo size={".75em"}/> 
-      
       <FlashingText text={'&nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...'} htmlEntities={true}/>
-    </p> // Display a waiting message until the file is ready
+    </p> 
   ) : (
     <>
     <audio controls>
@@ -352,7 +339,7 @@ const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={se
              <div className={"pageDescription"}>
                 {descriptionOfPageFunction}
                 {howAppWorks}
-                <button className={"button green-button"} onClick={handleBegin}>Begin!</button>
+                <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button>
             </div>
            </div>
           </div>)

@@ -2,14 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './css/PageStyles.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import BoxList from '../components/BoxList';
-import { getHomeSummaryHowItWorks } from '../lib/DataHelper';
+import { getWebSummaryHowItWorks } from '../lib/DataHelper';
 import FlashingText from '../components/FlashingText';
+import PageDescription from '../components/PageDescription';
 
 
-function HomeSummaryTool({setIsLoading}) {
+function WebpageSummaryTool({setIsLoading}) {
   const [htmlReponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
@@ -112,22 +111,11 @@ function HomeSummaryTool({setIsLoading}) {
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
 
-  const howItWorksData = getHomeSummaryHowItWorks(); 
+  const howItWorksData = getWebSummaryHowItWorks(); 
   const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
   const inputClasses = enteredUrlError ? "errorTextInput textInput" : (validUrl ? "inputSuccess textInput" : "textInput");
-
-  const descriptionOfPageFunction = (
-    <p className={"pStandard"}>
-      Please enter a website url. This tool will return a general summary of the homepage:
-      <FontAwesomeIcon 
-        className={"flashing-icon"}
-        icon={faCircleQuestion} 
-        onClick={handleShowHowItWorks} 
-        title="How does it work?"
-      />
-    </p>
-  );
-
+  const pageDescText = "Please enter a website url. This tool will return a general summary of the homepage:";
+  const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
   const enteredUrlDisplay = !enteredUrl ? "Please enter url" : ( validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl);
 
   return (
@@ -157,4 +145,4 @@ function HomeSummaryTool({setIsLoading}) {
   );
 }
 
-export default HomeSummaryTool;
+export default WebpageSummaryTool;
