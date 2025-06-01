@@ -337,7 +337,7 @@ function StoryMaker({setIsLoading}) {
       Your browser does not support the audio element.
     </audio> 
     <h6 className={"no-margin-padding"}>
-      <FlashingText text={'&uarr; &nbsp; To download file click &nbsp; &#8942; &nbsp; &uarr;'} htmlEntities={true}/>
+      <FlashingText text={'To download file click \'<strong>&#8942;</strong>\' &uarr;'} htmlEntities={true}/>
     </h6>
     </>
   )}

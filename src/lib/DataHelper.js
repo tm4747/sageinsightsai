@@ -3,19 +3,19 @@ export const getStoryMakerHowItWorks = () => {
         {
             "data": [
               {
-                "text": "First, you create 3 characters, either from a variety of presets, or by adding in your own custom values.",
+                "text": "First, you create and name 3 characters either from a variety of presets or by adding your own custom values.",
               },
               {
-                "text": "Next, a random situation will be suggested. You are free to modify this or delete it altogether.",
+                "text": "Next, a random situation will be suggested. You are free to modify this, get a different random situation or delete it altogether.",
               },
               {
-                "text": "The characters and situation are then sent to a lambda function that will generate a story using LLMs from OpenAI, Google Gemini and Anthropic Claude, which each will be called to play each of the characters, carrying out a conversation and acting out a virtual 'skit'.",
+                "text": "The characters and situation are then sent to an AWS Lambda function which will generate a story using LLMs from OpenAI, Google and Anthropic, with each playing one of the characters in a virtual 'skit' and dialogue.",
               },
               {
-                "text": "When this text begins to appear, you have the option to generate an audio file where a narrator will read the story. This is done through a series of calls to lambda, AWS S3, and OpenAI's audio model, as the story text will often exceed the 4096 character limit of Lambda, and the generation of the audio file will exceed the 30-second max response time of AWS API Gateway.",
+                "text": "After a moment, the story text will begins to print out in the results box, and a button will appear allowing you to generate an audio file where a narrator will read the story to you. This is accomplished through a series of calls to AWS Lambda, AWS S3, and OpenAI's audio model.  The story text will often exceed Lambda's 4096 character input limit, as fetching the audio file will often exceed the 30-second max response time of AWS API Gateway. Therefore, we must make use of S3 as an intermediary data store from which Lambda can pull data outside of these platform limits.",
               },
               {
-                "text": "Audio file generation can take up to a couple of minutes. There is a polling functionality in place to check every 5 seconds to see if the file is ready. Once it's ready, you'll be able to play it through the audio player which appears.",
+                "text": "Audio file generation can take up to a couple of minutes. The front end app has a polling functionality to check every 5 seconds for whether or not a valid file is ready. As soon as it becomes available, an audio player will appear through which you'll be able to play or download the audio file.",
               },
             ]
         }
@@ -27,7 +27,7 @@ export const getHomeSummaryHowItWorks = () => {
         {
             "data": [
                 {
-                    "text": "A valid url must be entered which is then submitted to a Lambda function via AWS API Gateway.",
+                    "text": "A valid url must be entered which is then submitted to an AWS Lambda function via AWS API Gateway.",
                 },
                 {
                     "text": "The Lambda function then attempts to pull and parse all content from the site homepage.",
@@ -39,10 +39,10 @@ export const getHomeSummaryHowItWorks = () => {
                     ],
                 },
                 {
-                    "text": "The Lambda function then submits this content to OpenAI via API, requesting a summary.",
+                    "text": "The Lambda function then submits the content to OpenAI's API, requesting a summary.",
                 },
                 {
-                    "text": "The response is then returned by Lambda to display here.",
+                    "text": "The response is finally returned by Lambda to display here.",
                 },
             ]
         }
