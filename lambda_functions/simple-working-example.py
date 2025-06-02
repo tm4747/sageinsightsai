@@ -11,7 +11,6 @@ logger.setLevel(logging.INFO)
 
 # Set your OpenAI API key (either hardcoded or via environment variable)
 openai.api_key = os.environ.get("OPENAI_API_KEY")  # Best practice: use environment variable
-#openai.api_key = "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"
 
 def lambda_handler(event, context):
     user_content = "make up a new word"
