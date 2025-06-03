@@ -4,11 +4,14 @@ import BoxList from '../components/BoxList';
 import { getDifficultChoiceMakerHowItWorks } from '../lib/DataHelper';
 import PageDescription from '../components/PageDescription';
 import FlashingText from '../components/FlashingText';
+import InputModal from '../components/InputModal';
 
 function DifficultChoiceMaker({setIsLoading}) {
   const [showBoxList, setShowBoxList] = useState(false);
   const [choiceText, setChoiceText] = useState("");
   const [choiceTextDone, setChoiceTextDone] = useState(false);
+  const [showCriteriaModal, setShowCriteriaModal] = useState(false);
+  const [criteria, setCriteria] = useState([]);
 
 
   /********* USE EFFECTS & API CALLS **********/
@@ -25,7 +28,14 @@ function DifficultChoiceMaker({setIsLoading}) {
   }
 
   const addCriteria = () => {
-    // add criteria row
+    setShowCriteriaModal(true);
+  }
+
+  const handleSubmitCriteria = ({name, description}) => {
+    console.log("name, description: " + name + " - " + description);
+  }
+  const closeCriteriaModal = () => {
+    setShowCriteriaModal(false);
   }
 
   /***********HELPER FUNCTIONS ************/
@@ -45,6 +55,7 @@ function DifficultChoiceMaker({setIsLoading}) {
   <><button className={"button green-button"} onClick={addCriteria} value={""}>Add Criteria</button>
     <span> - these are factors of the decision you will use in evaluation.</span>
   </>  : "";
+  const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} onClose={closeCriteriaModal} />
 
   return (
     <div className={styles.content}>
@@ -63,6 +74,7 @@ function DifficultChoiceMaker({setIsLoading}) {
           </p>
           {decisionGoodButton} 
           {addChoiceCriteriaButton}
+          {criteriaModal}
         </div>
       </div>
     </div>
