@@ -2,7 +2,7 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import AILogo from './components/AILogo';
-import Modal from "./components/Modal";
+import LoadingModal from "./components/LoadingModal";
 import TypingText from './components/TypingText';
 
 const Layout = ({isLoading}) => {
@@ -44,7 +44,7 @@ const Layout = ({isLoading}) => {
               <Outlet /> {/* This renders the current child route */}
             </section>
          </header>
-          <Modal isLoading={isLoading}/>
+          <LoadingModal isLoading={isLoading}/>
         </div>
       </main>
     </div>

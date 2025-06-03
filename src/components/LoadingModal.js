@@ -1,7 +1,7 @@
 import React from 'react';
 import AILogo from './AILogo';
 
-const Modal = ({ isLoading }) => {
+const LoadingModal = ({ isLoading }) => {
   return (
     // Overlay background that covers the full screen
     <div
@@ -28,4 +28,4 @@ const Modal = ({ isLoading }) => {
   );
 };
 
-export default Modal;
+export default LoadingModal;
