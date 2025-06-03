@@ -11,7 +11,7 @@ function DifficultChoiceMaker({setIsLoading}) {
   const [choiceText, setChoiceText] = useState("");
   const [choiceTextDone, setChoiceTextDone] = useState(false);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
-  const [criteria, setCriteria] = useState([]);
+  // const [criteria, setCriteria] = useState([]);
 
 
   /********* USE EFFECTS & API CALLS **********/
