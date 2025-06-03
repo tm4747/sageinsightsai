@@ -3,7 +3,7 @@ import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, 
 import "./styles/CharacterConfigurator.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
-// todo: test - remove
+// todo: test 
 
 const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, getEdgy, setGetEdgy }) => {
   
