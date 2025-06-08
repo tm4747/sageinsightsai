@@ -22,8 +22,6 @@ jobs:
       - name: Build React app
         env:
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
-          REACT_APP_AWS_ACCESS_KEY_ID_S3: ${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID_S3 }}
-          REACT_APP_AWS_SECRET_ACCESS_KEY_S3: ${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY_S3 }}
         run: |
           npm install
           npm run build
