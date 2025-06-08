@@ -4,7 +4,8 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fo
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [value, setValue] = useState(1);
-  const [isNameError, setNameError] = useState(false);
+  // TODO: work on error next
+  // const [isNameError, setNameError] = useState(false);
 
   const handleSubmit = () => {
     // todo: validate name

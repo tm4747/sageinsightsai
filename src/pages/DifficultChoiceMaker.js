@@ -28,11 +28,16 @@ function DifficultChoiceMaker({setIsLoading}) {
   // ]);
 
   // Column Definitions: Defines the columns to be displayed.
-  const [colDefs, setColDefs] = useState([
+  // const [colDefs, setColDefs] = useState([
+  //     { field: "name" },
+  //     { field: "description" },
+  //     { field: "value" },
+  // ]);
+  const colDefs = [
       { field: "name" },
       { field: "description" },
-      { field: "value" },
-  ]);
+      { field: "value" }
+    ];
 
   // const [criteria, setCriteria] = useState([]);
 
@@ -135,6 +140,7 @@ function DifficultChoiceMaker({setIsLoading}) {
           {decisionGoodButton} 
           {addChoiceCriteriaButton}
           {criteriaModal}
+          {choiceModal}
            <DataTable rowData={criteriaItems} colDefs={colDefs} />
            
         </div>
