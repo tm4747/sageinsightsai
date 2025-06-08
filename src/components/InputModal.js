@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
 
-const InputModal = ({ isOpen, onSubmit, onClose }) => {
+const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", formDescription = "" }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [value, setValue] = useState(1);
+  const [isNameError, setNameError] = useState(false);
 
   const handleSubmit = () => {
     // todo: validate name
     if(name){
-        onSubmit({ name, description });
+        onSubmit({ name, description, value });
         setName('');
         setDescription('');
+        setValue(1);
     }
   };
+
+
+  const descriptionText = formDescription ? <p className={"small-text"}>{formDescription}</p> : "";
+  const doneButton = <button className={"button red-button"} onClick={onClose} style={{ marginRight: '1rem', width:'50%' }}>Done</button>;
+  const submitButton = <button className={"button green-button"} onClick={handleSubmit} style={{ width:'50%' }}>Add Criteria</button>
+  
 
   return (
     <div
@@ -39,7 +48,8 @@ const InputModal = ({ isOpen, onSubmit, onClose }) => {
         boxShadow: '0 0 20px rgba(0,0,0,0.3)',
         color:'black'
       }}>
-        <h2 style={{ marginBottom: '1rem' }}>Enter Details</h2>
+        <h2 style={{ marginBottom: '1rem' }}>{formTitle}</h2>
+        {descriptionText}
         <div style={{ marginBottom: '1rem' }}>
           <label>Name:</label><br />
           <input
@@ -47,7 +57,7 @@ const InputModal = ({ isOpen, onSubmit, onClose }) => {
             className={"text-input"}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            style={{ width: '100%', padding: '0.5rem', backgroundColor:'white'}}
+            style={{ width: '100%', padding: '0.5rem', backgroundColor:'white', color:'black'}}
           />
         </div>
         <div style={{ marginBottom: '1rem' }}>
@@ -57,12 +67,24 @@ const InputModal = ({ isOpen, onSubmit, onClose }) => {
             rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            style={{ width: '100%', padding: '0.5rem', backgroundColor:'white' }}
+            style={{ width: '100%', padding: '0.5rem', backgroundColor:'white', color:'black' }}
+          />
+        </div>
+        <div>
+          <label htmlFor="slider">How important is this criteria: {value}</label>
+          <input
+            id="slider"
+            type="range"
+            min="1"
+            max="10"
+            value={value}
+            style={{ width: '100%'}}
+            onChange={(e) => setValue(parseInt(e.target.value))}
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button className={"button red-button"} onClick={onClose} style={{ marginRight: '1rem', width:'50%' }}>Cancel</button>
-          <button className={"button green-button"} onClick={handleSubmit} style={{ width:'50%' }}>Submit</button>
+          {doneButton}
+          {submitButton}
         </div>
       </div>
     </div>

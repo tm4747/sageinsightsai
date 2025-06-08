@@ -5,12 +5,36 @@ import { getDifficultChoiceMakerHowItWorks } from '../lib/DataHelper';
 import PageDescription from '../components/PageDescription';
 import FlashingText from '../components/FlashingText';
 import InputModal from '../components/InputModal';
+import DataTable from '../components/DataTable'; 
+ // or another theme like 'ag-theme-material'
+
+// Register all Community features
 
 function DifficultChoiceMaker({setIsLoading}) {
+
+  
   const [showBoxList, setShowBoxList] = useState(false);
-  const [choiceText, setChoiceText] = useState("");
-  const [choiceTextDone, setChoiceTextDone] = useState(false);
+  // const [choiceText, setChoiceText] = useState("");
+  // const [choiceTextDone, setChoiceTextDone] = useState(false);
+  const [choiceText, setChoiceText] = useState("Where To Move");
+  const [choiceTextDone, setChoiceTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
+  const [showChoiceModal, setShowChoiceModal] = useState(false);
+  const [criteriaItems, setCriteriaItems] = useState([]);
+  // Row Data: The data to be displayed.
+  const [rowData, setRowData] = useState([
+      { criteria: "Tesla", model: "Model Y", price: 64950, electric: true },
+      { make: "Ford", model: "F-Series", price: 33850, electric: false },
+      { make: "Toyota", model: "Corolla", price: 29600, electric: false },
+  ]);
+
+  // Column Definitions: Defines the columns to be displayed.
+  const [colDefs, setColDefs] = useState([
+      { field: "name" },
+      { field: "description" },
+      { field: "value" },
+  ]);
+
   // const [criteria, setCriteria] = useState([]);
 
 
@@ -31,11 +55,28 @@ function DifficultChoiceMaker({setIsLoading}) {
     setShowCriteriaModal(true);
   }
 
-  const handleSubmitCriteria = ({name, description}) => {
-    console.log("name, description: " + name + " - " + description);
+  const addChoice = () => {
+    setShowChoiceModal(true);
   }
-  const closeCriteriaModal = () => {
+ 
+  const handleSubmitCriteria = ({ name, description, value }) => {
+    setCriteriaItems(prevItems => [
+      ...prevItems,
+      { "name": name, "description": description, "value":value }
+    ]);
+  };
+
+  const handleSubmitChoice = ({ choice }) => {
+    setCriteriaItems(prevItems => [
+      ...prevItems,
+      { "name": choice }
+    ]);
+  };
+  
+
+  const closeModal = () => {
     setShowCriteriaModal(false);
+    setShowChoiceModal(false);
   }
 
   /***********HELPER FUNCTIONS ************/
@@ -52,10 +93,17 @@ function DifficultChoiceMaker({setIsLoading}) {
   const decisionGoodButton = !choiceTextDone ? <button className={"button green-button"} onClick={() => {setChoiceTextDone(true)}} value={""}>Decision is correct!</button> : "";
   const startOverButton = choiceTextDone ? <button className={"button red-button"} onClick={resetState} value={""}>Start Over</button> : "";
   const addChoiceCriteriaButton = choiceTextDone ? 
-  <><button className={"button green-button"} onClick={addCriteria} value={""}>Add Criteria</button>
-    <span> - these are factors of the decision you will use in evaluation.</span>
+  <><div>
+      <button className={"button green-button"} onClick={addCriteria} value={""}>Add Criteria</button>
+      <span className={"small-text"}> - these are factors of the decision you will use in evaluation.</span>
+    </div>
+    <div>
+      <button className={"button green-button"} onClick={addChoice} value={""}>Add Choice</button>
+      <span className={"small-text"}> - these are the choices you will you evaluate.</span>
+    </div>
   </>  : "";
-  const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} onClose={closeCriteriaModal} />
+  const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} onClose={closeModal} formTitle={"Enter Criteria"} formDescription={"You can enter multiple criteria.  Click 'Done' when finished."} />
+  const choiceModal = <InputModal isOpen={showChoiceModal} onSubmit={handleSubmitChoice} onClose={closeModal} formTitle={"Enter Choices"} formDescription={"You can enter multiple choices.  Click 'Done' when finished."} />
 
   return (
     <div className={styles.content}>
@@ -75,6 +123,8 @@ function DifficultChoiceMaker({setIsLoading}) {
           {decisionGoodButton} 
           {addChoiceCriteriaButton}
           {criteriaModal}
+           <DataTable rowData={criteriaItems} colDefs={colDefs} />
+           
         </div>
       </div>
     </div>
