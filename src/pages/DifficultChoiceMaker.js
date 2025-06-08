@@ -14,19 +14,18 @@ function DifficultChoiceMaker({setIsLoading}) {
 
   
   const [showBoxList, setShowBoxList] = useState(false);
-  // const [choiceText, setChoiceText] = useState("");
-  // const [choiceTextDone, setChoiceTextDone] = useState(false);
   const [choiceText, setChoiceText] = useState("Where To Move");
   const [choiceTextDone, setChoiceTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteriaItems, setCriteriaItems] = useState([]);
+  const featureFlag = process.env.REACT_APP_SHOW_FEATURES && process.env.REACT_APP_SHOW_FEATURES === "true" ? true : false;
   // Row Data: The data to be displayed.
-  const [rowData, setRowData] = useState([
-      { criteria: "Tesla", model: "Model Y", price: 64950, electric: true },
-      { make: "Ford", model: "F-Series", price: 33850, electric: false },
-      { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-  ]);
+  // const [rowData, setRowData] = useState([
+  //     { criteria: "Tesla", model: "Model Y", price: 64950, electric: true },
+  //     { make: "Ford", model: "F-Series", price: 33850, electric: false },
+  //     { make: "Toyota", model: "Corolla", price: 29600, electric: false },
+  // ]);
 
   // Column Definitions: Defines the columns to be displayed.
   const [colDefs, setColDefs] = useState([
@@ -85,7 +84,7 @@ function DifficultChoiceMaker({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const howItWorksData = getDifficultChoiceMakerHowItWorks(); 
   const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
-  const pageDescText = "This tool will assist in making difficult and/or complex choices:";
+  const pageDescText = "This tool will assist in making difficult and/or complex choices: " + (featureFlag ? "" : "COMING SOON");
   const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
 
   const decisionInput = !choiceTextDone ? (<><label>Describe the decision or choice:</label>
@@ -104,6 +103,19 @@ function DifficultChoiceMaker({setIsLoading}) {
   </>  : "";
   const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} onClose={closeModal} formTitle={"Enter Criteria"} formDescription={"You can enter multiple criteria.  Click 'Done' when finished."} />
   const choiceModal = <InputModal isOpen={showChoiceModal} onSubmit={handleSubmitChoice} onClose={closeModal} formTitle={"Enter Choices"} formDescription={"You can enter multiple choices.  Click 'Done' when finished."} />
+
+  if(!featureFlag){
+    return (
+      <div className={styles.content}>
+        <div className={"formDiv"}>
+          <div className={"pageDescription border-bottom"}> 
+            {descriptionOfPageFunction}
+            {howAppWorks}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={styles.content}>
