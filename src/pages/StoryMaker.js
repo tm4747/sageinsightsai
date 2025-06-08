@@ -5,7 +5,6 @@ import CharacterConfigurator from "../components/CharacterConfigurator"
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
 import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/AILogo';
-import AWS from 'aws-sdk';
 import Slider from '../components/simple/Slider';
 import FlashingText from '../components/FlashingText';
 import BoxList from '../components/BoxList';
@@ -41,14 +40,11 @@ function StoryMaker({setIsLoading}) {
 
   // GET STORY AUDIO LAMBDA - send text to text file in S3 and url to file
   const fetchAudio = async () => {
-    // TODO: remove true ||
-    if(true || postResponse){
+    if(postResponse){
       try {
+        const bucketPath = "https://sageinsightsai-audio.s3.amazonaws.com/";
         let useablePostResponse = removeSpecialChars(postResponse);
         useablePostResponse = removeIntroMaterial(useablePostResponse);
-
-        //TODO: test - remove
-        useablePostResponse = "Test input test inpu ttest input";
         setIsLoading(true);
 
         // Create filename for the text file
@@ -57,14 +53,13 @@ function StoryMaker({setIsLoading}) {
 
         try {
           const apiKey = process.env.REACT_APP_API_KEY;
-          // 1. Get pre-signed URL from your Lambda (through API Gateway)
+          // Get pre-signed URL from Lambda (through API Gateway)
           const presignResponse = await fetch('https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/generate-upload-url', {
             method: 'POST',
             headers: {
               'x-api-key': apiKey,
               'Content-Type': 'application/json'
             },
-            // body: JSON.stringify({ url: enteredUrl }) 
             body: JSON.stringify({ fileName: s3FileName })
           });
 
@@ -74,7 +69,7 @@ function StoryMaker({setIsLoading}) {
 
           const { uploadURL } = await presignResponse.json();
 
-          // 2. Upload the text using fetch
+          // Upload the text using fetch
           const uploadResponse = await fetch(uploadURL, {
             method: 'PUT',
             headers: {
@@ -85,15 +80,16 @@ function StoryMaker({setIsLoading}) {
 
           if (!uploadResponse.ok) {
             throw new Error('Failed to upload to S3');
+          } else {
+            console.log("file upload successful");
+            console.log("s3FileName", s3FileName);
           }
 
-          console.log('Text file uploaded successfully to S3 at:', uploadURL.split('?')[0]);
-          // TODO: uncomment next 5 lines -
-          // const audioUrl = await fetchAudioFromLambda(s3Upload.Location);
-          // setAudioUrl(audioUrl); //  Set the audio URL 
-          // scrollToPageBody();
-          // setPolling(true); // Start polling
-          // setIsLoading(false);
+          const audioUrl = await fetchAudioFromLambda(bucketPath + s3FileName);
+          setAudioUrl(audioUrl); //  Set the audio URL 
+          scrollToPageBody();
+          setPolling(true); // Start polling
+          setIsLoading(false);
 
         } catch (error) {
           console.error('Error uploading to S3:', error.message);
@@ -126,7 +122,7 @@ function StoryMaker({setIsLoading}) {
         setIsDone(true);
         setIsStarted(false);
       }
-    }, .1); // Adjust speed here (50ms per character)
+    }, .05); // Adjust speed here (50ms per character)
 
     return () => clearInterval(typingInterval); // Cleanup the interval
   }, [htmlResponse]);
@@ -298,8 +294,7 @@ function StoryMaker({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-    // TODO: remove true || "(" + ")"
-  const fetchAudioButtonBottom = (true || (postResponse && (!polling && !isAudioReady))) ? 
+  const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? 
     <button className={"button btnCancelScroll purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
   // which showCharacterInput (1, 2, or 3) should show
