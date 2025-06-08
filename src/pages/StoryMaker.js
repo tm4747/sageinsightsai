@@ -37,19 +37,77 @@ function StoryMaker({setIsLoading}) {
   const pageBodyRef = useRef(null); 
 
 
-  /******** AWS S3 instance **********/
-  const S3_BUCKET = 'sageinsightsai-audio';  // Your bucket name
-  const REGION = 'us-east-1';
-  const s3 = new AWS.S3({
-    region: REGION,
-    credentials: new AWS.Credentials({
-      accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID_S3,
-      secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY_S3,
-    }),
-  });
-
-
   /********* USE EFFECTS & API CALLS **********/
+
+  // GET STORY AUDIO LAMBDA - send text to text file in S3 and url to file
+  const fetchAudio = async () => {
+    // TODO: remove true ||
+    if(true || postResponse){
+      try {
+        let useablePostResponse = removeSpecialChars(postResponse);
+        useablePostResponse = removeIntroMaterial(useablePostResponse);
+
+        //TODO: test - remove
+        useablePostResponse = "Test input test inpu ttest input";
+        setIsLoading(true);
+
+        // Create filename for the text file
+        const timestamp = Math.floor(Date.now() / 1000);
+        const s3FileName = `story-${timestamp}.txt`;
+
+        try {
+          const apiKey = process.env.REACT_APP_API_KEY;
+          // 1. Get pre-signed URL from your Lambda (through API Gateway)
+          const presignResponse = await fetch('https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/generate-upload-url', {
+            method: 'POST',
+            headers: {
+              'x-api-key': apiKey,
+              'Content-Type': 'application/json'
+            },
+            // body: JSON.stringify({ url: enteredUrl }) 
+            body: JSON.stringify({ fileName: s3FileName })
+          });
+
+          if (!presignResponse.ok) {
+            throw new Error('Failed to get pre-signed URL');
+          }
+
+          const { uploadURL } = await presignResponse.json();
+
+          // 2. Upload the text using fetch
+          const uploadResponse = await fetch(uploadURL, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'text/plain'
+            },
+            body: useablePostResponse
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error('Failed to upload to S3');
+          }
+
+          console.log('Text file uploaded successfully to S3 at:', uploadURL.split('?')[0]);
+          // TODO: uncomment next 5 lines -
+          // const audioUrl = await fetchAudioFromLambda(s3Upload.Location);
+          // setAudioUrl(audioUrl); //  Set the audio URL 
+          // scrollToPageBody();
+          // setPolling(true); // Start polling
+          // setIsLoading(false);
+
+        } catch (error) {
+          console.error('Error uploading to S3:', error.message);
+          setIsLoading(false);
+        } finally {
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Error sending story text to S3:", error);
+        setIsLoading(false);
+      }
+    }
+  };
+  
   // TYPING EFFECT DISPLAY RESULTS 
   useEffect(() => {
     if (!htmlResponse) return;
@@ -92,46 +150,6 @@ function StoryMaker({setIsLoading}) {
     }
   }
   
-  // GET STORY AUDIO LAMBDA - send text to text file in S3 and url to file
-  const fetchAudio = async () => {
-    if(postResponse){
-      try {
-        let useablePostResponse = removeSpecialChars(postResponse);
-        useablePostResponse = removeIntroMaterial(useablePostResponse);
-        setIsLoading(true);
-
-        // Create filename for the text file
-        const timestamp = Math.floor(Date.now() / 1000);;
-        const s3FileName = `story-${timestamp}.txt`;
-
-        const s3Params = {
-          Bucket: S3_BUCKET,
-          Key: s3FileName,
-          Body: useablePostResponse,
-          ContentType: 'text/plain'
-        };
-        try {
-          // Upload to S3
-          const s3Upload = await s3.upload(s3Params).promise();
-          console.log('Text file uploaded to S3:', s3Upload.Location);
-          // Now call fetchAudioFromLambda with the S3 URL
-          const audioUrl = await fetchAudioFromLambda(s3Upload.Location);
-          // Set the audio URL
-          setAudioUrl(audioUrl);
-          scrollToPageBody();
-          setPolling(true); // Start polling
-          setIsLoading(false);
-        } catch (error) {
-          console.error("Error uploading to s3 or fetching audio:", error);
-          setIsLoading(false);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error sending story text to S3:", error);
-        setIsLoading(false);
-      }
-    }
-  };
 
   // POLLING function to check if audio file is available
   useEffect(() => {
@@ -280,7 +298,8 @@ function StoryMaker({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-  const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? 
+    // TODO: remove true || "(" + ")"
+  const fetchAudioButtonBottom = (true || (postResponse && (!polling && !isAudioReady))) ? 
     <button className={"button btnCancelScroll purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
 
   // which showCharacterInput (1, 2, or 3) should show
