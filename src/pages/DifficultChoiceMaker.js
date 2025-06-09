@@ -107,8 +107,9 @@ function DifficultChoiceMaker({setIsLoading}) {
     </div>
   </>  : "";
   const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} 
-    onClose={closeModal} formTitle={"Enter Criteria"} 
-    formDescription={"You can enter multiple criteria. Description is optional. Click 'Done' when finished."} showSlider={true}/>
+    onClose={closeModal} formTitle={"Enter Criteria"} field1Name={"Criterion"}
+    formDescription={"You can enter multiple criteria. Description is optional. Click 'Done' when finished."} showSlider={true}
+    sliderTitle={"How important is this criterion:"}/>
   const choiceModal = <InputModal isOpen={showChoiceModal} onSubmit={handleSubmitChoice} 
     onClose={closeModal} formTitle={"Enter Choices"} 
     formDescription={"You can enter multiple choices. Description is optional. Click 'Done' when finished."} />

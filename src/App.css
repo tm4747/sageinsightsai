@@ -180,12 +180,6 @@ audio{
   color:rgb(47, 47, 208);
   background-color: white;
 }
-.notice{
-  text-decoration: underline;
-  font-size:.75em;
-  font-style:italic;
-  color:lightpink
-}
 /* GENERAL ELEMENT CSS */
 .no-padding{
   padding:0;
@@ -202,9 +196,6 @@ audio{
 .border-bottom{
   border-bottom:solid 2px #444;
 }
-.notice{
-  text-decoration: italic;
-}
 .bold{
   font-weight:bold;
 }
@@ -218,10 +209,15 @@ audio{
   margin:0;
   padding:0;
 }
-.error{
-  color:red;
+.notice{
   font-weight:bold;
   font-style:italic;
+}
+.error{
+  color:red;
+}
+.success{
+  color:var(--dark-green-inversion)
 }
 /* DIV and P SPECIFIC */
 .pStandard{
