@@ -19,9 +19,23 @@ jobs:
         with:
           node-version: '23.6.0'
 
+      - name: Set environment-specific variables
+        id: vars
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            echo "bucket=ai-portfolio-tommolinaro" >> $GITHUB_OUTPUT
+            echo "cf_dist=E1GDMJ2H19J58Y" >> $GITHUB_OUTPUT
+            echo "env=prod" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
+            echo "bucket=ai-portfolio-tommolinaro-qa" >> $GITHUB_OUTPUT
+            echo "cf_dist=E10CK62O23I86Y" >> $GITHUB_OUTPUT
+            echo "env=non-prod" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build React app
         env:
           REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
+          REACT_APP_ENV: ${{ steps.vars.outputs.env }}
         run: |
           npm install
           npm run build
@@ -32,17 +46,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Set environment-specific variables
-        id: vars
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-            echo "bucket=ai-portfolio-tommolinaro" >> $GITHUB_OUTPUT
-            echo "cf_dist=E1GDMJ2H19J58Y" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
-            echo "bucket=ai-portfolio-tommolinaro-qa" >> $GITHUB_OUTPUT
-            echo "cf_dist=E10CK62O23I86Y" >> $GITHUB_OUTPUT
-          fi
 
       - name: Clear old S3 files
         run: |
@@ -55,3 +58,4 @@ jobs:
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation --distribution-id ${{ steps.vars.outputs.cf_dist }} --paths "/*"
+
