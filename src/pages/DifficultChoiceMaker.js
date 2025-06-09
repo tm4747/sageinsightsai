@@ -106,8 +106,12 @@ function DifficultChoiceMaker({setIsLoading}) {
       <span className={"small-text"}> - these are the choices you will you evaluate.</span>
     </div>
   </>  : "";
-  const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} onClose={closeModal} formTitle={"Enter Criteria"} formDescription={"You can enter multiple criteria.  Click 'Done' when finished."} />
-  const choiceModal = <InputModal isOpen={showChoiceModal} onSubmit={handleSubmitChoice} onClose={closeModal} formTitle={"Enter Choices"} formDescription={"You can enter multiple choices.  Click 'Done' when finished."} />
+  const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} 
+    onClose={closeModal} formTitle={"Enter Criteria"} 
+    formDescription={"You can enter multiple criteria. Description is optional. Click 'Done' when finished."} showSlider={true}/>
+  const choiceModal = <InputModal isOpen={showChoiceModal} onSubmit={handleSubmitChoice} 
+    onClose={closeModal} formTitle={"Enter Choices"} 
+    formDescription={"You can enter multiple choices. Description is optional. Click 'Done' when finished."} />
 
   if(!featureFlag){
     return (

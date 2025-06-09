@@ -190,6 +190,9 @@ audio{
 .no-padding{
   padding:0;
 }
+.margin-bottom{
+  margin-bottom:1rem;
+}
 .red-border{
   border:solid 2px var(--red);
 }
@@ -214,6 +217,11 @@ audio{
 .no-margin-padding{
   margin:0;
   padding:0;
+}
+.error{
+  color:red;
+  font-weight:bold;
+  font-style:italic;
 }
 /* DIV and P SPECIFIC */
 .pStandard{
