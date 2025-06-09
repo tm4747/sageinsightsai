@@ -6,6 +6,7 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
   const [description, setDescription] = useState('');
   const [sliderValue, setSliderValue] = useState(5);
   const [showAdded, setShowAdded] = useState(false);
+  const [showAddedText, setShowAddedText] = useState('');
   // TODO: work on error next
   const [nameError, setNameError] = useState(false);
 
@@ -19,6 +20,14 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
     return name && name.length > 2;
   }
 
+
+  /******* JAVASCRIPT HELPERS *******/
+  const resetState = () => {
+    setName('');
+    setDescription('');
+    setSliderValue(5);
+  }
+
   const handleUpdateName = (value) => {
     let name = value.trim();
     if(isValidName(name)){
@@ -27,17 +36,22 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
     setName(name);
   }
 
+  const handleOnClose = () => {
+    resetState();
+    onClose();
+  }
+
   const handleSubmit = () => {
     // todo: validate name
     if(name && isValidName(name)){
         setNameError(false);
         onSubmit({ name, description, sliderValue });
-        setName('');
-        setDescription('');
-        setSliderValue(5);
+        setShowAddedText(name);
         setShowAdded(true);
+        resetState();
         setTimeout(() => {
           setShowAdded(false);
+          setShowAddedText('');
         }, 2000);
     } else {
       setNameError(true);
@@ -45,9 +59,10 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
   };
 
 
+
   /******** DISPLAY FUNCTIONS & VARS *********/
   const descriptionText = formDescription ? <p className={"small-text"}>{formDescription}</p> : "";
-  const doneButton = <button className={"button red-button"} onClick={onClose} style={{ marginRight: '1rem', width:'50%' }}>Done</button>;
+  const doneButton = <button className={"button red-button"} onClick={handleOnClose} style={{ marginRight: '1rem', width:'50%' }}>Done</button>;
   const submitButton = <button className={"button green-button"} onClick={handleSubmit} style={{ width:'50%' }}>Add {field1NameToUpper}</button>
   const sliderDiv = showSlider ? <div>
           <label htmlFor="slider">{sliderTitle} {sliderValue}</label>
@@ -56,7 +71,7 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
         </div> : "";
   const nameInputClasses = nameError ? `text-input ${styles.textInput} red-border` : `text-input ${styles.textInput}`;
   const nameErrorText = nameError ? <p className={"small-text notice error"}>* Entered {field1Name} must be at least 3 characters.</p> : "";
-  const valueAddedText = showAdded ? <p className={"small-text notice success"}>{field1Name} has been added!</p> : "";
+  const valueAddedText = showAdded ? <p className={"small-text notice success"}>{field1Name} {showAddedText} has been added!</p> : "";
 
   
   return (
