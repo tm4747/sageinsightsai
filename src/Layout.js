@@ -12,7 +12,7 @@ const Layout = ({isLoading}) => {
   const linkData = [
     { path: '/', label: 'Story Maker' },
     { path: '/web-summary', label: 'Web Page Summary' },
-    { path: '/difficult-choice-helper', label: 'Difficult Choice Helper' },
+    { path: '/decidedly-choice-tool', label: 'Decidedly' },
   ];
 
   const nav = (<nav className="theNav">
