@@ -94,16 +94,18 @@ function DifficultChoiceMaker({setIsLoading}) {
 
   const decisionInput = !choiceTextDone ? (<><label>Describe the decision or choice:</label>
     <input className={"text-input"} value={choiceText} type="text" onChange={(e) => setChoiceText(e.target.value)}/></>) : "";
-  const decisionGoodButton = !choiceTextDone ? <button className={"button green-button"} onClick={() => {setChoiceTextDone(true)}} value={""}>Decision is correct!</button> : "";
-  const startOverButton = choiceTextDone ? <button className={"button red-button"} onClick={resetState} value={""}>Start Over</button> : "";
+  const decisionGoodButton = !choiceTextDone ? 
+    <button className={"button green-button"} onClick={() => {setChoiceTextDone(true)}} value={""}>Decision is correct!</button> : "";
+  const startOverButton = choiceTextDone ? 
+    <button className={"button red-button"} onClick={resetState} value={""}>Start Over</button> : "";
   const addChoiceCriteriaButton = choiceTextDone ? 
   <><div>
-      <button className={"button green-button"} onClick={addCriteria} value={""}>Add Criteria</button>
-      <span className={"small-text"}> - these are factors of the decision you will use in evaluation.</span>
+      <button className={"button green-button margin-bottom"} onClick={addCriteria} value={""}>Add Criteria</button>
+      <span className={"small-text notice"}> - these are factors of the decision you will use in evaluation.</span>
     </div>
     <div>
-      <button className={"button green-button"} onClick={addChoice} value={""}>Add Choice</button>
-      <span className={"small-text"}> - these are the choices you will you evaluate.</span>
+      <button className={"button green-button margin-bottom"} onClick={addChoice} value={""}>Add Choice</button>
+      <span className={"small-text notice"}> - these are the choices you will you evaluate.</span>
     </div>
   </>  : "";
   const criteriaModal = <InputModal isOpen={showCriteriaModal} onSubmit={handleSubmitCriteria} 
