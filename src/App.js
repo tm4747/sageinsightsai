@@ -7,6 +7,7 @@ import StoryMaker from './pages/StoryMaker';
 import DifficultChoiceMaker from './pages/DifficultChoiceMaker';
 
 function App() {
+  // TODO: move routes into array here and pass into layout
     const [isLoading, setIsLoading] = useState(false);
   
   return (
@@ -14,7 +15,7 @@ function App() {
       <Route path="/" element={<Layout isLoading={isLoading} />}>
         <Route index element={<StoryMaker setIsLoading={setIsLoading}/>}  />
         <Route path="web-summary" element={<WebpageSummaryTool setIsLoading={setIsLoading}/>} />
-        <Route path="difficult-choice-helper" element={<DifficultChoiceMaker setIsLoading={setIsLoading}/>} />
+        <Route path="decidedly-choice-tool" element={<DifficultChoiceMaker setIsLoading={setIsLoading}/>} />
       </Route>
     </Routes>
   );

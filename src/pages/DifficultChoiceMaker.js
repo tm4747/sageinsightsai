@@ -19,7 +19,7 @@ function DifficultChoiceMaker({setIsLoading}) {
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteriaItems, setCriteriaItems] = useState([]);
-  const featureFlag = process.env.REACT_APP_SHOW_FEATURES && process.env.REACT_APP_SHOW_FEATURES === "true" ? true : false;
+  const featureFlag = process.env.REACT_APP_ENV && process.env.REACT_APP_ENV === "non-prod" ? true : false;
   // Row Data: The data to be displayed.
   // const [rowData, setRowData] = useState([
   //     { criteria: "Tesla", model: "Model Y", price: 64950, electric: true },

@@ -81,8 +81,7 @@ function StoryMaker({setIsLoading}) {
           if (!uploadResponse.ok) {
             throw new Error('Failed to upload to S3');
           } else {
-            console.log("file upload successful");
-            console.log("s3FileName", s3FileName);
+            console.log("file upload successful", s3FileName);
           }
 
           const audioUrl = await fetchAudioFromLambda(bucketPath + s3FileName);
@@ -154,7 +153,6 @@ function StoryMaker({setIsLoading}) {
       intervalId = setInterval(async () => {
         try {
           const res = await fetch(audioUrl);
-          console.log("results", res);
           if (res.ok) {
             setIsAudioReady(true); // Audio file is available, enable the audio player
             clearInterval(intervalId); // Stop polling

@@ -66,8 +66,6 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
       };
 
       const handleInputSubmit = (input) => {
-        console.log('input');
-        console.log(input);
         submittedData(input);
         clearInputs();
         setEnterValues(false);
@@ -120,8 +118,6 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
     }
     let iconClasses = "flashing-icon edgy-icon";
     iconClasses += getEdgy ? " red-border" : " black-border";
-    console.log('getEdgy');
-    console.log(getEdgy);
 
     const handleToggleEnterValues = () =>{
       setEnterValues(!enterValues);
