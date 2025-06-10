@@ -78,10 +78,6 @@ const ImportanceCellRenderer = props => {
   );
 };
 
- // Register the cellRenderer in the grid
-  const frameworkComponents = {
-    importanceCellRenderer: ImportanceCellRenderer
-  };
 
   /********* USE EFFECTS & API CALLS **********/
   useEffect(() => {
