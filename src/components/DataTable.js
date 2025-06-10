@@ -7,20 +7,14 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const DataTable = ({criteriaItems, choiceItems}) => {
 
-  const [rowData, setRowData] = useState([]);
-  const [colDefs, setColDefs] = useState([
-      { field: "name", headerName: "Criterion" },
-      { field: "importance", headerName: "Importance", cellRenderer: 'importanceCellRenderer'}
-    ]);
-
-   
-
-
-  /******** CELL RENDERERS *******/
 
   // Up and down arrow icons can be plain text or emoji, or import from an icon library
-const ImportanceCellRenderer = props => {
+const ImportanceCellRenderer = (props) => {
   const { value, data, api } = props;
+
+  if(data.name === "TOTAL"){
+    return <span>{value}</span>;
+  }
 
   const handleIncrement = () => {
     if (data.name === "TOTAL") return; // prevent changing the total row
@@ -79,6 +73,19 @@ const ImportanceCellRenderer = props => {
 };
 
 
+  const [rowData, setRowData] = useState([]);
+  const [colDefs, setColDefs] = useState([
+      { field: "name", headerName: "Criterion" },
+      { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer}
+    ]);
+
+   
+
+
+  /******** CELL RENDERERS *******/
+
+
+
   /********* USE EFFECTS & API CALLS **********/
   useEffect(() => {
   if (criteriaItems.length === 0) {
@@ -89,7 +96,7 @@ const ImportanceCellRenderer = props => {
   // 1️⃣ Build column definitions: static columns
   const updatedColDefs = [
     { field: "name", headerName: "Criterion" },
-    { field: "importance", headerName: "Importance", cellRenderer: 'importanceCellRenderer' }
+    { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer }
   ];
 
   // 2️⃣ Add choice columns and rating columns
@@ -179,7 +186,6 @@ const ImportanceCellRenderer = props => {
             columnDefs={colDefs}
             defaultColDef={defaultColDef}
             getRowStyle={rowStyles}
-            frameworkComponents={frameworkComponents}
         />
     </div>
   )
