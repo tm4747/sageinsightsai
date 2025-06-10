@@ -20,72 +20,12 @@ function DifficultChoiceMaker({setIsLoading}) {
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteriaItems, setCriteriaItems] = useState([]);
   const [choiceItems, setChoiceItems] = useState([]);
-  const [rowData, setRowData] = useState([]);
-  const [colDefs, setColDefs] = useState([
-      { field: "name" },
-      { field: "description" },
-      { field: "value" }
-    ])
+  
   const featureFlag = process.env.REACT_APP_ENV && process.env.REACT_APP_ENV === "non-prod" ? true : false;
  
-  // const [criteria, setCriteria] = useState([]);
-
 
   /********* USE EFFECTS & API CALLS **********/
-  useEffect(() => {
-  // Only update if there is at least one criterion
-  if (criteriaItems.length === 0) {
-    setRowData([]);
-    return;
-  }
-
-  // 1️⃣ Build column definitions: start with static columns
-  const updatedColDefs = [
-    { field: "name", headerName: "Criterion" },
-    // { field: "description", headerName: "Description" },
-    { field: "importance", headerName: "Importance" }
-  ];
-
-  // 2️⃣ Add a column for each choice
-  choiceItems.forEach((choice, index) => {
-    updatedColDefs.push({
-      field: `choice${index + 1}`,
-      headerName: `choice${index + 1}` + choice.name
-    });
-    updatedColDefs.push({
-      field: `choice${index + 1}Rating`,
-      headerName: "Rating"
-    });
-  });
-
-  setColDefs(updatedColDefs);
-
-  // 3️⃣ Build row data
-  const updatedRowData = criteriaItems.map(criterion => {
-    // Start with the criterion's data
-    const row = {
-      name: criterion.name,
-      // description: criterion.description,
-      importance: criterion.sliderValue
-    };
-
-    console.log('choiceItems', choiceItems)
-    // For each choice, initialize as empty or a default
-    // Add choice1, choice2, etc., with the choice name as the cell value
-    choiceItems.forEach((choice, index) => {
-      row[`choice${index + 1}`] = choice.name;
-      row[`choice${index + 1}Rating`] = 5;
-
-    });
-
-    return row;
-  });
-
-  setRowData(updatedRowData);
-
-}, [criteriaItems, choiceItems]);
-
-
+ 
 
   /********** DYNAMIC JS FUNCTIONS **********/ 
   const handleShowHowItWorks = () => {
@@ -190,7 +130,7 @@ function DifficultChoiceMaker({setIsLoading}) {
           {addChoiceCriteriaButton}
           {criteriaModal}
           {choiceModal}
-           <DataTable rowData={rowData} colDefs={colDefs} />
+           <DataTable criteriaItems={criteriaItems} choiceItems={choiceItems} />
            
         </div>
       </div>
