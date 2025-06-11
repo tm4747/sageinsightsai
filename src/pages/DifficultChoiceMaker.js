@@ -112,7 +112,7 @@ function DifficultChoiceMaker({setIsLoading}) {
   }
 
   return (
-    <div className={styles.content}>
+    <div className={styles.content} >
       <div className={"formDiv"}>
         <div className={"pageDescription border-bottom"}> 
           {descriptionOfPageFunction}

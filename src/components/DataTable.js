@@ -8,7 +8,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const DataTable = ({criteriaItems, choiceItems}) => {
 
 
-  // Up and down arrow icons can be plain text or emoji, or import from an icon library
+/******** CELL RENDERERS *******/
+// Up and down arrow icons can be plain text or emoji, or import from an icon library
 const ImportanceCellRenderer = (props) => {
   const { value, data, api } = props;
 
@@ -72,17 +73,11 @@ const ImportanceCellRenderer = (props) => {
   );
 };
 
-
-  const [rowData, setRowData] = useState([]);
-  const [colDefs, setColDefs] = useState([
-      { field: "name", headerName: "Criterion" },
-      { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer}
-    ]);
-
-   
-
-
-  /******** CELL RENDERERS *******/
+const [rowData, setRowData] = useState([]);
+const [colDefs, setColDefs] = useState([
+    { field: "name", headerName: "Criterion" },
+    { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer}
+  ]);
 
 
 
