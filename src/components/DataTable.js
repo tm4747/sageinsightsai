@@ -11,7 +11,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems, setChoiceItem
 
   /********** CELL RENDERERS **********/ 
   const ImportanceCellRenderer = (props) => {
-    const { value, data, api } = props;
+    const { value, data } = props;
 
     if (data.name === "TOTAL") return <span>{value}</span>;
 
@@ -32,9 +32,11 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems, setChoiceItem
 
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+         <div>
+          <span style={{ cursor: 'pointer' }} onClick={() => updateCriterionAndRow(value + 1)}>▲</span>
+        </div>
         <span>{value}</span>
         <div>
-          <span style={{ cursor: 'pointer' }} onClick={() => updateCriterionAndRow(value + 1)}>▲</span>
           <span style={{ cursor: 'pointer', marginLeft: '4px' }} onClick={() => { if (value > 1) updateCriterionAndRow(value - 1); }}>▼</span>
         </div>
       </div>
@@ -43,7 +45,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems, setChoiceItem
 
 
   const ChoiceCellRenderer = (props) => {
-    const { value, data, colDef, api } = props;
+    const { value, data, colDef } = props;
     const field = colDef.field;
 
     if (data.name === "TOTAL") return <span>{value}</span>;
@@ -84,9 +86,11 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems, setChoiceItem
 
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+         <div>
+          <span style={{ cursor: 'pointer' }} onClick={handleIncrement}>▲</span>
+        </div>
         <span>{value}</span>
         <div>
-          <span style={{ cursor: 'pointer' }} onClick={handleIncrement}>▲</span>
           <span style={{ cursor: 'pointer', marginLeft: '4px' }} onClick={handleDecrement}>▼</span>
         </div>
       </div>
@@ -156,7 +160,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems, setChoiceItem
 
     setRowData(rows);
   }, [criteriaItems, choiceItems]);
-  
+
 
   /******** DISPLAY FUNCTIONS *********/
   const defaultColDef = { flex: 1 };
