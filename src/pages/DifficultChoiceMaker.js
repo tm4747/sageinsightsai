@@ -130,7 +130,7 @@ function DifficultChoiceMaker({setIsLoading}) {
           {addChoiceCriteriaButton}
           {criteriaModal}
           {choiceModal}
-           <DataTable criteriaItems={criteriaItems} choiceItems={choiceItems} />
+           <DataTable setCriteriaItems={setCriteriaItems} criteriaItems={criteriaItems} choiceItems={choiceItems} />
            
         </div>
       </div>
