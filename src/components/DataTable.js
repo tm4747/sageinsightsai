@@ -4,21 +4,18 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
-
+const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems, setChoiceItems }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
 
-  /******** CELL RENDERER ********/
+
+  /********** CELL RENDERERS **********/ 
   const ImportanceCellRenderer = (props) => {
     const { value, data, api } = props;
 
-    if (data.name === "TOTAL") {
-      return <span>{value}</span>;
-    }
+    if (data.name === "TOTAL") return <span>{value}</span>;
 
     const updateCriterionAndRow = (newImportance) => {
-      // Update rowData in table
       data.importance = newImportance;
       choiceItems.forEach((_, index) => {
         const choiceField = `choice${index + 1}`;
@@ -26,25 +23,62 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
         const initialRating = data[choiceField];
         data[ratingField] = initialRating * newImportance;
       });
-      api.applyTransaction({ update: [data] });
 
-      // Update criteriaItems to persist changes
-      const updatedCriteriaItems = criteriaItems.map(c => {
-        if (c.name === data.name) {
-          return { ...c, sliderValue: newImportance };
-        }
-        return c;
-      });
+      const updatedCriteriaItems = criteriaItems.map(c =>
+        c.name === data.name ? { ...c, sliderValue: newImportance } : c
+      );
       setCriteriaItems(updatedCriteriaItems);
     };
 
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span>{value}</span>
+        <div>
+          <span style={{ cursor: 'pointer' }} onClick={() => updateCriterionAndRow(value + 1)}>▲</span>
+          <span style={{ cursor: 'pointer', marginLeft: '4px' }} onClick={() => { if (value > 1) updateCriterionAndRow(value - 1); }}>▼</span>
+        </div>
+      </div>
+    );
+  };
+
+
+  const ChoiceCellRenderer = (props) => {
+    const { value, data, colDef, api } = props;
+    const field = colDef.field;
+
+    if (data.name === "TOTAL") return <span>{value}</span>;
+
+    const choiceIndexMatch = field.match(/choice(\d+)$/);
+    if (!choiceIndexMatch) return <span>{value}</span>; // not a choice column
+
+    const choiceIndex = parseInt(choiceIndexMatch[1], 10) - 1; // index in choiceItems
+    const choiceName = choiceItems[choiceIndex]?.name;
+
+    const updateChoiceValueAndRow = (newValue) => {
+      data[field] = newValue;
+      // Update corresponding rating field
+      const ratingField = `${field}Rating`;
+      data[ratingField] = newValue * data.importance;
+
+      // Update choiceItems
+      const updatedChoiceItems = choiceItems.map((c, idx) => {
+        if (idx === choiceIndex) {
+          return { ...c, initialRating: newValue }; // store the new value in choiceItems
+        }
+        return c;
+      });
+      setChoiceItems(updatedChoiceItems);
+    };
+
     const handleIncrement = () => {
-      updateCriterionAndRow(value + 1);
+      if (value < 10) {
+        updateChoiceValueAndRow(value + 1);
+      }
     };
 
     const handleDecrement = () => {
       if (value > 1) {
-        updateCriterionAndRow(value - 1);
+        updateChoiceValueAndRow(value - 1);
       }
     };
 
@@ -59,27 +93,24 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
     );
   };
 
-  /******** COLUMNS & ROWS ********/
+
+  /******** useEffect FUNCTIONS **********/
   useEffect(() => {
     if (criteriaItems.length === 0) {
       setRowData([]);
       return;
     }
 
-    // Columns
     const updatedColDefs = [
       { field: "name", headerName: "Criterion" },
-      {
-        field: "importance",
-        headerName: "Importance",
-        cellRenderer: ImportanceCellRenderer
-      }
+      { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer }
     ];
 
     choiceItems.forEach((choice, index) => {
       updatedColDefs.push({
         field: `choice${index + 1}`,
-        headerName: `${choice.name}`
+        headerName: `${choice.name}`,
+        cellRenderer: ChoiceCellRenderer
       });
       updatedColDefs.push({
         field: `choice${index + 1}Rating`,
@@ -89,7 +120,6 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
 
     setColDefs(updatedColDefs);
 
-    // Rows
     const rows = criteriaItems.map(criterion => {
       const criterionValue = criterion.sliderValue;
       const row = {
@@ -98,7 +128,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
       };
 
       choiceItems.forEach((choice, index) => {
-        const initialRating = 5;
+        const initialRating = choice.initialRating || 5; // default to 5 if not set
         row[`choice${index + 1}`] = initialRating;
         row[`choice${index + 1}Rating`] = initialRating * criterionValue;
       });
@@ -106,7 +136,6 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
       return row;
     });
 
-    // Totals row
     let totalImportance = 0;
     const totalRatings = {};
     rows.forEach(row => {
@@ -126,16 +155,12 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
     rows.push(totalsRow);
 
     setRowData(rows);
-
   }, [criteriaItems, choiceItems]);
+  
 
+  /******** DISPLAY FUNCTIONS *********/
   const defaultColDef = { flex: 1 };
-  const rowStyles = params => {
-    if (params.data?.name === 'TOTAL') {
-      return { fontWeight: 'bold', backgroundColor: '#f0f0f0' };
-    }
-    return {};
-  };
+  const rowStyles = params => (params.data?.name === 'TOTAL' ? { fontWeight: 'bold', backgroundColor: '#f0f0f0' } : {});
 
   return (
     <div className="ag-theme-alpine" style={{ height: 300, width: '100%' }}>
@@ -148,5 +173,6 @@ const DataTable = ({ criteriaItems, setCriteriaItems, choiceItems }) => {
     </div>
   );
 };
+
 
 export default DataTable;
