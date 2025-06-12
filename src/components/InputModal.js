@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from "./styles/InputModal.module.css"
 
-const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", field1Name = "name", formDescription = "", showSlider = false, sliderTitle = "How important:" }) => {
+const InputModal = ({ 
+  isOpen, 
+  onSubmit, 
+  onClose, 
+  currentItems,
+  formTitle = "Enter Details", 
+  field1Name = "name", 
+  formDescription = "", 
+  showSlider = false, 
+  sliderTitle = "How important:",
+}) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [sliderValue, setSliderValue] = useState(5);
@@ -9,6 +19,8 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
   const [showAddedText, setShowAddedText] = useState('');
   // TODO: work on error next
   const [nameError, setNameError] = useState(false);
+  const [nameErrorMessage, setNameErrorMessage] = useState('');
+
 
 
   const capitalizeFirstLetter = (val) => {
@@ -17,7 +29,38 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
   const field1NameToUpper = capitalizeFirstLetter(field1Name);
 
   const isValidName = (name) => {
-    return name && name.length > 2;
+    let isValid = true;
+    if(!(name && name.length > 2)){
+      isValid = false;
+      setNameErrorMessage("* Entered " + field1Name + " must be at least 3 characters.")
+    }
+    // if criteria - check criteria names 
+    if(field1Name === "criterion"){
+      if(currentItems && currentItems.length > 0){
+        for(var x = 0; x < currentItems.length; x++){
+          if(name === currentItems[x].name){
+            isValid = false;
+            setNameErrorMessage("* Entered " + field1Name + " must be unique.")
+          }
+        }
+      }
+    } else if(field1Name === "choice"){
+      if(currentItems && currentItems.length > 0){
+        const theseChoices = currentItems[0].choices;
+        if(theseChoices && theseChoices.length > 0){
+          for(var x = 0; x < theseChoices.length; x++){
+            if(name === theseChoices[x].name){
+              isValid = false;
+              setNameErrorMessage("* Entered " + field1Name + " must be unique.")
+            }
+          }
+        }
+      }
+    }
+    if(isValid){
+      setNameErrorMessage("");
+    }
+    return isValid;
   }
 
 
@@ -29,11 +72,10 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
   }
 
   const handleUpdateName = (value) => {
-    let name = value.trim();
-    if(isValidName(name)){
+    if(isValidName(value)){
         setNameError(false);
     }
-    setName(name);
+    setName(value);
   }
 
   const handleOnClose = () => {
@@ -42,7 +84,7 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
   }
 
   const handleSubmit = () => {
-    // todo: validate name
+    // todo: validate name & TRIM name
     if(name && isValidName(name)){
         setNameError(false);
         onSubmit({ name, description, sliderValue });
@@ -70,7 +112,7 @@ const InputModal = ({ isOpen, onSubmit, onClose, formTitle = "Enter Details", fi
             onChange={(e) => setSliderValue(parseInt(e.target.value))} className={`margin-bottom ${styles.slider}`} />
         </div> : "";
   const nameInputClasses = nameError ? `text-input ${styles.textInput} red-border` : `text-input ${styles.textInput}`;
-  const nameErrorText = nameError ? <p className={"small-text notice error"}>* Entered {field1Name} must be at least 3 characters.</p> : "";
+  const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const valueAddedText = showAdded ? <p className={"small-text notice success"}>{field1Name} {showAddedText} has been added!</p> : "";
 
   

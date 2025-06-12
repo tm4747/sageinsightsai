@@ -6,14 +6,14 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 // Moved outside component and uses context
 const ImportanceCellRenderer = (props) => {
-  const { value, data, context: { setCriteriaItems, criteriaItems } } = props;
+  const { value, data, context: { setCriteriaRows, criteriaRows } } = props;
   if (data.name === "TOTAL") return <span>{value}</span>;
 
   const updateImportance = (newValue) => {
-    const updatedCriteriaItems = criteriaItems.map(c =>
+    const updatedCriteriaRows = criteriaRows.map(c =>
       c.name === data.name ? { ...c, sliderValue: newValue } : c
     );
-    setCriteriaItems(updatedCriteriaItems);
+    setCriteriaRows(updatedCriteriaRows);
   };
 
   return (
@@ -26,13 +26,13 @@ const ImportanceCellRenderer = (props) => {
 };
 
 const ChoiceCellRenderer = (props) => {
-  const { value, data, colDef, context: { setCriteriaItems, criteriaItems } } = props;
+  const { value, data, colDef, context: { setCriteriaRows, criteriaRows } } = props;
   if (data.name === "TOTAL") return <span>{value}</span>;
 
   const choiceIndex = parseInt(colDef.field.replace('choice', ''), 10) - 1;
 
   const updateChoiceRating = (newValue) => {
-    const updatedCriteriaItems = criteriaItems.map(criterion => {
+    const updatedCriteriaRows = criteriaRows.map(criterion => {
       if (criterion.name === data.name) {
         const updatedChoices = criterion.choices.map((choice, index) => {
           if (index === choiceIndex) {
@@ -44,7 +44,7 @@ const ChoiceCellRenderer = (props) => {
       }
       return criterion;
     });
-    setCriteriaItems(updatedCriteriaItems);
+    setCriteriaRows(updatedCriteriaRows);
   };
 
   return (
@@ -56,17 +56,17 @@ const ChoiceCellRenderer = (props) => {
   );
 };
 
-const DataTable = ({ criteriaItems, setCriteriaItems }) => {
+const DataTable = ({ criteriaRows, setCriteriaRows }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
 
   useEffect(() => {
-    if (criteriaItems.length === 0) {
+    if (criteriaRows.length === 0) {
       setRowData([]);
       return;
     }
 
-    const choiceCount = criteriaItems[0].choices.length;
+    const choiceCount = criteriaRows[0].choices.length;
     const updatedColDefs = [
       { field: "name", headerName: "Criterion" },
       { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer }
@@ -86,7 +86,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems }) => {
 
     setColDefs(updatedColDefs);
 
-    const rows = criteriaItems.map(criterion => {
+    const rows = criteriaRows.map(criterion => {
       const row = {
         name: criterion.name,
         importance: criterion.sliderValue
@@ -100,7 +100,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems }) => {
       return row;
     });
 
-    const firstCriterion = criteriaItems[0];
+    const firstCriterion = criteriaRows[0];
     let totalImportance = 0;
     const totalRatings = {};
     rows.forEach(row => {
@@ -120,7 +120,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems }) => {
     rows.push(totalsRow);
 
     setRowData(rows);
-  }, [criteriaItems]);
+  }, [criteriaRows]);
 
   const defaultColDef = { flex: 1 };
   const rowStyles = params => (params.data?.name === 'TOTAL' ? { fontWeight: 'bold', backgroundColor: '#f0f0f0' } : {});
@@ -132,7 +132,7 @@ const DataTable = ({ criteriaItems, setCriteriaItems }) => {
         columnDefs={colDefs}
         defaultColDef={defaultColDef}
         getRowStyle={rowStyles}
-        context={{ criteriaItems, setCriteriaItems }}
+        context={{ criteriaRows, setCriteriaRows }}
       />
     </div>
   );

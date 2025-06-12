@@ -13,7 +13,8 @@ function DifficultChoiceMaker({ setIsLoading }) {
   const [choiceTextDone, setChoiceTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
-  const [criteriaItems, setCriteriaItems] = useState([]);
+  const [criteriaRows, setCriteriaRows] = useState([]);
+  
 
   const featureFlag = process.env.REACT_APP_ENV === "non-prod";
 
@@ -35,7 +36,7 @@ function DifficultChoiceMaker({ setIsLoading }) {
   };
 
   const handleSubmitCriteria = ({ name, description, sliderValue }) => {
-    setCriteriaItems(prevItems => [
+    setCriteriaRows(prevItems => [
       ...prevItems,
       {
         name,
@@ -47,8 +48,8 @@ function DifficultChoiceMaker({ setIsLoading }) {
   };
 
   const handleSubmitChoice = ({ name, description }) => {
-    setCriteriaItems(prevCriteriaItems =>
-      prevCriteriaItems.map(criterion => ({
+    setCriteriaRows(prevCriteriaRows =>
+      prevCriteriaRows.map(criterion => ({
         ...criterion,
         choices: [
           ...criterion.choices,
@@ -100,7 +101,7 @@ function DifficultChoiceMaker({ setIsLoading }) {
     </button>
   );
 
-  const addChoiceButton = criteriaItems && criteriaItems.length > 0 ? 
+  const addChoiceButton = criteriaRows && criteriaRows.length > 0 ? 
     <div>
       <button className={"button green-button margin-bottom"} onClick={addChoice}>
         Add Choice
@@ -130,6 +131,7 @@ function DifficultChoiceMaker({ setIsLoading }) {
       formDescription={"You can enter multiple criteria. Description is optional. Click 'Done' when finished."}
       showSlider={true}
       sliderTitle={"How important is this criterion:"}
+      currentItems={criteriaRows}
     />
   );
   const choiceModal = (
@@ -140,6 +142,7 @@ function DifficultChoiceMaker({ setIsLoading }) {
       formTitle={"Enter Choices"}
       field1Name={"choice"}
       formDescription={"You can enter multiple choices. Description is optional. Click 'Done' when finished."}
+      currentItems={criteriaRows}
     />
   );
 
@@ -174,8 +177,8 @@ function DifficultChoiceMaker({ setIsLoading }) {
           {criteriaModal}
           {choiceModal}
           <DataTable
-            criteriaItems={criteriaItems}
-            setCriteriaItems={setCriteriaItems}
+            criteriaRows={criteriaRows}
+            setCriteriaRows={setCriteriaRows}
           />
         </div>
       </div>
