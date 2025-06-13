@@ -22,7 +22,7 @@ s3_client = boto3.client('s3')
 BUCKET_NAME = 'sageinsightsai-audio'
 
 # for ffmpeg from s3
-FMPEG_BUCKET_NAME = 'lambda-dependencies-sageinsightsai'  # Replace with your actual S3 bucket name
+FFMPEG_BUCKET_NAME = 'lambda-dependencies-sageinsightsai'  # Replace with your actual S3 bucket name
 FFMPEG_KEY = 'ffmpeg'
 
 def download_ffmpeg():
