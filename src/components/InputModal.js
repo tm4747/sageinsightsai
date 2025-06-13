@@ -48,8 +48,8 @@ const InputModal = ({
       if(currentItems && currentItems.length > 0){
         const theseChoices = currentItems[0].choices;
         if(theseChoices && theseChoices.length > 0){
-          for(var x = 0; x < theseChoices.length; x++){
-            if(name === theseChoices[x].name){
+          for(var y = 0; y < theseChoices.length; y++){
+            if(name === theseChoices[y].name){
               isValid = false;
               setNameErrorMessage("* Entered " + field1Name + " must be unique.")
             }
