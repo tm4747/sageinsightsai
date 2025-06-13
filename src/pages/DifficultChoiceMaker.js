@@ -14,6 +14,8 @@ function DifficultChoiceMaker({ setIsLoading }) {
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteriaRows, setCriteriaRows] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+
   
 
   const featureFlag = process.env.REACT_APP_ENV === "non-prod";
@@ -121,6 +123,17 @@ function DifficultChoiceMaker({ setIsLoading }) {
     </>
   );
 
+   const showResultsButton = choiceTextDone && (
+    <>
+      <div>
+        <button className={"button green-button margin-bottom"} onClick={() => setShowResults(true)}>
+          Show Results
+        </button>
+        <span className={"small-text notice"}> - this will display totals and reveal your best choice.</span>
+      </div>
+    </>
+  );
+
   const criteriaModal = (
     <InputModal
       isOpen={showCriteriaModal}
@@ -174,11 +187,13 @@ function DifficultChoiceMaker({ setIsLoading }) {
           <p><FlashingText text={choiceText} /></p>
           {decisionGoodButton}
           {addChoiceCriteriaButton}
+          {showResultsButton}
           {criteriaModal}
           {choiceModal}
           <DataTable
             criteriaRows={criteriaRows}
             setCriteriaRows={setCriteriaRows}
+            showResults={showResults}
           />
         </div>
       </div>

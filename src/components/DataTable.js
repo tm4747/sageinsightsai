@@ -56,11 +56,10 @@ const ChoiceCellRenderer = (props) => {
   );
 };
 
-const DataTable = ({ criteriaRows, setCriteriaRows }) => {
+const DataTable = ({ criteriaRows, setCriteriaRows, showResults }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
-  const [showResults, setShowResults] = useState(false);
 
 
   useEffect(() => {
@@ -118,11 +117,11 @@ const DataTable = ({ criteriaRows, setCriteriaRows }) => {
     firstCriterion.choices.forEach((_, index) => {
       const ratingKey = `choice${index + 1}Rating`;
       totalsRow[`choice${index + 1}`] = "";
-      totalsRow[ratingKey] = showResults ? totalRatings[ratingKey] : "0";
+      totalsRow[ratingKey] = showResults ? totalRatings[ratingKey] : null;
     });
     setRowData(rows);
     setPinnedBottomRowData([totalsRow]);
-  }, [criteriaRows]);
+  }, [criteriaRows, showResults]);
 
   const defaultColDef = { flex: 1 };
   const rowStyles = params => (params.data?.name === 'TOTAL' ? { fontWeight: 'bold', backgroundColor: '#f0f0f0' } : {});
