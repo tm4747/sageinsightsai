@@ -18,9 +18,9 @@ const ImportanceCellRenderer = (props) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <span style={{ cursor: 'pointer' }} onClick={() => updateImportance(value + 1)}>▲</span>
-      <span>{value}</span>
       <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateImportance(value - 1); }}>▼</span>
+      <span>{value}</span>
+      <span style={{ cursor: 'pointer' }} onClick={() => updateImportance(value + 1)}>▲</span>
     </div>
   );
 };
@@ -49,9 +49,9 @@ const ChoiceCellRenderer = (props) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10) updateChoiceRating(value + 1); }}>▲</span>
-      <span>{value}</span>
       <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateChoiceRating(value - 1); }}>▼</span>
+      <span>{value}</span>
+      <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10) updateChoiceRating(value + 1); }}>▲</span>
     </div>
   );
 };
@@ -59,6 +59,8 @@ const ChoiceCellRenderer = (props) => {
 const DataTable = ({ criteriaRows, setCriteriaRows }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
+  const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
+
 
   useEffect(() => {
     if (criteriaRows.length === 0) {
@@ -75,7 +77,7 @@ const DataTable = ({ criteriaRows, setCriteriaRows }) => {
     for (let i = 0; i < choiceCount; i++) {
       updatedColDefs.push({
         field: `choice${i + 1}`,
-        headerName: `Choice ${i + 1}`,
+        headerName: criteriaRows[0].choices[i].name,
         cellRenderer: ChoiceCellRenderer
       });
       updatedColDefs.push({
@@ -117,9 +119,8 @@ const DataTable = ({ criteriaRows, setCriteriaRows }) => {
       totalsRow[`choice${index + 1}`] = "";
       totalsRow[ratingKey] = totalRatings[ratingKey];
     });
-    rows.push(totalsRow);
-
     setRowData(rows);
+    setPinnedBottomRowData([totalsRow]);
   }, [criteriaRows]);
 
   const defaultColDef = { flex: 1 };
@@ -133,6 +134,7 @@ const DataTable = ({ criteriaRows, setCriteriaRows }) => {
         defaultColDef={defaultColDef}
         getRowStyle={rowStyles}
         context={{ criteriaRows, setCriteriaRows }}
+        pinnedBottomRowData={pinnedBottomRowData}
       />
     </div>
   );
