@@ -60,6 +60,7 @@ const DataTable = ({ criteriaRows, setCriteriaRows }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
+  const [showResults, setShowResults] = useState(false);
 
 
   useEffect(() => {
@@ -117,7 +118,7 @@ const DataTable = ({ criteriaRows, setCriteriaRows }) => {
     firstCriterion.choices.forEach((_, index) => {
       const ratingKey = `choice${index + 1}Rating`;
       totalsRow[`choice${index + 1}`] = "";
-      totalsRow[ratingKey] = totalRatings[ratingKey];
+      totalsRow[ratingKey] = showResults ? totalRatings[ratingKey] : "0";
     });
     setRowData(rows);
     setPinnedBottomRowData([totalsRow]);

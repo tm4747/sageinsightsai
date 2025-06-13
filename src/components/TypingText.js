@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import FlashingText from './FlashingText';
 
-const TypingText = ({ baseText, text, flashingText = "", speed = 100 }) => {
+const TypingText = ({ baseText = "", text, flashingText = "", speed = 100, headerSize = "" }) => {
+    const initialReady = baseText ? false : true;
     const [displayedText, setDisplayedText] = useState('');
     const [index, setIndex] = useState(0);
-    const [isReady, setIsReady] = useState(false);
+    const [isReady, setIsReady] = useState(initialReady);
 
     useEffect(() => {
       const timer = setTimeout(() => {

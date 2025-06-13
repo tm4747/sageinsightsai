@@ -56,16 +56,19 @@ export const getDifficultChoiceMakerHowItWorks = () => {
         {
             "data": [
               {
-                "text": "First, .",
+                "text": "First enter a decision you need help with.  This could be something like 'Where do I want to move'.",
               },
               {
-                "text": "Next, .",
+                "text": "Next enter criteria and relative importance of each from 1-10.  Criteria are the meaningful aspects of your choices through which metrics and analysis will be derived.  Some examples could be 'beautiful scenery', 'access to a nice downtown', 'clean air', 'good schools'.  Don't worry about being exact with the entered importance value, as you can adjust that later.",
               },
               {
-                "text": "Then, .",
+                "text": "Then enter your choices.  These are essentially all the possible options you are considering.",
               },
               {
-                "text": "Finally, .",
+                "text": "Fine tune the importance of your criteria.  The number of total points are set by your initial choices, but you can reallocate points from one criteria to another. You must allocate all criteria points to get your final analysis.",
+              },
+              {
+                "text": "Finally, submit your adjusted criteria and choices.  The tool will return the best and worst choice, as well as an AI-enabled analysis.",
               },
             ]
         }
