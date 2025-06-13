@@ -1,4 +1,4 @@
-// src/components/Layout.js
+// src/Layout.js
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import AILogo from './components/AILogo';
