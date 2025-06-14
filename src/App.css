@@ -51,6 +51,62 @@ ol li ul li {
   padding-top:1em;
   padding-bottom:0em;
 }
+/* Hide mobile nav by default */
+.hamburger {
+  font-size: 2rem;
+  background: none;
+  border: solid 2px grey;
+  cursor: pointer;
+  color:white;
+  margin-bottom:1rem;
+  border-radius:10px;
+}
+.mobile-nav {
+  display: none;
+  width:90%;
+}
+
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+.mobile-menu.open {
+  max-height: 500px; /* adjust if your menu might be taller */
+  opacity: 1;
+}
+
+
+.mobile-link {
+  background-color: #222;
+  padding: 0.75rem;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 10px;
+  border: solid 2px grey;
+  color: white;
+}
+
+
+
+/* Responsive rules */
+@media screen and (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-nav {
+    display: block;
+  }
+}
+
 /** LINKS **/
 a{
   color: var(--blue);

@@ -12,28 +12,56 @@ const Layout = ({isLoading}) => {
   const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
+  const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => setMenuOpen(prev => !prev);
+
 
   const linkData = [
-    { path: '/', label: 'Story Maker' },
-    { path: '/web-summary', label: 'Web Page Summary' },
+    { path: '/', label: 'Web Summary' },
+    { path: '/story-maker', label: 'Story Maker' },
     { path: '/decidedly-choice-tool', label: 'Decidedly' },
   ];
+  
 
-  const nav = (<nav className="theNav">
-    {linkData.map((link, index) => (
-      <React.Fragment key={link.path}>
-        {/* If it's not the first link, display separator */}
-        {index > 0 && <span>&nbsp;|&nbsp;</span>}
-        
-        <Link
-          className={path === link.path ? 'activeLink' : ''}
-          to={link.path}
-        >
-          {link.label}
-        </Link>
-      </React.Fragment>
+  const nav = (
+    <>
+      {/* Desktop Nav */}
+      <nav className="theNav desktop-nav">
+        {linkData.map((link, index) => (
+          <React.Fragment key={link.path}>
+            {index > 0 && <span>&nbsp;|&nbsp;</span>}
+            <Link
+              className={path === link.path ? 'activeLink' : ''}
+              to={link.path}
+            >
+              {link.label}
+            </Link>
+          </React.Fragment>
+        ))}
+      </nav>
+
+      {/* Mobile Hamburger */}
+<div className="mobile-nav">
+  link data for path <button className="hamburger" onClick={toggleMenu}>
+     ☰
+  </button>
+  <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+    {linkData.map(link => (
+      <Link
+        key={link.path}
+        className={`mobile-link ${path === link.path ? 'activeLink' : ''}`}
+        to={link.path}
+        onClick={() => setMenuOpen(false)}
+      >
+        {link.label}
+      </Link>
     ))}
-  </nav>);
+  </div>
+</div>
+
+    </>
+  );
+
 
 
 const handleUpdateName = () => {

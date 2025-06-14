@@ -13,8 +13,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout isLoading={isLoading} />}>
-        <Route index element={<StoryMaker setIsLoading={setIsLoading}/>}  />
-        <Route path="web-summary" element={<WebpageSummaryTool setIsLoading={setIsLoading}/>} />
+        <Route index element={<WebpageSummaryTool setIsLoading={setIsLoading}/>} />
+        <Route path="story-maker" element={<StoryMaker setIsLoading={setIsLoading}/>}  />
         <Route path="decidedly-choice-tool" element={<DifficultChoiceMaker setIsLoading={setIsLoading}/>} />
       </Route>
     </Routes>
