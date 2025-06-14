@@ -60,6 +60,7 @@ ol li ul li {
   color:white;
   margin-bottom:1rem;
   border-radius:10px;
+  margin-left:1rem;
 }
 .mobile-nav {
   display: none;
@@ -76,13 +77,10 @@ ol li ul li {
   opacity: 0;
   transition: max-height 0.4s ease, opacity 0.4s ease;
 }
-
 .mobile-menu.open {
   max-height: 500px; /* adjust if your menu might be taller */
   opacity: 1;
 }
-
-
 .mobile-link {
   background-color: #222;
   padding: 0.75rem;
@@ -93,9 +91,6 @@ ol li ul li {
   border: solid 2px grey;
   color: white;
 }
-
-
-
 /* Responsive rules */
 @media screen and (max-width: 768px) {
   .desktop-nav {
@@ -312,6 +307,17 @@ audio{
   width:100%;
   border:solid 2px white;
 }
+
+/* page navigation animation */
+
+.fade-wrapper {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.fade-enter {
+  opacity: 0;
+}
+
 
 /** POTENTIAL FONTS **/
 /*
