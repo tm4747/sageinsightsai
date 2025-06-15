@@ -9,7 +9,7 @@ import PageDescription from './components/PageDescription';
 import { getWebSummaryHowItWorks, getStoryMakerHowItWorks, getDifficultChoiceMakerHowItWorks } from './lib/DataHelper';
 
 
-const Layout = ({isLoading}) => {
+const Layout = ({isLoading, pages}) => {
   const location = useLocation();
   const path = location.pathname;
   const [fadeClass, setFadeClass] = useState("fade-wrapper");
@@ -35,29 +35,21 @@ const Layout = ({isLoading}) => {
 
 
   /******* JAVASCRIPT HELPERS *********/
-  const webSummaryUrl = "/";
-  const storyMakerUrl = "/story-maker";
-  const decidedlyUrl = "/decidedly-choice-tool";
-  const urls = {
-    webSummaryUrl: "/",
-    storyMakerUrl: "/story-make",
-    decidedlyUrl: "/decidedly-choice-tool",
-  }
   const linkData = [
-    { path: webSummaryUrl, label: 'Web Summary', active: path === webSummaryUrl },
-    { path: storyMakerUrl, label: 'Story Maker', active: path === storyMakerUrl },
-    { path: decidedlyUrl, label: 'Decidedly', active: path === decidedlyUrl },
+    { path: pages.webSummary.url, label: pages.webSummary.label, active: path === pages.webSummary.url },
+    { path: pages.storyMaker.url, label: pages.storyMaker.label, active: path === pages.storyMaker.url },
+    { path: pages.decidedly.url, label: pages.decidedly.label, active: path === pages.decidedly.url },
   ];
   let howItWorksData, pageDescText; 
-  if(path === webSummaryUrl){
+  if(path === pages.webSummary.url){
     howItWorksData = getWebSummaryHowItWorks(); 
-    pageDescText = "Please enter a website url. This tool will return a general summary of the homepage:";
-  } else if (path === storyMakerUrl){
+    pageDescText = pages.webSummary.description;
+  } else if (path === pages.storyMaker.url){
     howItWorksData = getStoryMakerHowItWorks(); 
-    pageDescText = "You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.";
-  } else if (path === decidedlyUrl){
+    pageDescText = pages.storyMaker.description;
+  } else if (path === pages.decidedly.url){
     howItWorksData = getDifficultChoiceMakerHowItWorks(); 
-    pageDescText = "This tool will assist in making difficult and/or complex choices: COMING SOON";
+    pageDescText = pages.decidedly.description;
   }
   const activeLink = linkData.find(link => link.active);
   const activeLinkText = activeLink?.label;
