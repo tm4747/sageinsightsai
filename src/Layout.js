@@ -4,6 +4,10 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import AILogo from './components/AILogo';
 import LoadingModal from "./components/LoadingModal";
 import TypingText from './components/TypingText';
+import BoxList from './components/BoxList';
+import PageDescription from './components/PageDescription';
+import { getWebSummaryHowItWorks, getStoryMakerHowItWorks, getDifficultChoiceMakerHowItWorks } from './lib/DataHelper';
+
 
 const Layout = ({isLoading}) => {
   const location = useLocation();
@@ -14,6 +18,7 @@ const Layout = ({isLoading}) => {
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showBoxList, setShowBoxList] = useState(false);
   const toggleMenu = () => setMenuOpen(prev => !prev);
 
 
@@ -50,6 +55,10 @@ const Layout = ({isLoading}) => {
       setNameErrorMessage("* Entered name must be at least 2 characters.");
       setNameError(true);
     }
+  }
+
+  const handleShowHowItWorks = () => {
+    setShowBoxList(!showBoxList);
   }
 
 
@@ -92,11 +101,27 @@ const Layout = ({isLoading}) => {
     </>
   );
 
-
-
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
 
+  let howItWorksData, pageDescText; 
+  if(path === '/'){
+    howItWorksData = getWebSummaryHowItWorks(); 
+    pageDescText = "Please enter a website url. This tool will return a general summary of the homepage:";
+  } else if (path === "/story-maker"){
+    howItWorksData = getStoryMakerHowItWorks(); 
+    pageDescText = "You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.";
+  } else if (path === "/decidedly-choice-tool"){
+    howItWorksData = getDifficultChoiceMakerHowItWorks(); 
+    pageDescText = "This tool will assist in making difficult and/or complex choices: COMING SOON";
+  }
+    const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
+    const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
+  
+
+
+
+  /**** RETURN INPUT TO ENTER USERNAME IF NOT ENTERED ****/
   if(!validUserNameSubmitted){
     return(
       <div className="layout">
@@ -118,6 +143,7 @@ const Layout = ({isLoading}) => {
     );
   }
 
+  /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (
     <div className="layout">
       <main>
@@ -128,6 +154,10 @@ const Layout = ({isLoading}) => {
               <TypingText baseText={" Hello " + userName + " "} text={"Welcome to Sage Insights AI!"} flashingText={"_ "}/>
             </h2>
             {nav}
+            <div className={"pageDescription border-bottom"}> 
+              {descriptionOfPageFunction}
+              {howAppWorks}
+            </div>
          </header>
             <section className="body">
               <div className={fadeClass}>

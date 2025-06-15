@@ -22,7 +22,6 @@ function StoryMaker({setIsLoading}) {
   const [disableScroll, setDisableScroll] = useState(false);
   const [showCharacterInput, setShowCharacterInput] = useState(1);
   const [characterInputs, setCharacterInputs] = useState([]);
-  const [showBoxList, setShowBoxList] = useState(false);
   const textareaRef = useRef(null);
   const [audioUrl, setAudioUrl] = useState(null);
   const [isAudioReady, setIsAudioReady] = useState(false); // Track if audio is ready
@@ -34,6 +33,7 @@ function StoryMaker({setIsLoading}) {
   const [isStarted, setIsStarted] = useState(false);
   const messagesEndRef = useRef(null); // scroll vars
   const pageBodyRef = useRef(null); 
+
 
 
   /********* USE EFFECTS & API CALLS **********/
@@ -177,11 +177,7 @@ function StoryMaker({setIsLoading}) {
     }
   }, [disableScroll, displayedText]);
 
-  const handleShowHowItWorks = () => {
-    setShowBoxList(!showBoxList);
-  }
-
-
+ 
   /********** DYNAMIC JS FUNCTIONS **********/ 
   const scrollToPageBody = () => {
     setTimeout(() => {
@@ -195,7 +191,6 @@ function StoryMaker({setIsLoading}) {
     setDisableScroll(false);
     setShowCharacterInput(1);
     setCharacterInputs([]);
-    setShowBoxList(false);
     setAudioUrl(null);
     setIsAudioReady(false);
     setPolling(false);
@@ -239,7 +234,6 @@ function StoryMaker({setIsLoading}) {
   };
 
   const handleBegin = () => {
-    setShowBoxList(false);
     setBegun(true);
     scrollToPageBody();
   }
@@ -315,10 +309,6 @@ function StoryMaker({setIsLoading}) {
   {getADifferentSituationButton}
   <button className={"button red-button"} onClick={resetState}>Clear And Start Over</button></> : "";
 
-  const howItWorksData = getStoryMakerHowItWorks(); 
-  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
-  const pageDescText = "You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.";
-  const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
   const formattedCharacterData = datafyCharacterInputs(characterInputs);
   const characterInputsDisplay = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
   setShowBoxList={() => {return null;}} showCloseButton={false} listType={"ul"}/>
@@ -349,8 +339,6 @@ const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={se
           <div className={styles.content}>
            <div className={"formDiv"}>
              <div className={"pageDescription"}>
-                {descriptionOfPageFunction}
-                {howAppWorks}
                 <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button>
             </div>
            </div>
@@ -359,10 +347,6 @@ const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={se
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <div className={"pageDescription border-bottom"}>
-          {descriptionOfPageFunction}
-          {howAppWorks}
-        </div>
         <div ref={pageBodyRef}  className={"pageBody"}>
           {!postResponse ? displaySlider : ""}
           {!postResponse && characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}

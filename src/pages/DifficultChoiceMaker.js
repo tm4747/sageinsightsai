@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import styles from './css/PageStyles.module.css';
-import BoxList from '../components/BoxList';
-import { getDifficultChoiceMakerHowItWorks } from '../lib/DataHelper';
-import PageDescription from '../components/PageDescription';
 import FlashingText from '../components/FlashingText';
 import InputModal from '../components/InputModal';
 import DataTable from '../components/DataTable';
 
 function DifficultChoiceMaker({ setIsLoading }) {
-  const [showBoxList, setShowBoxList] = useState(false);
   const [choiceText, setDecisionText] = useState("Where To Move");
   const [choiceTextDone, setDecisionTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
@@ -19,10 +15,6 @@ function DifficultChoiceMaker({ setIsLoading }) {
   
 
   const featureFlag = process.env.REACT_APP_ENV === "non-prod";
-
-  const handleShowHowItWorks = () => {
-    setShowBoxList(!showBoxList);
-  };
 
   const resetState = () => {
     setDecisionText("");
@@ -66,24 +58,10 @@ function DifficultChoiceMaker({ setIsLoading }) {
     setShowChoiceModal(false);
   };
 
-  const howItWorksData = getDifficultChoiceMakerHowItWorks();
   const haveCriteria = criteriaRows && criteriaRows.length > 0;
 
 
   /********* DISPLAY FUNCTIONS **********/
-  const howAppWorks = (
-    <BoxList
-      title={"How it works:"}
-      data={howItWorksData}
-      showBoxList={showBoxList}
-      setShowBoxList={setShowBoxList}
-      showCloseButton={true}
-    />
-  );
-  const pageDescText = "This tool will assist in making difficult and/or complex choices: " + (featureFlag ? "" : "COMING SOON");
-  const descriptionOfPageFunction = (
-    <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
-  );
 
   const decisionInput = !choiceTextDone && (
     <>
@@ -167,8 +145,6 @@ function DifficultChoiceMaker({ setIsLoading }) {
       <div className={styles.content}>
         <div className={"formDiv"}>
           <div className={"pageDescription border-bottom"}>
-            {descriptionOfPageFunction}
-            {howAppWorks}
           </div>
         </div>
       </div>
@@ -178,10 +154,6 @@ function DifficultChoiceMaker({ setIsLoading }) {
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <div className={"pageDescription border-bottom"}>
-          {descriptionOfPageFunction}
-          {howAppWorks}
-        </div>
       </div>
       <div className={"resultsDiv"}>
         <div className={"innerResultsDiv"}>

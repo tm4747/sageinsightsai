@@ -2,10 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './css/PageStyles.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
-import BoxList from '../components/BoxList';
-import { getWebSummaryHowItWorks } from '../lib/DataHelper';
 import FlashingText from '../components/FlashingText';
-import PageDescription from '../components/PageDescription';
 
 
 function WebpageSummaryTool({setIsLoading}) {
@@ -15,7 +12,6 @@ function WebpageSummaryTool({setIsLoading}) {
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [validUrl, setValidUrl] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
-  const [showBoxList, setShowBoxList] = useState(false);
     //typing effect
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);
@@ -95,9 +91,7 @@ function WebpageSummaryTool({setIsLoading}) {
     }  
   };
 
-  const handleShowHowItWorks = () => {
-    setShowBoxList(!showBoxList);
-  }
+  
 
   /***********HELPER FUNCTIONS ************/
   const haveValidData = (enteredValue) => {
@@ -111,20 +105,13 @@ function WebpageSummaryTool({setIsLoading}) {
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
 
-  const howItWorksData = getWebSummaryHowItWorks(); 
-  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
+ 
   const inputClasses = enteredUrlError ? "errorTextInput textInput" : (validUrl ? "inputSuccess textInput" : "textInput");
-  const pageDescText = "Please enter a website url. This tool will return a general summary of the homepage:";
-  const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
   const enteredUrlDisplay = !enteredUrl ? "Please enter url" : ( validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl);
 
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <div className={"pageDescription border-bottom"}> 
-          {descriptionOfPageFunction}
-          {howAppWorks}
-        </div>
         <input className={inputClasses} onChange={handleInputChange} type="text"/>
         <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
         <p>
