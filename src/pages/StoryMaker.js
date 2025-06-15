@@ -29,7 +29,7 @@ function StoryMaker({setIsLoading}) {
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const messagesEndRef = useRef(null); // scroll vars
-  const pageBodyRef = useRef(null); 
+  const characterDescriptionRef = useRef(null); 
 
 
   /********* USE EFFECTS & API CALLS **********/
@@ -81,7 +81,7 @@ function StoryMaker({setIsLoading}) {
 
           const audioUrl = await fetchAudioFromLambda(bucketPath + s3FileName);
           setAudioUrl(audioUrl); //  Set the audio URL 
-          scrollToPageBody();
+          scrollToCharacterDescription();
           setPolling(true); // Start polling
           setIsLoading(false);
 
@@ -174,9 +174,9 @@ function StoryMaker({setIsLoading}) {
 
  
   /********** DYNAMIC JS FUNCTIONS **********/ 
-  const scrollToPageBody = () => {
+  const scrollToCharacterDescription = () => {
     setTimeout(() => {
-      pageBodyRef.current?.scrollIntoView({ behavior: "smooth" });
+      characterDescriptionRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 250);
   }
   const resetState = () => {
@@ -221,7 +221,7 @@ function StoryMaker({setIsLoading}) {
     const nextCharacterInputIndex = index + 1;
     addNewCharacter(data)
     setShowCharacterInput(nextCharacterInputIndex);
-    scrollToPageBody();
+    scrollToCharacterDescription();
   }
 
   const addNewCharacter = (newValue) => {
@@ -329,7 +329,7 @@ function StoryMaker({setIsLoading}) {
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <div ref={pageBodyRef}  className={"pageBody"}>
+        <div ref={characterDescriptionRef}  className={"pageBody"}>
           {!postResponse ? displaySlider : ""}
           {!postResponse && characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
           {!postResponse ? characterInputGroup : ""}
