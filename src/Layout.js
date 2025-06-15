@@ -6,12 +6,10 @@ import LoadingModal from "./components/LoadingModal";
 import TypingText from './components/TypingText';
 import BoxList from './components/BoxList';
 import PageDescription from './components/PageDescription';
-import { getWebSummaryHowItWorks, getStoryMakerHowItWorks, getDifficultChoiceMakerHowItWorks } from './lib/DataHelper';
 
 
 const Layout = ({isLoading, pages}) => {
   const location = useLocation();
-  const path = location.pathname;
   const [fadeClass, setFadeClass] = useState("fade-wrapper");
   const [userName, setUserName] = useState("test - remove and set NL false");
   const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(true);
@@ -35,24 +33,10 @@ const Layout = ({isLoading, pages}) => {
 
 
   /******* JAVASCRIPT HELPERS *********/
-  const linkData = [
-    { path: pages.webSummary.url, label: pages.webSummary.label, active: path === pages.webSummary.url },
-    { path: pages.storyMaker.url, label: pages.storyMaker.label, active: path === pages.storyMaker.url },
-    { path: pages.decidedly.url, label: pages.decidedly.label, active: path === pages.decidedly.url },
-  ];
-  let howItWorksData, pageDescText; 
-  if(path === pages.webSummary.url){
-    howItWorksData = getWebSummaryHowItWorks(); 
-    pageDescText = pages.webSummary.description;
-  } else if (path === pages.storyMaker.url){
-    howItWorksData = getStoryMakerHowItWorks(); 
-    pageDescText = pages.storyMaker.description;
-  } else if (path === pages.decidedly.url){
-    howItWorksData = getDifficultChoiceMakerHowItWorks(); 
-    pageDescText = pages.decidedly.description;
-  }
-  const activeLink = linkData.find(link => link.active);
-  const activeLinkText = activeLink?.label;
+  const activePage = pages.find(page => page.active);
+  const howItWorksData = activePage.howItWorks;
+  const pageDescText = activePage.description;
+  const activeLinkText = activePage?.label;
 
   const handleUpdateName = () => {
     if(userName && userName.length > 1){
@@ -77,14 +61,14 @@ const Layout = ({isLoading, pages}) => {
     <>
       {/* Desktop Nav */}
       <nav className="theNav desktop-nav">
-        {linkData.map((link, index) => (
-          <React.Fragment key={link.path}>
+        {pages.map((page, index) => (
+          <React.Fragment key={page.key}>
             {index > 0 && <span>&nbsp;|&nbsp;</span>}
             <Link
-              className={link.active ? 'activeLink' : ''}
-              to={link.path}
+              className={page.active ? 'activeLink' : ''}
+              to={page.url}
             >
-              {link.label}
+              {page.label}
             </Link>
           </React.Fragment>
         ))}
@@ -96,14 +80,14 @@ const Layout = ({isLoading, pages}) => {
           ☰
         </button>
         <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
-          {linkData.map(link => (
+          {pages.map(page => (
             <Link
-              key={link.path}
-              className={`mobile-link ${link.active ? 'activeLink' : ''}`}
-              to={link.path}
+              key={page.key}
+              className={`mobile-link ${page.active ? 'activeLink' : ''}`}
+              to={page.url}
               onClick={() => setMenuOpen(false)}
             >
-              {link.label}
+              {page.label}
             </Link>
           ))}
         </div>
@@ -150,7 +134,7 @@ const Layout = ({isLoading, pages}) => {
               <TypingText baseText={" Hello " + userName + " "} text={"Welcome to Sage Insights AI!"} flashingText={"_ "}/>
             </h2>
             {nav}
-            <div className={"pageDescription border-bottom"}> 
+            <div className={`pageDescription border-bottom ${fadeClass}`}> 
               {descriptionOfPageFunction}
               {howAppWorks}
             </div>
