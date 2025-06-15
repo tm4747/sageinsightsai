@@ -20,6 +20,9 @@ html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
   font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-family:'Montserrat', 'Courier Prime', Courier, monospace;
 }
+body{
+  overflow-x: hidden;
+}
 /** LAYOUT **/
 .theNav{
   padding-bottom:1em;
@@ -66,7 +69,6 @@ ol li ul li {
   display: none;
   width:90%;
 }
-
 .mobile-menu {
   display: flex;
   flex-direction: column;
@@ -90,6 +92,14 @@ ol li ul li {
   border-radius: 10px;
   border: solid 2px grey;
   color: white;
+}
+/* page navigation fade-in animation */
+.fade-wrapper {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.fade-enter {
+  opacity: 0;
 }
 /* Responsive rules */
 @media screen and (max-width: 768px) {
@@ -307,16 +317,59 @@ audio{
   width:100%;
   border:solid 2px white;
 }
+/*******  DATA TABLE ********/
+/* .responsive-grid .ag-header-cell,
+  .responsive-grid .ag-cell {
+    padding:2px;
+    text-align: center;
+    border:solid 1px #eee;
+  }
 
-/* page navigation animation */
+  .responsive-grid .ag-header-cell-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border: solid 1px #eee;
+  }
+@media screen and (max-width: 768px) {
+  .responsive-grid .ag-header-cell,
+  .responsive-grid .ag-cell {
+    padding-left: 2px !important;
+    padding-right: 2px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+  .responsive-grid .ag-header-cell-label {
+    padding: 0 !important;
+  }
+} */
+/* This wraps the grid and constrains it */
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+}
+/* AG Grid content can be as wide as it needs */
+.ag-theme-alpine.responsive-grid {
+  width: max-content;
+  min-width: 100%;
+  height: 300px;
+}
+@media screen and (max-width: 1000px) {
+  .table-scroll-container {
+    width:100%;
+  overflow-x: auto;
+  }
+  .ag-theme-alpine.responsive-grid {
+    width: 1200px;
+    min-width: 100%;
+    height: 300px;
+  }
+}
 
-.fade-wrapper {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-.fade-enter {
-  opacity: 0;
-}
+
 
 
 /** POTENTIAL FONTS **/

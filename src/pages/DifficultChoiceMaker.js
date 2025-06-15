@@ -9,8 +9,8 @@ import DataTable from '../components/DataTable';
 
 function DifficultChoiceMaker({ setIsLoading }) {
   const [showBoxList, setShowBoxList] = useState(false);
-  const [choiceText, setChoiceText] = useState("Where To Move");
-  const [choiceTextDone, setChoiceTextDone] = useState(true);
+  const [choiceText, setDecisionText] = useState("Where To Move");
+  const [choiceTextDone, setDecisionTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteriaRows, setCriteriaRows] = useState([]);
@@ -25,8 +25,8 @@ function DifficultChoiceMaker({ setIsLoading }) {
   };
 
   const resetState = () => {
-    setChoiceText("");
-    setChoiceTextDone(false);
+    setDecisionText("");
+    setDecisionTextDone(false);
   };
 
   const addCriteria = () => {
@@ -67,6 +67,10 @@ function DifficultChoiceMaker({ setIsLoading }) {
   };
 
   const howItWorksData = getDifficultChoiceMakerHowItWorks();
+  const haveCriteria = criteriaRows && criteriaRows.length > 0;
+
+
+  /********* DISPLAY FUNCTIONS **********/
   const howAppWorks = (
     <BoxList
       title={"How it works:"}
@@ -88,12 +92,12 @@ function DifficultChoiceMaker({ setIsLoading }) {
         className={"text-input"}
         value={choiceText}
         type="text"
-        onChange={(e) => setChoiceText(e.target.value)}
+        onChange={(e) => setDecisionText(e.target.value)}
       />
     </>
   );
   const decisionGoodButton = !choiceTextDone && (
-    <button className={"button green-button"} onClick={() => setChoiceTextDone(true)}>
+    <button className={"button green-button"} onClick={() => setDecisionTextDone(true)}>
       Decision is correct!
     </button>
   );
@@ -103,15 +107,7 @@ function DifficultChoiceMaker({ setIsLoading }) {
     </button>
   );
 
-  const addChoiceButton = criteriaRows && criteriaRows.length > 0 ? 
-    <div>
-      <button className={"button green-button margin-bottom"} onClick={addChoice}>
-        Add Choice
-      </button>
-      <span className={"small-text notice"}> - these are the choices you will evaluate.</span>
-    </div> : "";
-
-  const addChoiceCriteriaButton = choiceTextDone && (
+  const addCriteriaButton = choiceTextDone && (
     <>
       <div>
         <button className={"button green-button margin-bottom"} onClick={addCriteria}>
@@ -119,9 +115,16 @@ function DifficultChoiceMaker({ setIsLoading }) {
         </button>
         <span className={"small-text notice"}> - these are factors of the decision you will use in evaluation.</span>
       </div>
-      {addChoiceButton}
     </>
   );
+
+  const addChoiceButton = haveCriteria ? 
+    <div>
+      <button className={"button green-button margin-bottom"} onClick={addChoice}>
+        Add Choice
+      </button>
+      <span className={"small-text notice"}> - these are the choices you will evaluate.</span>
+    </div> : "";
 
    const showResultsButton = choiceTextDone && (
     <>
@@ -186,7 +189,8 @@ function DifficultChoiceMaker({ setIsLoading }) {
           {decisionInput}
           <p><FlashingText text={choiceText} /></p>
           {decisionGoodButton}
-          {addChoiceCriteriaButton}
+          {addCriteriaButton}
+          {addChoiceButton}
           {showResultsButton}
           {criteriaModal}
           {choiceModal}

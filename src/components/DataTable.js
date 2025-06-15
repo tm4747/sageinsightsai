@@ -127,17 +127,24 @@ const DataTable = ({ criteriaRows, setCriteriaRows, showResults }) => {
   const rowStyles = params => (params.data?.name === 'TOTAL' ? { fontWeight: 'bold', backgroundColor: '#f0f0f0' } : {});
 
   return (
-    <div className="ag-theme-alpine" style={{ height: 300, width: '100%' }}>
-      <AgGridReact
-        rowData={rowData}
-        columnDefs={colDefs}
-        defaultColDef={defaultColDef}
-        getRowStyle={rowStyles}
-        context={{ criteriaRows, setCriteriaRows }}
-        pinnedBottomRowData={pinnedBottomRowData}
-      />
+    <div className="table-scroll-container">
+      <div className="ag-theme-alpine responsive-grid">
+        <AgGridReact
+          rowData={rowData}
+          columnDefs={colDefs}
+          defaultColDef={defaultColDef}
+          getRowStyle={rowStyles}
+          context={{ criteriaRows, setCriteriaRows }}
+          pinnedBottomRowData={pinnedBottomRowData}
+        />
+      </div>
     </div>
   );
+
+
+
+
+
 };
 
 export default DataTable;

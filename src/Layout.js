@@ -30,6 +30,7 @@ const Layout = ({isLoading}) => {
 
 
 
+  /******* JAVASCRIPT HELPERS *********/
   const linkData = [
     { path: '/', label: 'Web Summary', active: path === '/' },
     { path: '/story-maker', label: 'Story Maker', active: path === '/story-maker' },
@@ -38,7 +39,21 @@ const Layout = ({isLoading}) => {
   const activeLink = linkData.find(link => link.active);
   const activeLinkText = activeLink?.label;
 
+  const handleUpdateName = () => {
+    if(userName && userName.length > 1){
+      console.log('good user name');
+      setNameErrorMessage("");
+      setNameError(false);
+      setValidUserNameSubmitted(true);
+    } else {
+      console.log('bad user name');
+      setNameErrorMessage("* Entered name must be at least 2 characters.");
+      setNameError(true);
+    }
+  }
 
+
+  /******** DISPLAY FUNCTIONS **********/
   const nav = (
     <>
       {/* Desktop Nav */}
@@ -57,41 +72,28 @@ const Layout = ({isLoading}) => {
       </nav>
 
       {/* Mobile Hamburger */}
-<div className="mobile-nav">
-  <span className="bold">{activeLinkText} </span> <button className="hamburger" onClick={toggleMenu}>
-     ☰
-  </button>
-  <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
-    {linkData.map(link => (
-      <Link
-        key={link.path}
-        className={`mobile-link ${link.active ? 'activeLink' : ''}`}
-        to={link.path}
-        onClick={() => setMenuOpen(false)}
-      >
-        {link.label}
-      </Link>
-    ))}
-  </div>
-</div>
-
+      <div className="mobile-nav">
+        <span className="bold">{activeLinkText} </span> <button className="hamburger" onClick={toggleMenu}>
+          ☰
+        </button>
+        <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+          {linkData.map(link => (
+            <Link
+              key={link.path}
+              className={`mobile-link ${link.active ? 'activeLink' : ''}`}
+              to={link.path}
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </div>
     </>
   );
 
 
 
-const handleUpdateName = () => {
-  if(userName && userName.length > 1){
-      console.log('good user name');
-      setNameErrorMessage("");
-      setNameError(false);
-      setValidUserNameSubmitted(true);
-    } else {
-      console.log('bad user name');
-      setNameErrorMessage("* Entered name must be at least 2 characters.");
-      setNameError(true);
-    }
-  }
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
 
@@ -126,12 +128,12 @@ const handleUpdateName = () => {
               <TypingText baseText={" Hello " + userName + " "} text={"Welcome to Sage Insights AI!"} flashingText={"_ "}/>
             </h2>
             {nav}
+         </header>
             <section className="body">
               <div className={fadeClass}>
                 <Outlet /> {/* This renders the current child route */}
               </div>
             </section>
-         </header>
           <LoadingModal isLoading={isLoading}/>
         </div>
       </main>
