@@ -1,5 +1,5 @@
 // src/Layout.js
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import AILogo from './components/AILogo';
 import LoadingModal from "./components/LoadingModal";
@@ -10,6 +10,7 @@ import PageDescription from './components/PageDescription';
 
 const Layout = ({isLoading, pages}) => {
   const location = useLocation();
+  const [begun, setBegun] = useState(false);
   const [fadeClass, setFadeClass] = useState("fade-wrapper");
   const [userName, setUserName] = useState("test - remove and set NL false");
   const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(true);
@@ -18,12 +19,13 @@ const Layout = ({isLoading, pages}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showBoxList, setShowBoxList] = useState(false);
   const toggleMenu = () => setMenuOpen(prev => !prev);
+  const pageBodyRef = useRef(null); 
 
 
   /***** USE EFFECTS  ******/
   useEffect(() => {
     setFadeClass("fade-enter"); // Start at opacity 0
-
+    setBegun(false);
     const timeout = setTimeout(() => {
        // Force reflow before setting class to trigger transition
       setFadeClass("fade-wrapper"); // triggers fade-in animation
@@ -37,6 +39,12 @@ const Layout = ({isLoading, pages}) => {
   const howItWorksData = activePage.howItWorks;
   const pageDescText = activePage.description;
   const activeLinkText = activePage?.label;
+
+  const scrollToPageBody = () => {
+    setTimeout(() => {
+      pageBodyRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 250);
+  }
 
   const handleUpdateName = () => {
     if(userName && userName.length > 1){
@@ -53,6 +61,11 @@ const Layout = ({isLoading, pages}) => {
 
   const handleShowHowItWorks = () => {
     setShowBoxList(!showBoxList);
+  }
+
+  const handleBegin = () => {
+    setBegun(true);
+    scrollToPageBody();
   }
 
 
@@ -122,6 +135,7 @@ const Layout = ({isLoading, pages}) => {
       </div>
     );
   }
+  const beginButton = !begun ?  <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button> : "";
 
   /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (
@@ -137,11 +151,12 @@ const Layout = ({isLoading, pages}) => {
             <div className={`pageDescription border-bottom ${fadeClass}`}> 
               {descriptionOfPageFunction}
               {howAppWorks}
+              {beginButton}
             </div>
          </header>
-            <section className="body">
+            <section className="body" ref={pageBodyRef} >
               <div className={fadeClass}>
-                <Outlet /> {/* This renders the current child route */}
+                {begun ? <Outlet /> : ""} {/* This renders the current child route */}
               </div>
             </section>
           <LoadingModal isLoading={isLoading}/>

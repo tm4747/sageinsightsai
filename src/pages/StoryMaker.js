@@ -11,7 +11,6 @@ import BoxList from '../components/BoxList';
 
 
 function StoryMaker({setIsLoading}) {
-  const [begun, setBegun] = useState(false);
   const [htmlResponse, setHtmlResponse] = useState('');
   const [postResponse, setPostResponse] = useState('');
   const [levelOfRealism, setLevelOfRealism] = useState(1);
@@ -228,11 +227,6 @@ function StoryMaker({setIsLoading}) {
   const addNewCharacter = (newValue) => {
     setCharacterInputs(characterInputs => [...characterInputs, newValue]);
   };
-
-  const handleBegin = () => {
-    setBegun(true);
-    scrollToPageBody();
-  }
   
   const handleGetDifferentSituation = () => {
     setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
@@ -332,15 +326,6 @@ function StoryMaker({setIsLoading}) {
   const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
 
 
-  if(!begun) return(
-          <div className={styles.content}>
-           <div className={"formDiv"}>
-             <div className={"pageDescription"}>
-                <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button>
-            </div>
-           </div>
-          </div>)
-   
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
