@@ -122,8 +122,8 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
     return(
       <div className="layout">
         <main>
-          <div className="App">
-            <header className="App-header">
+          <div className="app">
+            <header className="app-header">
               <h3 className={"pageTitle"}>
               <AILogo size={".75em"}/>
                 <TypingText text={"Please enter your name"} flashingText={"_ "} headerSize={"small"}/>
@@ -144,8 +144,8 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   return (
     <div className="layout">
       <main>
-        <div className="App">
-          <header className="App-header">
+        <div className="app">
+          <header className={`app-header ${!begun ? "full-viewport-height" : ""}`}>
             <h2 className={"pageTitle"}>
             <AILogo size={".75em"}/>
               <TypingText baseText={" Hello " + userName + " "} text={"Welcome to Sage Insights AI!"} flashingText={"_ "}/>
