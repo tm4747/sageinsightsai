@@ -6,6 +6,7 @@ import LoadingModal from "./components/LoadingModal";
 import TypingText from './components/TypingText';
 import BoxList from './components/BoxList';
 import PageDescription from './components/PageDescription';
+import ShowHowItWorksIcon from './components/simple/ShowHowItWorksIcon';
 
 
 const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
@@ -20,6 +21,8 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const [showHowItWorksBoxList, setShowHowItWorksBoxList] = useState(false);
   const toggleMenu = () => setMenuOpen(prev => !prev);
   const pageBodyRef = useRef(null); 
+  const [headerHeight, setHeaderHeight] = useState("100vh");
+  const headerContentRef = useRef();
 
 
   /***** USE EFFECTS  ******/
@@ -33,6 +36,16 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
     return () => clearTimeout(timeout);
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (begun && headerContentRef.current) {
+      // Measure the content height and animate to it
+      const contentHeight = headerContentRef.current.scrollHeight;
+      setHeaderHeight(`${contentHeight}px`);
+    } else {
+      // Full screen when not begun
+      setHeaderHeight("100vh");
+    }
+  }, [begun]);
 
   /******* JAVASCRIPT HELPERS *********/
   const activePage = pages.find(page => page.active);
@@ -114,7 +127,9 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
   const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showHowItWorksBoxList} setShowBoxList={setShowHowItWorksBoxList} showCloseButton={true}/>);
-  const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
+  const descriptionOfPageFunction = <>
+    <PageDescription text={pageDescText} /> 
+  </>
 
 
   /**** RETURN INPUT TO ENTER USERNAME IF NOT ENTERED ****/
@@ -145,23 +160,33 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
     <div className="layout">
       <main>
         <div className="app">
-          <header className={`app-header ${!begun ? "full-viewport-height" : ""}`}>
-            <h2 className={"pageTitle"}>
-            <AILogo size={".75em"}/>
-              <TypingText baseText={" Hello " + userName + " "} text={"Welcome to Sage Insights AI!"} flashingText={"_ "}/>
-            </h2>
-            {nav}
-            <div className={`pageDescription ${fadeClass}`}> 
-              {descriptionOfPageFunction}
-              {howAppWorks}
-              {beginButton}
-            </div>
-         </header>
-            <section className="body" ref={pageBodyRef} >
-              <div className={fadeClass}>
-                {begun ? <Outlet /> : ""} {/* This renders the current child route */}
+          <header className="app-header" style={{ height: headerHeight }}>
+            <div ref={headerContentRef}>
+              <h2 className={"pageTitle"}>
+                <AILogo size={".75em"} />
+                <TypingText
+                  baseText={" Hello " + userName + " "}
+                  text={"Welcome to Sage Insights AI!"}
+                  flashingText={"_ "}
+                />
+              </h2>
+              {nav}
+              <div className={`pageDescription ${fadeClass}`}>
+                {descriptionOfPageFunction}
+                {beginButton}
               </div>
-            </section>
+            </div>
+          </header>
+          <section className="body" ref={pageBodyRef} >
+            <div className={fadeClass}>
+              {begun ? 
+                <>
+                  <ShowHowItWorksIcon onClickFn={handleShowHowItWorks} />
+                  {howAppWorks}
+                  <Outlet />
+                </> : ""} {/* This renders the current child route */}
+            </div>
+          </section>
           <LoadingModal isLoading={isLoading}/>
         </div>
       </main>

@@ -30,7 +30,7 @@ body{
 .app {
   text-align: center;
 }
-/* .app-header {
+.app-header {
   background-color: #282c34;
   display: flex;
   flex-direction: column;
@@ -38,31 +38,9 @@ body{
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: var(--white);
-}
-.full-viewport-height{
-  min-height: 100vh;
-  transition: min-height 0.5s ease;
-} */
- .app-header {
-  background-color: #282c34;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--white);
-  overflow: hidden; /* Needed for max-height animation */
-  max-height: 300px; /* Adjust this to match final content height */
-  height: 300px;
+  overflow: hidden;
   transition: height 0.5s ease;
-  transition: max-height 0.5s ease;
 }
-
-.full-viewport-height {
-  height: 100vh;
-  max-height: 100vh;
-}
-
 .pageTitle{
   margin-bottom:1em;
 }
