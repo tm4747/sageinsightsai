@@ -4,14 +4,13 @@ import FlashingText from '../components/FlashingText';
 import InputModal from '../components/InputModal';
 import DataTable from '../components/DataTable';
 
-function DifficultChoiceMaker({ setIsLoading }) {
+function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [choiceText, setDecisionText] = useState("Where To Move");
   const [choiceTextDone, setDecisionTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteriaRows, setCriteriaRows] = useState([]);
   const [showResults, setShowResults] = useState(false);
-  const featureFlag = process.env.REACT_APP_ENV === "non-prod";
 
   const resetState = () => {
     setDecisionText("");
@@ -137,7 +136,7 @@ function DifficultChoiceMaker({ setIsLoading }) {
     />
   );
 
-  if (!featureFlag) {
+  if (!featureFlagShowBeta) {
     return (
       <div className={styles.content}>
         <div className={"formDiv"}>

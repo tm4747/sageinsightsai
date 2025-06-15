@@ -8,7 +8,7 @@ import BoxList from './components/BoxList';
 import PageDescription from './components/PageDescription';
 
 
-const Layout = ({isLoading, pages}) => {
+const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const location = useLocation();
   const [begun, setBegun] = useState(false);
   const [fadeClass, setFadeClass] = useState("fade-wrapper");
@@ -17,7 +17,7 @@ const Layout = ({isLoading, pages}) => {
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [showBoxList, setShowBoxList] = useState(false);
+  const [showHowItWorksBoxList, setShowHowItWorksBoxList] = useState(false);
   const toggleMenu = () => setMenuOpen(prev => !prev);
   const pageBodyRef = useRef(null); 
 
@@ -39,6 +39,8 @@ const Layout = ({isLoading, pages}) => {
   const howItWorksData = activePage.howItWorks;
   const pageDescText = activePage.description;
   const activeLinkText = activePage?.label;
+  const isBeta = activePage?.isBeta;
+  const hideContentBeginButton = isBeta && !featureFlagShowBeta;
 
   const scrollToPageBody = () => {
     setTimeout(() => {
@@ -60,11 +62,12 @@ const Layout = ({isLoading, pages}) => {
   }
 
   const handleShowHowItWorks = () => {
-    setShowBoxList(!showBoxList);
+    setShowHowItWorksBoxList(!showHowItWorksBoxList);
   }
 
   const handleBegin = () => {
     setBegun(true);
+    setShowHowItWorksBoxList(false);
     scrollToPageBody();
   }
 
@@ -110,7 +113,7 @@ const Layout = ({isLoading, pages}) => {
 
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
-  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
+  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showHowItWorksBoxList} setShowBoxList={setShowHowItWorksBoxList} showCloseButton={true}/>);
   const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
 
 
@@ -135,7 +138,7 @@ const Layout = ({isLoading, pages}) => {
       </div>
     );
   }
-  const beginButton = !begun ?  <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button> : "";
+  const beginButton = !begun && !hideContentBeginButton ? <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button> : "";
 
   /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (
@@ -148,7 +151,7 @@ const Layout = ({isLoading, pages}) => {
               <TypingText baseText={" Hello " + userName + " "} text={"Welcome to Sage Insights AI!"} flashingText={"_ "}/>
             </h2>
             {nav}
-            <div className={`pageDescription border-bottom ${fadeClass}`}> 
+            <div className={`pageDescription ${fadeClass}`}> 
               {descriptionOfPageFunction}
               {howAppWorks}
               {beginButton}
