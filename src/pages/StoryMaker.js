@@ -8,8 +8,6 @@ import AILogo from '../components/AILogo';
 import Slider from '../components/simple/Slider';
 import FlashingText from '../components/FlashingText';
 import BoxList from '../components/BoxList';
-import { getStoryMakerHowItWorks } from '../lib/DataHelper';
-import PageDescription from '../components/PageDescription';
 
 
 function StoryMaker({setIsLoading}) {
@@ -35,11 +33,9 @@ function StoryMaker({setIsLoading}) {
   const pageBodyRef = useRef(null); 
 
 
-
   /********* USE EFFECTS & API CALLS **********/
-
-  // GET STORY AUDIO LAMBDA - send text to text file in S3 and url to file
-  const fetchAudio = async () => {
+  // send text to text file in S3 and url to file
+  const fetchAudio = async () => {  
     if(postResponse){
       try {
         const bucketPath = "https://sageinsightsai-audio.s3.amazonaws.com/";
@@ -313,26 +309,27 @@ function StoryMaker({setIsLoading}) {
   const characterInputsDisplay = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
   setShowBoxList={() => {return null;}} showCloseButton={false} listType={"ul"}/>
 
-  const displayAudio = (audioUrl ? <div className="audio-player-container">
-  {audioUrl && !isAudioReady ? ( // Display a waiting message until the file is ready
-    <p>
-      <AILogo size={".75em"}/> 
-      <FlashingText text={'&nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...'} htmlEntities={true}/>
-    </p> 
-  ) : (
-    <>
-    <audio controls>
-      <source src={audioUrl} type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio> 
-    <h6 className={"no-margin-padding"}>
-      <FlashingText text={'To download file click \'<strong>&#8942;</strong>\' &uarr;'} htmlEntities={true}/>
-    </h6>
-    </>
-  )}
-</div> : "")
+  const displayAudio = (audioUrl ? 
+  <div className="audio-player-container">
+    {audioUrl && !isAudioReady ? ( // Display a waiting message until the file is ready
+      <p>
+        <AILogo size={".75em"}/> 
+        <FlashingText text={'&nbsp; Your Audio File is being processed and might take up to a couple minutes. Please check back shortly...'} htmlEntities={true}/>
+      </p> 
+    ) : (
+      <>
+      <audio controls>
+        <source src={audioUrl} type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio> 
+      <h6 className={"no-margin-padding"}>
+        <FlashingText text={'To download file click \'<strong>&#8942;</strong>\' &uarr;'} htmlEntities={true}/>
+      </h6>
+      </>
+    )}
+  </div> : "")
 
-const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
+  const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
 
 
   if(!begun) return(

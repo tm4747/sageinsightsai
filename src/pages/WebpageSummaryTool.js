@@ -12,12 +12,10 @@ function WebpageSummaryTool({setIsLoading}) {
   const [enteredUrlError, setEnteredUrlError] = useState(false);
   const [validUrl, setValidUrl] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
-    //typing effect
-  const [displayedText, setDisplayedText] = useState('');
+  const [displayedText, setDisplayedText] = useState('');  //typing effect
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
-  //scroll vars
-  const messagesEndRef = useRef(null);
+  const messagesEndRef = useRef(null);  //scroll vars
 
 
   /********* USE EFFECTS & API CALLS **********/
@@ -91,7 +89,6 @@ function WebpageSummaryTool({setIsLoading}) {
     }  
   };
 
-  
 
   /***********HELPER FUNCTIONS ************/
   const haveValidData = (enteredValue) => {
@@ -104,11 +101,11 @@ function WebpageSummaryTool({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
-
  
   const inputClasses = enteredUrlError ? "errorTextInput textInput" : (validUrl ? "inputSuccess textInput" : "textInput");
   const enteredUrlDisplay = !enteredUrl ? "Please enter url" : ( validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl);
 
+  
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>

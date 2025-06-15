@@ -34,13 +34,31 @@ const Layout = ({isLoading}) => {
   }, [location.pathname]);
 
 
-
   /******* JAVASCRIPT HELPERS *********/
+  const webSummaryUrl = "/";
+  const storyMakerUrl = "/story-maker";
+  const decidedlyUrl = "/decidedly-choice-tool";
+  const urls = {
+    webSummaryUrl: "/",
+    storyMakerUrl: "/story-make",
+    decidedlyUrl: "/decidedly-choice-tool",
+  }
   const linkData = [
-    { path: '/', label: 'Web Summary', active: path === '/' },
-    { path: '/story-maker', label: 'Story Maker', active: path === '/story-maker' },
-    { path: '/decidedly-choice-tool', label: 'Decidedly', active: path === '/decidedly-choice-tool' },
+    { path: webSummaryUrl, label: 'Web Summary', active: path === webSummaryUrl },
+    { path: storyMakerUrl, label: 'Story Maker', active: path === storyMakerUrl },
+    { path: decidedlyUrl, label: 'Decidedly', active: path === decidedlyUrl },
   ];
+  let howItWorksData, pageDescText; 
+  if(path === webSummaryUrl){
+    howItWorksData = getWebSummaryHowItWorks(); 
+    pageDescText = "Please enter a website url. This tool will return a general summary of the homepage:";
+  } else if (path === storyMakerUrl){
+    howItWorksData = getStoryMakerHowItWorks(); 
+    pageDescText = "You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.";
+  } else if (path === decidedlyUrl){
+    howItWorksData = getDifficultChoiceMakerHowItWorks(); 
+    pageDescText = "This tool will assist in making difficult and/or complex choices: COMING SOON";
+  }
   const activeLink = linkData.find(link => link.active);
   const activeLinkText = activeLink?.label;
 
@@ -103,22 +121,8 @@ const Layout = ({isLoading}) => {
 
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
-
-  let howItWorksData, pageDescText; 
-  if(path === '/'){
-    howItWorksData = getWebSummaryHowItWorks(); 
-    pageDescText = "Please enter a website url. This tool will return a general summary of the homepage:";
-  } else if (path === "/story-maker"){
-    howItWorksData = getStoryMakerHowItWorks(); 
-    pageDescText = "You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character.";
-  } else if (path === "/decidedly-choice-tool"){
-    howItWorksData = getDifficultChoiceMakerHowItWorks(); 
-    pageDescText = "This tool will assist in making difficult and/or complex choices: COMING SOON";
-  }
-    const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
-    const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
-  
-
+  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showBoxList} setShowBoxList={setShowBoxList} showCloseButton={true}/>);
+  const descriptionOfPageFunction = <PageDescription onClickFn={handleShowHowItWorks} text={pageDescText} />
 
 
   /**** RETURN INPUT TO ENTER USERNAME IF NOT ENTERED ****/

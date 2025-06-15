@@ -11,9 +11,6 @@ function DifficultChoiceMaker({ setIsLoading }) {
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteriaRows, setCriteriaRows] = useState([]);
   const [showResults, setShowResults] = useState(false);
-
-  
-
   const featureFlag = process.env.REACT_APP_ENV === "non-prod";
 
   const resetState = () => {
