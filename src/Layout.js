@@ -13,16 +13,16 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const location = useLocation();
   const [begun, setBegun] = useState(false);
   const [fadeClass, setFadeClass] = useState("fade-wrapper");
-  const [userName, setUserName] = useState("test - remove and set NL false");
-  const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(false);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
   const [showHowItWorksBoxList, setShowHowItWorksBoxList] = useState(false);
-  const toggleMenu = () => setMenuOpen(prev => !prev);
   const pageBodyRef = useRef(null); 
   const [headerHeight, setHeaderHeight] = useState("100vh");
   const headerContentRef = useRef();
+  const [bodyTopOffset, setBodyTopOffset] = useState(100);
 
 
   /***** USE EFFECTS  ******/
@@ -41,6 +41,7 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
       // Measure the content height and animate to it
       const contentHeight = headerContentRef.current.scrollHeight;
       setHeaderHeight(`${contentHeight}px`);
+      setBodyTopOffset(`${contentHeight + 25}px`);
     } else {
       // Full screen when not begun
       setHeaderHeight("100vh");
@@ -54,6 +55,12 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const activeLinkText = activePage?.label;
   const isBeta = activePage?.isBeta;
   const hideContentBeginButton = isBeta && !featureFlagShowBeta;
+
+
+  const toggleMenu = () => {
+    setBegun(false);
+    setMenuOpen(prev => !prev);
+  }
 
   const scrollToPageBody = () => {
     setTimeout(() => {
@@ -86,6 +93,15 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
 
 
   /******** DISPLAY FUNCTIONS **********/
+  const pageTitle = !begun ? 
+    <h2 className={"pageTitle"}>
+      <AILogo size={".75em"} />
+      <TypingText
+        baseText={" Hello " + userName + " "}
+        text={"Welcome to Sage Insights AI!"}
+        flashingText={"_ "}
+      />
+    </h2> : "";
   const nav = (
     <>
       {/* Desktop Nav */}
@@ -127,9 +143,9 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
   const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showHowItWorksBoxList} setShowBoxList={setShowHowItWorksBoxList} showCloseButton={true}/>);
-  const descriptionOfPageFunction = <>
+  const descriptionOfPageFunction = !begun ? <>
     <PageDescription text={pageDescText} /> 
-  </>
+  </> : "";
 
 
   /**** RETURN INPUT TO ENTER USERNAME IF NOT ENTERED ****/
@@ -138,13 +154,13 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
       <div className="layout">
         <main>
           <div className="app">
-            <header className="app-header">
+            <header className="app-header" style={{ height: headerHeight, alignItems: "center" }}>
               <h3 className={"pageTitle"}>
               <AILogo size={".75em"}/>
                 <TypingText text={"Please enter your name"} flashingText={"_ "} headerSize={"small"}/>
               </h3>
-              <input type="text" className={nameInputClasses} value={userName}
-              onChange={(e) => setUserName(e.target.value)} style={{maxWidth: "400px"}}/>
+              <input type="text-input" className={nameInputClasses} value={userName}
+              onChange={(e) => setUserName(e.target.value)} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
               {nameErrorText}
               <button className={"button green-button"} onClick={handleUpdateName} value={"Submit"} style={{margin:0, marginTop:'2rem', width:"100%",maxWidth: "400px"}}>Submit</button>
           </header>
@@ -157,19 +173,12 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
 
   /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (
-    <div className="layout">
+    <div className="layout" >
       <main>
-        <div className="app">
+        <div className="app" >
           <header className="app-header" style={{ height: headerHeight }}>
             <div ref={headerContentRef}>
-              <h2 className={"pageTitle"}>
-                <AILogo size={".75em"} />
-                <TypingText
-                  baseText={" Hello " + userName + " "}
-                  text={"Welcome to Sage Insights AI!"}
-                  flashingText={"_ "}
-                />
-              </h2>
+              {pageTitle}
               {nav}
               <div className={`pageDescription ${fadeClass}`}>
                 {descriptionOfPageFunction}
@@ -177,7 +186,7 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
               </div>
             </div>
           </header>
-          <section className="body" ref={pageBodyRef} >
+          <section className={"body"} ref={pageBodyRef} style={{paddingTop: bodyTopOffset}}>
             <div className={fadeClass}>
               {begun ? 
                 <>
