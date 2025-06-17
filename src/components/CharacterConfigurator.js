@@ -3,6 +3,7 @@ import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, 
 import "./styles/CharacterConfigurator.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
+import { removeNonAlphanumericMultispace } from '../lib/ValidationHelper';
 // todo: test 
 
 const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, getEdgy, setGetEdgy }) => {
@@ -133,14 +134,14 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
           <tr className={"inputDiv"}>
               <td className={"tdLeft"}><label>Character Name:</label></td>
               <td className={"tdRight"}>
-                <input className={"text-input"}value={characterName} type="text" onChange={(e) => setCharacterName(e.target.value)}/>
+                <input className={"text-input"}value={characterName} type="text" onChange={(e) => setCharacterName(removeNonAlphanumericMultispace(e.target.value))}/>
               </td>
           </tr>
             <tr className={"inputDiv"}>
                 <td className={"tdLeft"}><label>Character Type:</label></td>
                 <td className={"tdRight"}>
                 {enterValues ? 
-                  <input className={"text-input"} value={characterType} type="text" onChange={(e) => setCharacterType(e.target.value)}/>
+                  <input className={"text-input"} value={characterType} type="text" onChange={(e) => setCharacterType(removeNonAlphanumericMultispace(e.target.value))}/>
                   : <select className={"select-input"} value={characterType} onChange={(e) => setCharacterType(e.target.value)}>
                     <option value="">Select...</option>
                     {characterTypes.map((charType) =>
@@ -154,7 +155,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                 <td className={"tdLeft"}><label>Who Is:</label></td>
                 <td className={"tdRight"}>  
                   {enterValues ? 
-                  <input className={"text-input"} value={characterTrait} type="text" onChange={(e) => setCharacterTrait(e.target.value)}/>
+                  <input className={"text-input"} value={characterTrait} type="text" onChange={(e) => setCharacterTrait(removeNonAlphanumericMultispace(e.target.value))}/>
                   : <select value={characterTrait} onChange={(e) => setCharacterTrait(e.target.value)}>
                   <option value="">Select...</option>
                   {characterTraits.map((charTrait) =>
@@ -167,7 +168,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                 <td className={"tdLeft"}><label>Who Has:</label></td>
                 <td className={"tdRight"}>  
                   {enterValues ? 
-                    <input className={"text-input"} value={characterHas} type="text" onChange={(e) => setCharacterHas(e.target.value)}/>
+                    <input className={"text-input"} value={characterHas} type="text" onChange={(e) => setCharacterHas(removeNonAlphanumericMultispace(e.target.value))}/>
                     : <select value={characterHas} onChange={(e) => setCharacterHas(e.target.value)}>
                     <option value="">Select...</option>
                     {characterHasItems.map((characterHasItem) =>
@@ -180,7 +181,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                 <td className={"tdLeft"}><label>Who likes:</label></td>
                 <td className={"tdRight"}>                
                   {enterValues ? 
-                    <input className={"text-input"} value={characterLikes} type="text" onChange={(e) => setCharacterLikes(e.target.value)}/>
+                    <input className={"text-input"} value={characterLikes} type="text" onChange={(e) => setCharacterLikes(removeNonAlphanumericMultispace(e.target.value))}/>
                     : <select value={characterLikes} onChange={(e) => setCharacterLikes(e.target.value)}>
                     <option value="">Select...</option>
                     {likesChoices.map((likesChoice) =>
@@ -193,7 +194,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                 <td className={"tdLeft"}> <label>But doesn't like:</label></td>
                 <td className={"tdRight"}>  
                   {enterValues ? 
-                    <input className={"text-input full-width"} value={characterDislikes} type="text" onChange={(e) => setCharacterDislikes(e.target.value)}/>
+                    <input className={"text-input full-width"} value={characterDislikes} type="text" onChange={(e) => setCharacterDislikes(removeNonAlphanumericMultispace(e.target.value))}/>
                     : <select value={characterDislikes} onChange={(e) => setCharacterDislikes(e.target.value)}>
                     <option value="">Select...</option>
                     {dislikesChoices.map((dislikesChoice) =>

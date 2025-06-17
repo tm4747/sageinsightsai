@@ -3,6 +3,7 @@ import styles from './css/PageStyles.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import FlashingText from '../components/FlashingText';
+import { removeNonUrlCharacters } from '../lib/ValidationHelper';
 
 
 function WebpageSummaryTool({setIsLoading}) {
@@ -74,8 +75,8 @@ function WebpageSummaryTool({setIsLoading}) {
 
 
   /********** DYNAMIC JS FUNCTIONS **********/ 
-  const handleInputChange = (event) => {
-    const enteredValue = event.target.value.trim();
+  const handleEnteredUrlChange = (event) => {
+    const enteredValue = removeNonUrlCharacters(event.target.value);
     setEnteredUrl(enteredValue);
     if(enteredValue && enteredValue.length === 0 ){
       setEnteredUrlError(false);
@@ -109,7 +110,7 @@ function WebpageSummaryTool({setIsLoading}) {
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <input className={inputClasses} onChange={handleInputChange} type="text"/>
+        <input className={inputClasses} value={enteredUrl} onChange={handleEnteredUrlChange} type="text"/>
         <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
         <p>
           <FlashingText interval={750} text={enteredUrlDisplay}/>

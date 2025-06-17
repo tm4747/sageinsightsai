@@ -7,6 +7,7 @@ import TypingText from './components/TypingText';
 import BoxList from './components/BoxList';
 import PageDescription from './components/PageDescription';
 import ShowHowItWorksIcon from './components/simple/ShowHowItWorksIcon';
+import { removeNonAlphanumericMultispace } from './lib/ValidationHelper';
 
 
 const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
@@ -68,7 +69,13 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
     }, 250);
   }
 
-  const handleUpdateName = () => {
+  const handleUpdateName = (e) => {
+    const sanitizedName = removeNonAlphanumericMultispace(e.target.value);
+    setUserName(sanitizedName);
+  }
+
+  const handleSubmitName = () => {
+    setUserName(userName.trim());
     if(userName && userName.length > 1){
       console.log('good user name');
       setNameErrorMessage("");
@@ -160,9 +167,10 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
                 <TypingText text={"Please enter your name"} flashingText={"_ "} headerSize={"small"}/>
               </h3>
               <input type="text-input" className={nameInputClasses} value={userName}
-              onChange={(e) => setUserName(e.target.value)} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
+              onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
               {nameErrorText}
-              <button className={"button green-button"} onClick={handleUpdateName} value={"Submit"} style={{margin:0, marginTop:'2rem', width:"100%",maxWidth: "400px"}}>Submit</button>
+              {userName}
+              <button className={"button green-button"} onClick={handleSubmitName} value={"Submit"} style={{margin:0, marginTop:'2rem', width:"100%",maxWidth: "400px"}}>Submit</button>
           </header>
           </div>
         </main>
