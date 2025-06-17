@@ -11,6 +11,7 @@ function WebpageSummaryTool({setIsLoading}) {
   const [postResponse, setPostResponse] = useState('');
   const [enteredUrl, setEnteredUrl] = useState('');
   const [enteredUrlError, setEnteredUrlError] = useState(false);
+  const [enteredUrlErrorMessage, setEnteredUrlErrorMessage] = useState('');
   const [validUrl, setValidUrl] = useState(false);
   const [disableScroll, setDisableScroll] = useState(false);
   const [displayedText, setDisplayedText] = useState('');  //typing effect
@@ -78,8 +79,9 @@ function WebpageSummaryTool({setIsLoading}) {
   const handleEnteredUrlChange = (event) => {
     const enteredValue = removeNonUrlCharacters(event.target.value);
     setEnteredUrl(enteredValue);
-    if(enteredValue && enteredValue.length === 0 ){
+    if(enteredValue && enteredValue.length < 3 ){
       setEnteredUrlError(false);
+      setEnteredUrlErrorMessage("* Entered value " + enteredValue + " must be at least 3 characters.")
       setValidUrl(false);
     } else if (haveValidData(enteredValue)) {
       setEnteredUrlError(false);
@@ -113,7 +115,8 @@ function WebpageSummaryTool({setIsLoading}) {
         <input className={inputClasses} value={enteredUrl} onChange={handleEnteredUrlChange} type="text"/>
         <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
         <p>
-          <FlashingText interval={750} text={enteredUrlDisplay}/>
+          <FlashingText interval={750} text={enteredUrlDisplay - enteredUrlErrorMessage}/>
+          
         </p>
       </div>
       <div className={"resultsDiv"} >

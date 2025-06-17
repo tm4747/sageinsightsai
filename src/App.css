@@ -112,12 +112,6 @@ ol li ul li {
   .mobile-nav {
     display: inline;
   }
-  .app-header{
-    position:fixed;
-    padding: 0;  /* T R B L */
-    padding-top:.25rem;
-    padding-bottom:.25rem;
-  }
 }
 /* page navigation fade-in animation */
 .fade-wrapper {

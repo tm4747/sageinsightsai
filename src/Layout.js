@@ -9,14 +9,16 @@ import PageDescription from './components/PageDescription';
 import ShowHowItWorksIcon from './components/simple/ShowHowItWorksIcon';
 import { removeNonAlphanumericMultispace } from './lib/ValidationHelper';
 import FlashingText from './components/FlashingText';
+import { useViewportWidth } from './lib/Utilities';
 
 
 const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const location = useLocation();
   const [begun, setBegun] = useState(false);
   const [fadeClass, setFadeClass] = useState("fade-wrapper");
-  const [userName, setUserName] = useState("");
-  const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(false);
+  // TEST - remove test input 2 fields
+  const [userName, setUserName] = useState("Tom");
+  const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(true);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,6 +27,8 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const [headerHeight, setHeaderHeight] = useState("100vh");
   const headerContentRef = useRef();
   const [bodyTopOffset, setBodyTopOffset] = useState(100);
+  const viewportWidth = useViewportWidth();
+ 
 
 
   /***** USE EFFECTS  ******/
@@ -49,6 +53,19 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
       setHeaderHeight("100vh");
     }
   }, [begun]);
+
+  /*** UPDATE BODY CONTENT OFFSET WHEN VIEWPORT CHANGES */
+  useEffect(() => {
+    if (begun && headerContentRef.current) {
+      // Measure the content height and animate to it
+      const contentHeight = headerContentRef.current.scrollHeight;
+      setHeaderHeight(`${contentHeight}px`);
+      setBodyTopOffset(`${contentHeight + 25}px`);
+    } else {
+      // Full screen when not begun
+      setHeaderHeight("100vh");
+    }
+  }, [viewportWidth, begun]);
 
   /******* JAVASCRIPT HELPERS *********/
   const activePage = pages.find(page => page.active);
