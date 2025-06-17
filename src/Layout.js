@@ -8,6 +8,7 @@ import BoxList from './components/BoxList';
 import PageDescription from './components/PageDescription';
 import ShowHowItWorksIcon from './components/simple/ShowHowItWorksIcon';
 import { removeNonAlphanumericMultispace } from './lib/ValidationHelper';
+import FlashingText from './components/FlashingText';
 
 
 const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
@@ -169,7 +170,7 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
               <input type="text-input" className={nameInputClasses} value={userName}
               onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
               {nameErrorText}
-              {userName}
+              <FlashingText text={userName} blockDisplay={true}/>
               <button className={"button green-button"} onClick={handleSubmitName} value={"Submit"} style={{margin:0, marginTop:'2rem', width:"100%",maxWidth: "400px"}}>Submit</button>
           </header>
           </div>
