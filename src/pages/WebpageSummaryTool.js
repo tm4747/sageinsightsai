@@ -5,6 +5,7 @@ import { marked } from 'marked';
 import FlashingText from '../components/FlashingText';
 import { removeNonUrlCharacters } from '../lib/ValidationHelper';
 import TextInput from '../components/simple/TextInput';
+import ButtonControl from '../components/simple/ButtonControl';
 
 
 function WebpageSummaryTool({setIsLoading}) {
@@ -111,7 +112,8 @@ function WebpageSummaryTool({setIsLoading}) {
 
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
-    <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
+    <ButtonControl className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
+     : "";
  
   const enteredUrlDisplay = !enteredUrl ? "Please enter url" : ( validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl);
 
@@ -125,11 +127,11 @@ function WebpageSummaryTool({setIsLoading}) {
           isError={enteredUrlError} 
           errorMessage={enteredUrlErrorMessage}
           validData={validUrl}
-          setWidth={"50%"}/>
-        <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
+          halfWidth={true}/>
         <p>
           <FlashingText interval={750} text={enteredUrlDisplay }/>
         </p>
+        <ButtonControl classes={""} type={'submitRequest'} onPress={callLambda} text={"Get Summary"}/>
       </div>
       <div className={"resultsDiv"} >
         <div className={"innerResultsDiv"}>

@@ -4,8 +4,8 @@
   border:solid 2px var(--off-white);
   border-radius:10px;
   text-align: left;
-  width:100%;
-  display:inline;
+  max-width:100%;
+  box-sizing: border-box;
 }
 
 .inputSuccess{
@@ -16,4 +16,14 @@
 .errorTextInput{
   background-color: var(--light-red);
   border-color: var(--red);
+}
+
+.halfWidth{
+  width:50%;
+}
+
+@media screen and (max-width: 768px) {
+  .halfWidth{
+    width:100%;
+  }
 }

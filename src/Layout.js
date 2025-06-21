@@ -212,7 +212,7 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
               </div>
             </div>
           </header>
-          <section className={"body"} ref={pageBodyRef} style={{paddingTop: bodyTopOffset}}>
+          <section className={"appBody"} ref={pageBodyRef} style={{paddingTop: bodyTopOffset}}>
             <div className={fadeClass}>
               {begun ? 
                 <>
