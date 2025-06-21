@@ -12,13 +12,13 @@ import FlashingText from './components/FlashingText';
 import { useViewportWidth } from './lib/Utilities';
 
 
-const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
+const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   const location = useLocation();
   const [begun, setBegun] = useState(false);
   const [fadeClass, setFadeClass] = useState("fade-wrapper");
   // TEST - remove test input 2 fields
-  const [userName, setUserName] = useState("Tom");
-  const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(true);
+  const [userName, setUserName] = useState(devOnly ? "Tom" : "");
+  const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(devOnly);
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -73,7 +73,7 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
   const pageDescText = activePage.description;
   const activeLinkText = activePage?.label;
   const isBeta = activePage?.isBeta;
-  const hideContentBeginButton = isBeta && !featureFlagShowBeta;
+  const hideContentBeginButton = isBeta && !showBeta;
 
 
   const toggleMenu = () => {

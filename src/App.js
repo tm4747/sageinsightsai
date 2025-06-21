@@ -12,6 +12,7 @@ function App() {
   const location = useLocation();
   const path = location.pathname;
   const featureFlagShowBeta = process.env.REACT_APP_ENV === "non-prod";
+  const featureFlagDevOnly = process.env.REACT_APP_DEV && process.env.REACT_APP_DEV  === "true";
   
   const [isLoading, setIsLoading] = useState(false);
   const pages = [
@@ -22,7 +23,7 @@ function App() {
   
   return (
     <Routes>
-      <Route path="/" element={<Layout isLoading={isLoading} pages={pages} featureFlagShowBeta={featureFlagShowBeta} />}>
+      <Route path="/" element={<Layout isLoading={isLoading} pages={pages} showBeta={featureFlagShowBeta} devOnly={featureFlagDevOnly} />}>
         <Route index element={<WebpageSummaryTool setIsLoading={setIsLoading}/>} />
         <Route path="story-maker" element={<StoryMaker setIsLoading={setIsLoading}/>}  />
         <Route path="decidedly-choice-tool" element={<DifficultChoiceMaker setIsLoading={setIsLoading} featureFlagShowBeta={featureFlagShowBeta}/>} />
