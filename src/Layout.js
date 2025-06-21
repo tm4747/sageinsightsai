@@ -6,7 +6,7 @@ import LoadingModal from "./components/LoadingModal";
 import TypingText from './components/TypingText';
 import BoxList from './components/BoxList';
 import PageDescription from './components/PageDescription';
-import ShowHowItWorksIcon from './components/simple/ShowHowItWorksIcon';
+import ShowHowItWorksTextAndIcon from './components/simple/ShowHowItWorksTextAndIcon';
 import { removeNonAlphanumericMultispace } from './lib/ValidationHelper';
 import FlashingText from './components/FlashingText';
 import { useViewportWidth } from './lib/Utilities';
@@ -167,7 +167,7 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
 
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
-  const howAppWorks = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showHowItWorksBoxList} setShowBoxList={setShowHowItWorksBoxList} showCloseButton={true}/>);
+  const howAppWorksExpandable = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showHowItWorksBoxList} setShowBoxList={setShowHowItWorksBoxList} showCloseButton={true}/>);
   const descriptionOfPageFunction = !begun ? <>
     <PageDescription text={pageDescText} /> 
   </> : "";
@@ -216,8 +216,10 @@ const Layout = ({isLoading, pages, featureFlagShowBeta}) => {
             <div className={fadeClass}>
               {begun ? 
                 <>
-                  <ShowHowItWorksIcon onClickFn={handleShowHowItWorks} />
-                  {howAppWorks}
+                  <div className={"commonDiv noPadding borderBottomGray"}>
+                    <ShowHowItWorksTextAndIcon onClickFn={handleShowHowItWorks} />
+                    {howAppWorksExpandable}
+                  </div>
                   <Outlet />
                 </> : ""} {/* This renders the current child route */}
             </div>

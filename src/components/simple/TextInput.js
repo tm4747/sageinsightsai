@@ -6,16 +6,17 @@ const TextInput = ({enteredValue, handleOnChange, isError, errorMessage, validDa
   let inputClasses = halfWidth ? `${styles.textInput} ${styles.halfWidth}` : styles.textInput;
   inputClasses += isError ? ` ${styles.errorTextInput}` : (validData ? ` ${styles.inputSuccess}` : "");
 
+  const errorTextDisplay = errorMessage ? <p className={"notice error"}>{errorMessage}</p> : "";
 
     return(
-        <div className={"standardVerticalPadding"}>
+        <div className={"commonDiv"}>
             <input 
                 className={inputClasses} 
                 value={enteredValue} 
                 onChange={handleOnChange} 
                 type="text"
                 />
-            <p className={"notice error"}>{errorMessage}</p>
+            {errorTextDisplay}
         </div>
     );
 }

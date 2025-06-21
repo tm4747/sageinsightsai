@@ -15,6 +15,7 @@
   --purple: #273582;
   --light-red:rgb(245, 205, 211);
   --red:rgb(224, 8, 40);
+  --gray:#ccc;
 
 }
 html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
@@ -118,6 +119,7 @@ ol li ul li {
   flex-direction: column; /* optional, for vertical stacking */
   align-items: center;     /* horizontally centers children */
   justify-content: flex-start; /* or center if you want vertical centering too */
+  justify-content: space-between; /* or center if you want vertical centering too */
   padding:1rem;
   padding-top: 3rem;
   max-width: 1400px;
@@ -150,17 +152,6 @@ a:hover, .activeLink{
 .button:hover{
   background-color:var(--white);
   color:black;
-}
-.btnCancelScroll{
-  padding:.75em ;
-  border-radius:10px;
-  font-weight:bold;
-  width:25%;
-  display:inline;
-  opacity:.85;
-}
-.btnCancelScroll:hover{
-  opacity:1;
 }
 .green-button{
   background-color: var(--light-green);
@@ -261,6 +252,9 @@ audio{
 .margin-bottom{
   margin-bottom:1rem;
 }
+.negativeMarginBottom{
+  margin-bottom:1em;
+}
 .red-border{
   border:solid 2px var(--red);
 }
@@ -269,6 +263,10 @@ audio{
 }
 .border-bottom{
   border-bottom:solid 2px #444;
+}
+
+.borderBottomGray{
+  border-bottom:solid 2px var(--gray);
 }
 .bold{
   font-weight:bold;
@@ -294,6 +292,12 @@ audio{
   color:var(--dark-green-inversion)
 }
 /* DIV and P SPECIFIC */
+.commonDiv{
+  padding:1rem;
+  padding-top:1rem;
+  padding-bottom:1rem;
+  /* border: solid 2px red; */
+}
 .standardVerticalPadding{
   padding-top:.5rem;
   padding-bottom:.5rem;
@@ -301,12 +305,15 @@ audio{
 .pStandard{
   font-size:.75em;
 }
-.resultsDiv, .formDiv{
+.resultsDiv{
+  width:100%;
+}
+.formDiv{
   width:100%;
   max-width:1400px;
+  /* border: solid 2px green; */
 }
 .innerResultsDiv{
-  margin-top:2.5em;
   border:solid #555 2px;
   text-align:left;
   border-radius:15px;
@@ -325,35 +332,12 @@ audio{
   width:100%;
   border:solid 2px white;
 }
-/*******  DATA TABLE ********/
-/* .responsive-grid .ag-header-cell,
-  .responsive-grid .ag-cell {
-    padding:2px;
-    text-align: center;
-    border:solid 1px #eee;
-  }
-
-  .responsive-grid .ag-header-cell-label {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    border: solid 1px #eee;
-  }
-@media screen and (max-width: 768px) {
-  .responsive-grid .ag-header-cell,
-  .responsive-grid .ag-cell {
-    padding-left: 2px !important;
-    padding-right: 2px !important;
-    padding-top: 4px !important;
-    padding-bottom: 4px !important;
-  }
-  .responsive-grid .ag-header-cell-label {
-    padding: 0 !important;
-  }
-} */
+.noPadding{
+  padding:0;
+}
+.noPaddingTop{
+  padding-top:0;
+}
 /* This wraps the grid and constrains it */
 .table-scroll-container {
   width: 100%;

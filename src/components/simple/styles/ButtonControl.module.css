@@ -27,6 +27,19 @@
 }
 
 
+.cancelScroll{
+  background-color: var(--gray);
+  width:25%;
+  opacity:.85;
+}
+.cancelScroll:hover{
+  background-color: var(--off-black);
+  background-color: rgb(71, 0, 0);
+  color: var(--white);
+  opacity:1;
+}
+
+
 @media screen and (max-width: 768px) {
   .button{
     width:100%;

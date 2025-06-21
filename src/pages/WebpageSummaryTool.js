@@ -111,16 +111,21 @@ function WebpageSummaryTool({setIsLoading}) {
   
 
   /********** DISPLAY FUNCTIONS ***********/
-  const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
-    <ButtonControl className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
+  // TODO: remove true.. from next line
+  const stopScrollButton = (true || (isStarted && !isDone && !disableScroll)) ? 
+    <div className={"commonDiv"}><ButtonControl type={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/></div>
      : "";
- 
-  const enteredUrlDisplay = !enteredUrl ? "Please enter url" : ( validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl);
-
+  
+  const textForFlashing = validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl;
+  const enteredUrlDisplay = !enteredUrl ? <span className="bold">Please enter url:</span> : 
+  <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
   
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
+          <div className={"commonDiv"}>
+            {enteredUrlDisplay}
+          </div>
         <TextInput 
           enteredValue={enteredUrl} 
           handleOnChange={handleEnteredUrlChange} 
@@ -128,19 +133,21 @@ function WebpageSummaryTool({setIsLoading}) {
           errorMessage={enteredUrlErrorMessage}
           validData={validUrl}
           halfWidth={true}/>
-        <p>
-          <FlashingText interval={750} text={enteredUrlDisplay }/>
-        </p>
-        <ButtonControl classes={""} type={'submitRequest'} onPress={callLambda} text={"Get Summary"}/>
+        <div className={"commonDiv"}>
+          <ButtonControl classes={""} type={'submitRequest'} onPress={callLambda} text={"Get Summary"}/>
+        </div>
       </div>
-      <div className={"resultsDiv"} >
-        <div className={"innerResultsDiv"}>
-          <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
-          <div>
-            {isDone ? <p>Done!</p> : ""}
+      <div className={"commonDiv"}>
+        <div className={"resultsDiv"} >
+          <div className={"innerResultsDiv"}>
+            <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
+            <div>
+              {isDone ? <p>Done!</p> : ""}
+            </div>
           </div>
         </div>
       </div>
+      
       <div ref={messagesEndRef}/>
       {stopScrollButton}
     </div>

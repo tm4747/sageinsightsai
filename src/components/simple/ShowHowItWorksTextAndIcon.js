@@ -5,14 +5,13 @@ const ShowHowItWorksIcon = ({onClickFn, title = "How does it work?", size = "1.5
     return (
         <div onClick={onClickFn}  style={{
             cursor:"pointer", 
-            paddingLeft:"1rem",
-            paddingBottom:"1rem", 
-            paddingTop:"10px", 
             width:"100%", 
             display: "flex",
+            paddingTop: "1rem",
             flexDirection: "row",
             justifyContent: "center",
-            alignItems: "end",
+            alignItems: "center",
+            marginBottom: "-.5rem",
         }}>
             {/* <h3 style={{display: "inline", paddingRight:"1rem", marginTop:"1.5rem"}}>{title}</h3> */}
             <h3 style={{paddingRight:"1rem", alignSelf:"center"}}>{title}</h3>

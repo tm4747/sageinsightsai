@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 
-const FlashingText = ({ text, interval = 750, htmlEntities = false, blockDisplay = false }) => {
+const FlashingText = ({ text, interval = 750, htmlEntities = false, blockDisplay = false, boldText = false }) => {
   const [isVisible, setIsVisible] = useState(true);
+  
+  const classes = boldText ? "bold" : "";
 
   const fadeStyles = {
     fadeIn: {
@@ -27,19 +29,20 @@ const FlashingText = ({ text, interval = 750, htmlEntities = false, blockDisplay
   if (htmlEntities) {
     return (
       <span
+        className={classes}
         style={isVisible ? fadeStyles.fadeIn : fadeStyles.fadeOut}
         dangerouslySetInnerHTML={{ __html: text }} // Render HTML content
       />
     );
   } else if(blockDisplay) {
     return (
-      <p style={isVisible ? fadeStyles.fadeIn : fadeStyles.fadeOut}>
+      <p className={classes} style={isVisible ? fadeStyles.fadeIn : fadeStyles.fadeOut}>
         {text}
       </p>
     );
   } else {
     return (
-      <span style={isVisible ? fadeStyles.fadeIn : fadeStyles.fadeOut}>
+      <span className={classes} style={isVisible ? fadeStyles.fadeIn : fadeStyles.fadeOut}>
         {text}
       </span>
     );

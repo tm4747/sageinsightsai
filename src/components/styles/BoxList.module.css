@@ -20,7 +20,7 @@
     text-align:left;
     border-radius:15px;
     padding:0 2em;
-    font-size:.75em;
+    font-size:1rem;
     max-height: 1000px; /* or something high enough to contain your content */
     opacity: 1;
     visibility: visible;
@@ -28,5 +28,6 @@
 @media (max-width: 768px) {
   .boxListContainer.expanded {
     padding: 0 1em;
+    font-size:.75rem;
   }
 }
