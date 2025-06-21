@@ -14,6 +14,8 @@ const ButtonControl = ({ onPress, text, type = "", isDisabled = false}) => {
         case "resetButton":
             buttonClasses += ` ${styles.redButton}`;
             break;
+        default:
+            break;
     }
 
    
