@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './css/PageStyles.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import FlashingText from '../components/FlashingText';
 import { removeNonUrlCharacters } from '../lib/ValidationHelper';
+import TextInput from '../components/simple/TextInput';
 
 
 function WebpageSummaryTool({setIsLoading}) {
@@ -48,13 +49,15 @@ function WebpageSummaryTool({setIsLoading}) {
     setHtmlResponse(theHtmlResponse)
   }, [postResponse]);
 
+  // TODO: reset state function
+
   // website summary call
   const callLambda = () => {
-    setPostResponse("");
-    setHtmlResponse("");
-    setDisplayedText("");
-    if (haveValidData()) {
+    resetState();
+    if (!haveValidData(enteredUrl)) {
       setEnteredUrlError(true);
+      setEnteredUrlErrorMessage("Entered url is invalid.");
+      return false;
     } else {
       setEnteredUrlError(false);
       try {
@@ -78,22 +81,27 @@ function WebpageSummaryTool({setIsLoading}) {
   /********** DYNAMIC JS FUNCTIONS **********/ 
   const handleEnteredUrlChange = (event) => {
     const enteredValue = removeNonUrlCharacters(event.target.value);
+    console.log('enteredValue', enteredValue)
     setEnteredUrl(enteredValue);
-    if(enteredValue && enteredValue.length < 3 ){
-      setEnteredUrlError(false);
-      setEnteredUrlErrorMessage("* Entered value " + enteredValue + " must be at least 3 characters.")
-      setValidUrl(false);
-    } else if (haveValidData(enteredValue)) {
+    if ( enteredValue && haveValidData(enteredValue)) {
+      setEnteredUrlErrorMessage("")
       setEnteredUrlError(false);
       setValidUrl(true);
     } else {
-      setEnteredUrlError(true);
+      setEnteredUrlErrorMessage("")
+      setEnteredUrlError(false);
       setValidUrl(false);
     }  
   };
 
 
   /***********HELPER FUNCTIONS ************/
+  const resetState = () => {
+    setPostResponse("");
+    setHtmlResponse("");
+    setDisplayedText("");
+  }
+
   const haveValidData = (enteredValue) => {
     const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(\/[^\s]*)?$/;
     let b_validData = enteredValue && enteredValue.length > 3 && urlPattern.test(enteredValue);
@@ -105,18 +113,22 @@ function WebpageSummaryTool({setIsLoading}) {
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <button className={"btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
  
-  const inputClasses = enteredUrlError ? "errorTextInput textInput" : (validUrl ? "inputSuccess textInput" : "textInput");
   const enteredUrlDisplay = !enteredUrl ? "Please enter url" : ( validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl);
 
   
   return (
     <div className={styles.content}>
       <div className={"formDiv"}>
-        <input className={inputClasses} value={enteredUrl} onChange={handleEnteredUrlChange} type="text"/>
+        <TextInput 
+          enteredValue={enteredUrl} 
+          handleOnChange={handleEnteredUrlChange} 
+          isError={enteredUrlError} 
+          errorMessage={enteredUrlErrorMessage}
+          validData={validUrl}
+          setWidth={"50%"}/>
         <button className={"button green-button"} onClick={callLambda}>Get Summary</button>
         <p>
-          <FlashingText interval={750} text={enteredUrlDisplay - enteredUrlErrorMessage}/>
-          
+          <FlashingText interval={750} text={enteredUrlDisplay }/>
         </p>
       </div>
       <div className={"resultsDiv"} >

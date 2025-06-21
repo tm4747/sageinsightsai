@@ -213,11 +213,7 @@ select, .select-input, .text-input{
   overflow: hidden;
   line-height: 2em;
 }
-audio{
-  margin:1em;
-  border: solid 3px blue;
-  border-radius:30px;
-}
+/*** MOVE TO TextInput.js ***/
 .textInput{
   padding:.75em 4em ;
   border-radius:10px;
@@ -232,6 +228,11 @@ audio{
 .inputSuccess{
   background-color:var(--very-light-green);
   border-color: var(--green);
+}
+audio{
+  margin:1em;
+  border: solid 3px blue;
+  border-radius:30px;
 }
 @keyframes flashInvert {
   0%   { color: white; background-color: black; }
@@ -291,6 +292,10 @@ audio{
   color:var(--dark-green-inversion)
 }
 /* DIV and P SPECIFIC */
+.standardVerticalPadding{
+  padding-top:.5rem;
+  padding-bottom:.5rem;
+}
 .pStandard{
   font-size:.75em;
 }

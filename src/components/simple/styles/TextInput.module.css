@@ -1,0 +1,19 @@
+.textInput {
+  color:var(--off-black);
+  padding: .75em 1em;
+  border:solid 2px var(--off-white);
+  border-radius:10px;
+  text-align: left;
+  width:100%;
+  display:inline;
+}
+
+.inputSuccess{
+  background-color:var(--very-light-green);
+  border-color: var(--green);
+}
+
+.errorTextInput{
+  background-color: var(--light-red);
+  border-color: var(--red);
+}
