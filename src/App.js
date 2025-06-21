@@ -14,7 +14,7 @@ function App() {
   const featureFlagShowBeta = process.env.REACT_APP_ENV === "non-prod";
   const featureFlagDevOnly = process.env.REACT_APP_DEV && process.env.REACT_APP_DEV  === "true";
   
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const pages = [
     { key: "webSummary", url: "/", active: path === "/", label: "Web Summary", howItWorks: getWebSummaryHowItWorks(), description: "Please enter a website url. This tool will return a general summary of the homepage." },
     { key: "storyMaker", url: "/story-maker", active: path === "/story-maker", label: "Story Maker", howItWorks: getStoryMakerHowItWorks(), description: "You will create 3 characters and an optional scenario, then generate a short story with OpenAI, Google Gemini, and Anthropic's Claude playing each character." },

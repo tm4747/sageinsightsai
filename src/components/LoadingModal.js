@@ -3,7 +3,6 @@ import AILogo from './AILogo';
 
 const LoadingModal = ({ isLoading }) => {
   return (
-    // Overlay background that covers the full screen
     <div
       style={{
         position: 'fixed',
@@ -11,18 +10,39 @@ const LoadingModal = ({ isLoading }) => {
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',  // Black background with 20% opacity
-        display: isLoading ? 'flex' : 'none',  // Show only when loading
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        display: isLoading ? 'flex' : 'none',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 9999,  // Ensure overlay is on top
-        opacity: isLoading ? 1 : 0,  // Fade in/out
-        transition: 'opacity 1s ease-in-out',  // Smooth transition for fade
+        zIndex: 9999,
+        opacity: isLoading ? 1 : 0,
+        transition: 'opacity 1s ease-in-out',
       }}
     >
-      <div style={{ textAlign: 'center', color: '#fff', fontSize: '18px' }}>
-        <AILogo size={"4em"} transparency={true}/>
-        <h3>Please be patient as Lambda fetches results...</h3>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: '1.5rem',
+          color: '#fff',
+          fontSize: '18px',
+          textAlign: 'center',
+        }}
+      >
+        <AILogo size="3em" transparency={true} />
+        <h3 style={{ margin: 0 }}>Please be patient as Lambda</h3> 
+        <img
+          src="/Lambda.svg"
+          alt="AWS Lambda Logo"
+          style={{ 
+            width: '36px', 
+            height: '36px',
+            maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0.75) 90%, rgba(0,0,0,0.5) 95%, rgba(0,0,0,0.25) 100%)',
+            WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 85%, rgba(0,0,0,0.75) 90%, rgba(0,0,0,0.5) 95%, rgba(0,0,0,0.25) 100%)'
+          }}
+        />
+        <h3  style={{ margin: 0 }}>fetches results...</h3>
       </div>
     </div>
   );
