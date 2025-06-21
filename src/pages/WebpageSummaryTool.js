@@ -94,15 +94,19 @@ function WebpageSummaryTool({setIsLoading}) {
     }  
   };
 
+  const clearUrlInput = () => {
+    setEnteredUrl("");
+    setEnteredUrlError(false)
+    setEnteredUrlErrorMessage("");
+    setValidUrl(false);
+  }
+
 
   /***********HELPER FUNCTIONS ************/
   const resetState = () => {
     setHtmlResponse("");
     setPostResponse("");
-    setEnteredUrl("");
-    setEnteredUrlError(false);
-    setEnteredUrlErrorMessage("");
-    setValidUrl(false);
+    clearUrlInput();
     setDisableScroll(false);
     setDisplayedText("");
     setIsDone(false);
@@ -144,6 +148,8 @@ function WebpageSummaryTool({setIsLoading}) {
           validData={validUrl}
           halfWidth={true}
           isDisabled={lockTextInput}
+          handleClear={clearUrlInput}
+          isClearButton={enteredUrl && !lockTextInput}
         />
         <div className={"commonDiv"}>
           {mainButton}

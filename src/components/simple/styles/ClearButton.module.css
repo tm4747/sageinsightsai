@@ -1,0 +1,23 @@
+
+@keyframes flashInvert {
+  0%   { color: white; background-color: red; }
+  50%  { color: red; background-color: white; }
+  100% { color: white; background-color: red; }
+}
+.closeIcon{
+    height:1.5rem;
+    width:1.5rem;
+    display:inline-block;
+    vertical-align: middle;
+    animation: flashInvert 2.5s infinite;
+    border-radius: 50%;
+    padding: 4px;
+    transition: color 0.5s ease, background-color 0.5s ease;
+    cursor: pointer;
+    margin-left: 8px; 
+}
+.closeIcon:hover{
+    animation: none;
+    color:red;
+    background-color: white;
+}
