@@ -1,22 +1,29 @@
 import styles from './styles/ButtonControl.module.css';
 
 
-const ButtonControl = ({ onPress, text, type = "" }) => {
+const ButtonControl = ({ onPress, text, type = "", isDisabled = false}) => {
     let buttonClasses = `${styles.button} `;
-    if(type){
-        if(type === "submitRequest"){
+    
+    switch (type) {
+        case "submitRequest":
             buttonClasses += ` ${styles.greenButton}`;
-        } else if(type === "cancelScroll"){
+            break;
+        case "cancelScroll":
             buttonClasses += ` ${styles.cancelScroll}`;
-        }
+            break;
+        case "resetButton":
+            buttonClasses += ` ${styles.redButton}`;
+            break;
     }
+
    
 
-//   let inputClasses = halfWidth ? `${styles.textInput} ${styles.halfWidth}` : styles.textInput;
-//   inputClasses += isError ? ` ${styles.errorTextInput}` : (validData ? ` ${styles.inputSuccess}` : "");
-
     return(
-        <button className={buttonClasses} onClick={onPress}>{text}</button>
+        <button 
+            className={buttonClasses} 
+            onClick={onPress}
+            disabled={isDisabled}
+        >{text}</button>
     );
 }
 

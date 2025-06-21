@@ -1,7 +1,7 @@
 import styles from './styles/TextInput.module.css';
 
 
-const TextInput = ({enteredValue, handleOnChange, isError, errorMessage, validData, halfWidth = false}) => {
+const TextInput = ({enteredValue, handleOnChange, isError, errorMessage, validData, halfWidth = false, isDisabled = false}) => {
 
   let inputClasses = halfWidth ? `${styles.textInput} ${styles.halfWidth}` : styles.textInput;
   inputClasses += isError ? ` ${styles.errorTextInput}` : (validData ? ` ${styles.inputSuccess}` : "");
@@ -15,6 +15,7 @@ const TextInput = ({enteredValue, handleOnChange, isError, errorMessage, validDa
                 value={enteredValue} 
                 onChange={handleOnChange} 
                 type="text"
+                disabled={isDisabled}
                 />
             {errorTextDisplay}
         </div>

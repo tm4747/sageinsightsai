@@ -21,6 +21,8 @@ function WebpageSummaryTool({setIsLoading}) {
   const [isStarted, setIsStarted] = useState(false);
   const messagesEndRef = useRef(null);  //scroll vars
 
+  const lockTextInput = isDone || isStarted;
+
 
   /********* USE EFFECTS & API CALLS **********/
   useEffect(() => {  //typing effect
@@ -36,6 +38,7 @@ function WebpageSummaryTool({setIsLoading}) {
       // If we've added all characters, stop the typing effect
       if (htmlReponse && currentIndex === htmlReponse.length) {
         clearInterval(typingInterval);
+        setDisplayedText(htmlReponse)
         setIsDone(true);
         setIsStarted(false);
       }
@@ -50,11 +53,9 @@ function WebpageSummaryTool({setIsLoading}) {
     setHtmlResponse(theHtmlResponse)
   }, [postResponse]);
 
-  // TODO: reset state function
 
   // website summary call
   const callLambda = () => {
-    resetState();
     if (!haveValidData(enteredUrl)) {
       setEnteredUrlError(true);
       setEnteredUrlErrorMessage("Entered url is invalid.");
@@ -63,7 +64,6 @@ function WebpageSummaryTool({setIsLoading}) {
       setEnteredUrlError(false);
       try {
         setIsLoading(true);
-        console.log("lambda call")
         fetchWebSummary(enteredUrl, setPostResponse, setIsLoading);
       } catch (error) {
         console.error('Error fetching summary:', error);
@@ -82,7 +82,6 @@ function WebpageSummaryTool({setIsLoading}) {
   /********** DYNAMIC JS FUNCTIONS **********/ 
   const handleEnteredUrlChange = (event) => {
     const enteredValue = removeNonUrlCharacters(event.target.value);
-    console.log('enteredValue', enteredValue)
     setEnteredUrl(enteredValue);
     if ( enteredValue && haveValidData(enteredValue)) {
       setEnteredUrlErrorMessage("")
@@ -98,9 +97,15 @@ function WebpageSummaryTool({setIsLoading}) {
 
   /***********HELPER FUNCTIONS ************/
   const resetState = () => {
-    setPostResponse("");
     setHtmlResponse("");
+    setPostResponse("");
+    setEnteredUrl("");
+    setEnteredUrlError(false);
+    setEnteredUrlErrorMessage("");
+    setValidUrl(false);
+    setDisableScroll(false);
     setDisplayedText("");
+    setIsDone(false);
   }
 
   const haveValidData = (enteredValue) => {
@@ -111,14 +116,19 @@ function WebpageSummaryTool({setIsLoading}) {
   
 
   /********** DISPLAY FUNCTIONS ***********/
-  // TODO: remove true.. from next line
-  const stopScrollButton = (true || (isStarted && !isDone && !disableScroll)) ? 
-    <div className={"commonDiv"}><ButtonControl type={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/></div>
+  const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
+    <div className={"commonDiv"}>
+      <ButtonControl type={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
+    </div>
      : "";
   
   const textForFlashing = validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl;
   const enteredUrlDisplay = !enteredUrl ? <span className="bold">Please enter url:</span> : 
   <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
+
+  const mainButton = isDone ? 
+    <ButtonControl type={'resetButton'} onPress={resetState} text={"Start Over"}/> : 
+    <ButtonControl isDisabled={lockTextInput} type={'submitRequest'} onPress={callLambda} text={"Get Summary"} /> ;
   
   return (
     <div className={styles.content}>
@@ -132,9 +142,11 @@ function WebpageSummaryTool({setIsLoading}) {
           isError={enteredUrlError} 
           errorMessage={enteredUrlErrorMessage}
           validData={validUrl}
-          halfWidth={true}/>
+          halfWidth={true}
+          isDisabled={lockTextInput}
+        />
         <div className={"commonDiv"}>
-          <ButtonControl classes={""} type={'submitRequest'} onPress={callLambda} text={"Get Summary"}/>
+          {mainButton}
         </div>
       </div>
       <div className={"commonDiv"}>

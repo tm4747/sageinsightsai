@@ -16,7 +16,6 @@
   color:black;
 }
 
-
 .greenButton{
   background-color: var(--light-green);
   border-color: var(--dark-green-inversion);
@@ -24,6 +23,14 @@
 .greenButton:hover{
   color:var(--white);
   background-color: var(--dark-green-inversion);
+}
+
+.redButton{
+  background-color:var(--light-red);
+}
+.redButton:hover{
+  color:var(--white);
+  background-color:var(--red);
 }
 
 
