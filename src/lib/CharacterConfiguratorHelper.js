@@ -204,7 +204,7 @@ export const getDislikes = (levelOfRealism = 1, getEdgy = false) => {
         "standing in straight lines", 
         "opening gifts in front of others", 
         "watching fireworks alone", 
-        "watching someone using social media", 
+        "watching others using social media", 
     ]
     const list3 = [
         "soggy bread", 

@@ -27,7 +27,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
     const textareaRef = useRef(null);
   
     
-     useEffect(() => {
+    useEffect(() => {
       let previewData = "";
       if(characterType){
         if(characterTrait){
@@ -55,10 +55,12 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
           }
         }
         previewData += ".";
-        adjustTextareaSize();
-      } 
+      } else if(characterName){
+        previewData = "named " + characterName + ".";
+      }
       setCharacterDescription(previewData);
-      }, [characterType, characterName, characterTrait, characterHas, characterLikes, characterDislikes]);
+      adjustTextareaSize();
+    }, [characterType, characterName, characterTrait, characterHas, characterLikes, characterDislikes]);
 
       const handleCharacterDescriptionUpdated = (e) => {
         const textarea = e.target;
