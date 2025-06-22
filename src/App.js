@@ -12,7 +12,8 @@ function App() {
   const location = useLocation();
   const path = location.pathname;
   const featureFlagShowBeta = process.env.REACT_APP_ENV === "non-prod";
-  const featureFlagDevOnly = process.env.REACT_APP_DEV && process.env.REACT_APP_DEV  === "true";
+  // TODO: restore -> const featureFlagDevOnly = process.env.REACT_APP_DEV && process.env.REACT_APP_DEV  === "true";
+  const featureFlagDevOnly = false;
   
   const [isLoading, setIsLoading] = useState(false);
   const pages = [

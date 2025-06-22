@@ -50,6 +50,22 @@
   border-radius:10px;
   margin-left:1rem;
 }
+.mobileMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+.mobileMenuOpen {
+  max-height: 500px;
+  opacity: 1;
+}
+
 .mobileLink {
   background-color: #222;
   padding: 0.75rem;
@@ -64,5 +80,31 @@
 
 .activeLink, .mobileLink:hover{
   color: var(--light-blue);
+}
+.activeLinkMobile, .mobileLink:hover{
   background-color:black;
+}
+
+/* page navigation fade-in animation */
+.fadeWrapper {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.fadeEnter {
+  opacity: 0;
+}
+
+.appBody{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column; /* optional, for vertical stacking */
+  align-items: center;     /* horizontally centers children */
+  justify-content: flex-start; /* or center if you want vertical centering too */
+  justify-content: space-between; /* or center if you want vertical centering too */
+  padding:1rem;
+  padding-top: 3rem;
+  max-width: 1400px;
+  /* border: solid 2px yellow; */
+  margin: 0 auto; 
 }

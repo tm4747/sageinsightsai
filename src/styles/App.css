@@ -37,43 +37,6 @@ ol li ul li {
   padding-top:1em;
   padding-bottom:0em;
 }
-/** TODO: get next 2 into into Layout.module.css - need to learn how to do via css module **/ 
-.mobile-menu {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-  text-align: center;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.4s ease, opacity 0.4s ease;
-}
-.mobile-menu.open {
-  max-height: 500px; /* adjust if your menu might be taller */
-  opacity: 1;
-}
-/* page navigation fade-in animation */
-.fade-wrapper {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-.fade-enter {
-  opacity: 0;
-}
-.appBody{
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  flex-direction: column; /* optional, for vertical stacking */
-  align-items: center;     /* horizontally centers children */
-  justify-content: flex-start; /* or center if you want vertical centering too */
-  justify-content: space-between; /* or center if you want vertical centering too */
-  padding:1rem;
-  padding-top: 3rem;
-  max-width: 1400px;
-  /* border: solid 2px yellow; */
-  margin: 0 auto; 
-}
 /** LINKS **/
 a{
   color: var(--blue);
@@ -84,6 +47,7 @@ a:hover{
   color: var(--light-blue);
 }
 /** BUTTONS **/
+
 .button{
   border:solid 1px var(--off-black);
   padding:.75em ;

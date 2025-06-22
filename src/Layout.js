@@ -11,12 +11,13 @@ import { removeNonAlphanumericMultispace } from './lib/ValidationHelper';
 import FlashingText from './components/FlashingText';
 import { useViewportWidth } from './lib/Utilities';
 import styles from "./styles/Layout.module.css";
+import ButtonControl from "./components/simple/ButtonControl"
 
 
 const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   const location = useLocation();
   const [begun, setBegun] = useState(false);
-  const [fadeClass, setFadeClass] = useState("fade-wrapper");
+  const [fadeClass, setFadeClass] = useState(styles.fadeWrapper);
   // TEST - remove test input 2 fields
   const [userName, setUserName] = useState(devOnly ? "Tom" : "");
   const [validUserNameSubmitted, setValidUserNameSubmitted] = useState(devOnly);
@@ -33,11 +34,11 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
 
   /***** USE EFFECTS  ******/
   useEffect(() => {
-    setFadeClass("fade-enter"); // Start at opacity 0
+    setFadeClass(styles.fadeEnter); // Start at opacity 0
     setBegun(false);
     const timeout = setTimeout(() => {
        // Force reflow before setting class to trigger transition
-      setFadeClass("fade-wrapper"); // triggers fade-in animation
+      setFadeClass(styles.fadeWrapper); // triggers fade-in animation
     }, 200); // Small delay to trigger CSS transition
     return () => clearTimeout(timeout);
   }, [location.pathname]);
@@ -150,11 +151,11 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
         <button className={styles.hamburger} onClick={toggleMenu}>
           ☰
         </button>
-        <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+        <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
           {pages.map(page => (
             <Link
               key={page.key}
-              className={`${styles.mobileLink} ${page.active ? styles.activeLink : ''}`}
+              className={`${styles.mobileLink} ${page.active ? `${styles.activeLink} ${styles.activeLinkMobile}` : ''}`}
               to={page.url}
               onClick={() => setMenuOpen(false)}
             >
@@ -188,15 +189,18 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
               <input type="text-input" className={nameInputClasses} value={userName}
               onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
               {nameErrorText}
-              <FlashingText text={userName} blockDisplay={true}/>
-              <button className={"button green-button"} onClick={handleSubmitName} value={"Submit"} style={{margin:0, marginTop:'2rem', width:"100%",maxWidth: "400px"}}>Submit</button>
+              <FlashingText text={userName} blockDisplay={true}/>              
+              <div className={"commonDiv"} style={{width:"100%"}}>
+                <ButtonControl onPress={handleSubmitName} text={"Submit"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
+              </div>
           </header>
           </div>
         </main>
       </div>
     );
   }
-  const beginButton = !begun && !hideContentBeginButton ? <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button> : "";
+  const beginButton = !begun && !hideContentBeginButton ? 
+    <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button> : "";
 
   /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (
@@ -213,7 +217,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
               </div>
             </div>
           </header>
-          <section className={"appBody"} ref={pageBodyRef} style={{paddingTop: bodyTopOffset}}>
+          <section className={styles.appBody} ref={pageBodyRef} style={{paddingTop: bodyTopOffset}}>
             <div className={fadeClass}>
               {begun ? 
                 <>
