@@ -200,7 +200,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
     );
   }
   const beginButton = !begun && !hideContentBeginButton ? 
-    <button className={"button green-button margin-top"} onClick={handleBegin}>Begin!</button> : "";
+    <ButtonControl onPress={handleBegin} text={"Begin!"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/> :  "";
 
   /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (

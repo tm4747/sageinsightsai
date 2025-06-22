@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, getDislikes } from '../lib/CharacterConfiguratorHelper';
 import "./styles/CharacterConfigurator.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

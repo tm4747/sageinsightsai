@@ -2,6 +2,7 @@ import { useState } from 'react';
 import FlashingText from '../components/FlashingText';
 import InputModal from '../components/InputModal';
 import DataTable from '../components/DataTable';
+import ButtonControl from '../components/simple/ButtonControl';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [choiceText, setDecisionText] = useState("Where To Move");
@@ -70,43 +71,29 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     </>
   );
   const decisionGoodButton = !choiceTextDone && (
-    <button className={"button green-button"} onClick={() => setDecisionTextDone(true)}>
-      Decision is correct!
-    </button>
+    <ButtonControl onPress={() => setDecisionTextDone(true)} text={"Decision is correct!"} type={"submitRequest"}/>
   );
   const startOverButton = choiceTextDone && (
-    <button className={"button red-button"} onClick={resetState}>
-      Start Over
-    </button>
+    <ButtonControl onPress={resetState} text={"Start Over"} type={"resetButton"}/>
   );
 
   const addCriteriaButton = choiceTextDone && (
     <>
-      <div>
-        <button className={"button green-button margin-bottom"} onClick={addCriteria}>
-          Add Criteria
-        </button>
-        <span className={"small-text notice"}> - these are factors of the decision you will use in evaluation.</span>
-      </div>
+      <ButtonControl onPress={addCriteria} text={"Add Criteria"} type={"submitRequest"}/>
+      <span className={"small-text notice hide"}> - these are factors of the decision you will use in evaluation.</span>
     </>
   );
 
   const addChoiceButton = haveCriteria ? 
-    <div>
-      <button className={"button green-button margin-bottom"} onClick={addChoice}>
-        Add Choice
-      </button>
-      <span className={"small-text notice"}> - these are the choices you will evaluate.</span>
-    </div> : "";
+    <>
+      <ButtonControl onPress={addChoice} text={"Add Choices"} type={"submitRequest"}/>
+      <span className={"small-text notice hide"}> - these are the choices you will evaluate.</span>
+    </> : "";
 
    const showResultsButton = choiceTextDone && (
     <>
-      <div>
-        <button className={"button green-button margin-bottom"} onClick={() => setShowResults(true)}>
-          Show Results
-        </button>
-        <span className={"small-text notice"}> - this will display totals and reveal your best choice.</span>
-      </div>
+      <ButtonControl onPress={() => setShowResults(true)} text={"Show Results"} type={"submitRequest"}/>
+      <span className={"small-text notice hide"}> - this will display totals and reveal your best choice.</span>
     </>
   );
 
@@ -152,13 +139,19 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       </div>
       <div className={"resultsDiv"}>
         <div className={"innerResultsDiv"}>
-          {startOverButton}
-          {decisionInput}
-          <p><FlashingText text={choiceText} /></p>
-          {decisionGoodButton}
-          {addCriteriaButton}
-          {addChoiceButton}
-          {showResultsButton}
+          <div className={"commonDiv"}>
+            <FlashingText text={choiceText} />
+          </div>
+          <div className={"commonDiv"}>
+            <div className={"button-row"}>
+              {startOverButton}
+              {decisionInput}
+              {decisionGoodButton}
+              {addCriteriaButton}
+              {addChoiceButton}
+              {showResultsButton}
+            </div>
+          </div>
           {criteriaModal}
           {choiceModal}
           <DataTable

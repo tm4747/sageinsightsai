@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import styles from "./styles/InputModal.module.css"
+import styles from "./styles/InputModal.module.css";
+import ButtonControl from './simple/ButtonControl';
 
 const InputModal = ({ 
   isOpen, 
@@ -20,7 +21,6 @@ const InputModal = ({
   // TODO: work on error next
   const [nameError, setNameError] = useState(false);
   const [nameErrorMessage, setNameErrorMessage] = useState('');
-
 
 
   const capitalizeFirstLetter = (val) => {
@@ -104,8 +104,8 @@ const InputModal = ({
 
   /******** DISPLAY FUNCTIONS & VARS *********/
   const descriptionText = formDescription ? <p className={"small-text"}>{formDescription}</p> : "";
-  const doneButton = <button className={"button red-button"} onClick={handleOnClose} style={{ marginRight: '1rem', width:'50%' }}>Done</button>;
-  const submitButton = <button className={"button green-button"} onClick={handleSubmit} style={{ width:'50%' }}>Add {field1NameToUpper}</button>
+  const doneButton = <ButtonControl onPress={handleOnClose} text={"Done"} type={"resetButton"}/>;
+  const submitButton = <ButtonControl onPress={handleSubmit} text={`Add ${field1NameToUpper}`} type={"submitRequest"}/>;
   const sliderDiv = showSlider ? <div>
           <label htmlFor="slider">{sliderTitle} {sliderValue}</label>
           <input id="slider" type="range" min="1" max="10" value={sliderValue}
@@ -140,7 +140,7 @@ const InputModal = ({
             value={description} onChange={(e) => setDescription(e.target.value)}/>
         </div>
         {sliderDiv}
-        <div className={styles.buttonsDiv}>
+        <div className={"button-row"}>
           {doneButton}
           {submitButton}
         </div>
