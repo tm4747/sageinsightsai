@@ -213,7 +213,9 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
               {nav}
               <div className={`pageDescription ${fadeClass}`}>
                 {descriptionOfPageFunction}
-                {beginButton}
+                <div className={"commonDiv"}>
+                  {beginButton}
+                </div>
               </div>
             </div>
           </header>
