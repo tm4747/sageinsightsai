@@ -29,7 +29,6 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   const headerContentRef = useRef();
   const [bodyTopOffset, setBodyTopOffset] = useState(100);
   const viewportWidth = useViewportWidth();
- 
 
 
   /***** USE EFFECTS  ******/
@@ -136,7 +135,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
           <React.Fragment key={page.key}>
             {index > 0 && <span>&nbsp;|&nbsp;</span>}
             <Link
-              className={page.active ? 'activeLink' : ''}
+              className={page.active ? styles.activeLink : ''}
               to={page.url}
             >
               {page.label}
@@ -147,14 +146,15 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
 
       {/* Mobile Hamburger */}
       <div className={styles.mobileNav}>
-        <span className="bold">{activeLinkText} </span> <button className={styles.hamburger} onClick={toggleMenu}>
+        <span className="bold">{activeLinkText} </span> 
+        <button className={styles.hamburger} onClick={toggleMenu}>
           ☰
         </button>
         <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
           {pages.map(page => (
             <Link
               key={page.key}
-              className={`${styles.mobileLink} ${page.active ? 'activeLink' : ''}`}
+              className={`${styles.mobileLink} ${page.active ? styles.activeLink : ''}`}
               to={page.url}
               onClick={() => setMenuOpen(false)}
             >

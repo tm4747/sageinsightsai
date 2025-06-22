@@ -27,7 +27,9 @@
   width:98vw;
   border-bottom: solid 2px var(--blue);
 }
-
+.activeLink{
+  color: var(--light-blue);
+}
 @media screen and (max-width: 768px) {
   .desktopNav {
     display: none;
@@ -58,4 +60,9 @@
   border: solid 2px grey;
   color: white;
   margin-top:.5rem;
+}
+
+.activeLink, .mobileLink:hover{
+  color: var(--light-blue);
+  background-color:black;
 }
