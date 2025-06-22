@@ -1,0 +1,370 @@
+:root {
+  --white: ghostwhite;
+  --off-white:#ddd;
+  --off-black: #333;
+  --light-blue: #c6dcf3;
+  --blue: #80b4e8;
+  --dark-blue: #092847;
+  --very-light-green:#e4ebd2;
+  --light-green:#bcd187;
+  --green: #B1D25E;
+  --dark-green:#96bc37;
+  --dark-green-inversion:#229810;
+  --light-yellow: #e3d9b1;
+  --yellow: #D0B960;
+  --purple: #273582;
+  --light-red:rgb(245, 205, 211);
+  --red:rgb(224, 8, 40);
+  --gray:hsl(0, 0%, 80%);
+}
+html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family:'Montserrat', 'Courier Prime', Courier, monospace;
+}
+.content html, .content body, .content p, .content span, .content h1, .content h2, .content h3, .content h4, .content h5, .content h6, .content div{
+    font-family:'IBM Plex Mono', 'Courier New', Courier, monospace;
+}
+body{
+  overflow-x: hidden;
+  background-color: var(--white);
+}
+/** LAYOUT **/
+ol li, ul li{
+  padding-top:.5em;
+  padding-bottom:.5em;
+}
+ol li ul li {
+  padding-top:1em;
+  padding-bottom:0em;
+}
+/** TODO: get next 2 into into Layout.module.css - need to learn how to do via css module **/ 
+.mobile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  text-align: center;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+.mobile-menu.open {
+  max-height: 500px; /* adjust if your menu might be taller */
+  opacity: 1;
+}
+/* page navigation fade-in animation */
+.fade-wrapper {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.fade-enter {
+  opacity: 0;
+}
+.appBody{
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column; /* optional, for vertical stacking */
+  align-items: center;     /* horizontally centers children */
+  justify-content: flex-start; /* or center if you want vertical centering too */
+  justify-content: space-between; /* or center if you want vertical centering too */
+  padding:1rem;
+  padding-top: 3rem;
+  max-width: 1400px;
+  /* border: solid 2px yellow; */
+  margin: 0 auto; 
+}
+/** LINKS **/
+a{
+  color: var(--blue);
+  text-decoration: none;
+  font-weight:bold;
+}
+a:hover, .activeLink{
+  color: var(--light-blue);
+}
+/** BUTTONS **/
+.button{
+  border:solid 1px var(--off-black);
+  padding:.75em ;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:.6em;
+  margin:.5rem;
+  background-color:var(--off-white);
+  color:var(--off-black);
+  width:25%;
+  display:inline;
+  transition: background-color 0.2s ease, color 0.2s ease; /* Added transition */
+}
+.button:hover{
+  background-color:var(--white);
+  color:black;
+}
+.green-button{
+  background-color: var(--light-green);
+  border-color: var(--dark-green-inversion);
+}
+.green-button:hover{
+  color:var(--white);
+  background-color: var(--dark-green-inversion);
+}
+.yellow-button{
+  background-color:var(--light-yellow);
+}
+.yellow-button:hover{
+  background-color:var(--yellow);
+}
+.red-button{
+  background-color:var(--light-red);
+}
+.red-button:hover{
+  color:var(--white);
+  background-color:var(--red);
+}
+.purple-button{
+  background-color:var(--purple);
+  color:var(--white);
+  border-color: var(--white);
+}
+.purple-button:hover{
+  color:var(--purple);
+}
+/* INPUTS AND SPECIAL ELEMENTS */
+label{
+  font-size:.75em;
+  padding:.5em;
+  font-weight:bold;
+}
+/*** EXPLORE MOVING THIS TO STORYMAKER ***/
+select, .select-input, .text-input{
+  color:var(--off-black);
+  padding: .25em .125em;
+  border:solid 1px #555;
+  border-radius:5px;
+  background-color:transparent;
+  text-align: left;
+  width:100%;
+}
+/*** TODO: margin-top: 2rem removed - check sitewide ***/
+.textarea-input {
+  font-weight: bold;
+  padding: 0.25em;
+  padding-bottom:0;
+  resize: none;
+  overflow: hidden;
+  line-height: 2em;
+}
+/*** MOVE TO TextInput.js ***/
+.textInput{
+  padding:.75em 4em ;
+  border-radius:10px;
+  width:50%;
+  display:inline;
+  border:solid 2px var(--off-white);
+}
+.errorTextInput{
+  background-color: var(--light-red);
+  border-color: var(--red);
+}
+.inputSuccess{
+  background-color:var(--very-light-green);
+  border-color: var(--green);
+}
+audio{
+  margin:1em;
+  border: solid 3px blue;
+  border-radius:30px;
+}
+@keyframes flashInvert {
+  0%   { color: white; background-color: black; }
+  50%  { color: black; background-color: white; }
+  100% { color: white; background-color: black; }
+}
+.rounded-icon {
+  border-radius: 50%;
+}
+.flashing-icon {
+  animation: flashInvert 1.25s infinite;
+  padding: 1px;
+  transition: color 0.5s ease, background-color 0.5s ease;
+  cursor: pointer;
+}
+.flashing-icon:hover{
+  animation: none;
+  color:rgb(47, 47, 208);
+  background-color: white;
+}
+/* GENERAL ELEMENT CSS */
+.no-padding{
+  padding:0;
+}
+.margin-bottom{
+  margin-bottom:1rem;
+}
+.negativeMarginBottom{
+  margin-bottom:1em;
+}
+.red-border{
+  border:solid 2px var(--red);
+}
+.black-border, .test-border{
+  border:solid 2px black;
+}
+.border-bottom{
+  border-bottom:solid 2px #444;
+}
+
+.borderBottomGray{
+  border-bottom:solid 2px var(--gray);
+}
+.bold{
+  font-weight:bold;
+}
+.small-text{
+  font-size:small;
+}
+.italic{
+  font-style: italic;
+}
+.no-margin-padding{
+  margin:0;
+  padding:0;
+}
+.notice{
+  font-weight:bold;
+  font-style:italic;
+}
+.error{
+  color:red;
+}
+.success{
+  color:var(--dark-green-inversion)
+}
+/* DIV and P SPECIFIC */
+/** TODO: move to Slider.js -> module **/
+.sliderDiv{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem; /* Adjust spacing between buttons */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap; /* Allows wrapping on smaller screens */
+  width:100%;
+}
+.realismText span {
+  display: inline-block;
+  white-space: pre;
+}
+
+.realismText .visible {
+  visibility: visible;
+  position: static;
+}
+
+.realismText .hidden {
+  visibility: hidden;
+  position: static;
+}
+
+.realismText .hide {
+  display:none;
+}
+.sliderLabel{
+  font-size:1rem;
+}
+/*** END SLIDER CLASSES ***/
+
+.commonDiv{
+  padding:1rem;
+  padding-top:1rem;
+  padding-bottom:1rem;
+  /* border: solid 2px red; */
+}
+.standardVerticalPadding{
+  padding-top:.5rem;
+  padding-bottom:.5rem;
+}
+.pStandard{
+  font-size:.75em;
+}
+.resultsDiv{
+  width:100%;
+}
+.formDiv{
+  width:100%;
+  max-width:1400px;
+  /* border: solid 2px green; */
+}
+.innerResultsDiv{
+  border:solid #555 2px;
+  text-align:left;
+  border-radius:15px;
+  padding:1em;
+  font-size:.75em;
+}
+.divFixedBottom{
+  text-align: center;
+  position:fixed;
+  bottom:5px;
+  margin:auto;
+  width:100vw;
+  max-width: 1400px;
+}
+.preContentDiv{
+  width:100%;
+  border:solid 2px white;
+}
+.noPadding{
+  padding:0;
+}
+.noPaddingTop{
+  padding-top:0;
+}
+.paddingTop{
+  padding-top:1rem;
+}
+.paddingBottom{
+  padding-bottom:1rem;
+}
+/* This wraps the grid and constrains it */
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+}
+/* AG Grid content can be as wide as it needs */
+.ag-theme-alpine.responsive-grid {
+  width: max-content;
+  min-width: 100%;
+  height: 300px;
+}
+@media screen and (max-width: 1000px) {
+  .table-scroll-container {
+    width:100%;
+  overflow-x: auto;
+  }
+  .ag-theme-alpine.responsive-grid {
+    width: 1200px;
+    min-width: 100%;
+    height: 300px;
+  }
+}
+
+
+/* Responsive rules */
+@media screen and (max-width: 768px) {
+  .sliderDiv{
+    flex-direction: column;
+    gap: .5rem; /* Adjust spacing between buttons */
+    justify-content: space-between;
+  }
+  .realismText .hidden {
+    display:none;  
+    position: absolute;
+  }
+  .displayNoneSm{
+    display:none;
+  }
+}
+
+

@@ -5,11 +5,12 @@ import AILogo from './components/AILogo';
 import LoadingModal from "./components/LoadingModal";
 import TypingText from './components/TypingText';
 import BoxList from './components/BoxList';
-import PageDescription from './components/PageDescription';
+import PageDescription from './components/simple/PageDescription';
 import ShowHowItWorksTextAndIcon from './components/simple/ShowHowItWorksTextAndIcon';
 import { removeNonAlphanumericMultispace } from './lib/ValidationHelper';
 import FlashingText from './components/FlashingText';
 import { useViewportWidth } from './lib/Utilities';
+import styles from "./styles/Layout.module.css";
 
 
 const Layout = ({isLoading, pages, showBeta, devOnly}) => {
@@ -119,7 +120,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
 
   /******** DISPLAY FUNCTIONS **********/
   const pageTitle = !begun ? 
-    <h2 className={"pageTitle"}>
+    <h2 className={styles.pageTitle}>
       <AILogo size={".75em"} />
       <TypingText
         baseText={" Hello " + userName + " "}
@@ -130,7 +131,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   const nav = (
     <>
       {/* Desktop Nav */}
-      <nav className="theNav desktop-nav">
+      <nav className={`${styles.theNav} ${styles.desktopNav}`}>
         {pages.map((page, index) => (
           <React.Fragment key={page.key}>
             {index > 0 && <span>&nbsp;|&nbsp;</span>}
@@ -145,15 +146,15 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
       </nav>
 
       {/* Mobile Hamburger */}
-      <div className="mobile-nav">
-        <span className="bold">{activeLinkText} </span> <button className="hamburger" onClick={toggleMenu}>
+      <div className={styles.mobileNav}>
+        <span className="bold">{activeLinkText} </span> <button className={styles.hamburger} onClick={toggleMenu}>
           ☰
         </button>
         <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
           {pages.map(page => (
             <Link
               key={page.key}
-              className={`mobile-link ${page.active ? 'activeLink' : ''}`}
+              className={`${styles.mobileLink} ${page.active ? 'activeLink' : ''}`}
               to={page.url}
               onClick={() => setMenuOpen(false)}
             >
@@ -178,8 +179,8 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
     return(
       <div className="layout">
         <main>
-          <div className="app">
-            <header className="app-header" style={{ height: headerHeight, alignItems: "center" }}>
+          <div className={styles.app}>
+            <header className={styles.appHeader} style={{ height: headerHeight, alignItems: "center" }}>
               <h3 className={"pageTitle"}>
               <AILogo size={".75em"}/>
                 <TypingText text={"Please enter your name"} flashingText={"_ "} headerSize={"small"}/>
@@ -201,8 +202,8 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   return (
     <div className="layout" >
       <main>
-        <div className="app" >
-          <header className="app-header" style={{ height: headerHeight }}>
+        <div className={styles.app} >
+          <header className={styles.appHeader} style={{ height: headerHeight }}>
             <div ref={headerContentRef}>
               {pageTitle}
               {nav}

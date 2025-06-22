@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import styles from './css/PageStyles.module.css';
 import FlashingText from '../components/FlashingText';
 import InputModal from '../components/InputModal';
 import DataTable from '../components/DataTable';
@@ -138,9 +137,9 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
   if (!featureFlagShowBeta) {
     return (
-      <div className={styles.content}>
+      <div className="content">
         <div className={"formDiv"}>
-          <div className={"pageDescription border-bottom"}>
+          <div className={"border-bottom"}>
           </div>
         </div>
       </div>
@@ -148,7 +147,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   }
 
   return (
-    <div className={styles.content}>
+    <div className="content">
       <div className={"formDiv"}>
       </div>
       <div className={"resultsDiv"}>

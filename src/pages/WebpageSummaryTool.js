@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import styles from './css/PageStyles.module.css';
 import { fetchWebSummary } from '../lib/LambdaHelper';
 import { marked } from 'marked';
 import FlashingText from '../components/FlashingText';
@@ -135,7 +134,7 @@ function WebpageSummaryTool({setIsLoading}) {
     <ButtonControl isDisabled={lockTextInput} type={'submitRequest'} onPress={callLambda} text={"Get Summary"} /> ;
   
   return (
-    <div className={styles.content}>
+    <div className="content">
       <div className={"formDiv"}>
           <div className={"commonDiv"}>
             {enteredUrlDisplay}

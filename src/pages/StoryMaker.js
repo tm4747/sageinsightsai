@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import styles from './css/PageStyles.module.css';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
@@ -366,7 +365,7 @@ function StoryMaker({setIsLoading}) {
 
 
   return (
-    <div className={styles.content}>
+    <div className="content">
       <div className={"formDiv"}>
         <div ref={characterDescriptionRef}  className={"pageBody"}>
           {!postResponse ? displaySlider : ""}
