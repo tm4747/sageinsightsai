@@ -14,8 +14,6 @@
     margin:0;
 }
 .boxListContainer.expanded {
-    margin-top:1.5em;
-    margin-bottom:1.5em;
     border:solid #555 2px;
     text-align:left;
     border-radius:15px;

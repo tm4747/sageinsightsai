@@ -46,6 +46,24 @@
   opacity:1;
 }
 
+.purpleButton{
+  background-color:var(--purple);
+  color:var(--white);
+  border-color: var(--white);
+}
+.purpleButton:hover{
+  color:var(--purple);
+  background-color: var(--off-white);
+  border-color:var(--purple);
+}
+
+.yellowButton{
+  background-color:var(--light-yellow);
+}
+.yellowButton:hover{
+  background-color:var(--yellow);
+}
+
 
 @media screen and (max-width: 768px) {
   .button{

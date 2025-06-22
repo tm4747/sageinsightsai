@@ -187,6 +187,7 @@ label{
   padding:.5em;
   font-weight:bold;
 }
+/*** EXPLORE MOVING THIS TO STORYMAKER ***/
 select, .select-input, .text-input{
   color:var(--off-black);
   padding: .25em .125em;
@@ -196,8 +197,8 @@ select, .select-input, .text-input{
   text-align: left;
   width:100%;
 }
+/*** TODO: margin-top: 2rem removed - check sitewide ***/
 .textarea-input {
-  margin-top:2em;
   font-weight: bold;
   padding: 0.25em;
   padding-bottom:0;
@@ -231,13 +232,14 @@ audio{
   50%  { color: black; background-color: white; }
   100% { color: white; background-color: black; }
 }
+.rounded-icon {
+  border-radius: 50%;
+}
 .flashing-icon {
   animation: flashInvert 1.25s infinite;
-  border-radius: 50%;
-  padding: 4px;
+  padding: 1px;
   transition: color 0.5s ease, background-color 0.5s ease;
   cursor: pointer;
-  margin-left: 8px; 
 }
 .flashing-icon:hover{
   animation: none;
@@ -291,6 +293,39 @@ audio{
   color:var(--dark-green-inversion)
 }
 /* DIV and P SPECIFIC */
+/** TODO: move to Slider.js -> module **/
+.sliderDiv{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem; /* Adjust spacing between buttons */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap; /* Allows wrapping on smaller screens */
+  width:100%;
+}
+.realismText span {
+  display: inline-block;
+  white-space: pre;
+}
+
+.realismText .visible {
+  visibility: visible;
+  position: static;
+}
+
+.realismText .hidden {
+  visibility: hidden;
+  position: static;
+}
+
+.realismText .hide {
+  display:none;
+}
+.sliderLabel{
+  font-size:1rem;
+}
+/*** END SLIDER CLASSES ***/
+
 .commonDiv{
   padding:1rem;
   padding-top:1rem;
@@ -324,7 +359,7 @@ audio{
   position:fixed;
   bottom:5px;
   margin:auto;
-  width:100%;
+  width:100vw;
   max-width: 1400px;
 }
 .preContentDiv{
@@ -336,6 +371,12 @@ audio{
 }
 .noPaddingTop{
   padding-top:0;
+}
+.paddingTop{
+  padding-top:1rem;
+}
+.paddingBottom{
+  padding-bottom:1rem;
 }
 /* This wraps the grid and constrains it */
 .table-scroll-container {
@@ -368,6 +409,18 @@ audio{
   }
   .mobile-nav {
     display: inline;
+  }
+  .sliderDiv{
+    flex-direction: column;
+    gap: .5rem; /* Adjust spacing between buttons */
+    justify-content: space-between;
+  }
+  .realismText .hidden {
+    display:none;  
+    position: absolute;
+  }
+  .displayNoneSm{
+    display:none;
   }
 }
 

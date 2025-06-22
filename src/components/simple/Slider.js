@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const Slider = ({ setValue, initialValue, showEdgy, label }) => {
   const [sliderValue, setSliderValue] = useState(initialValue);
@@ -16,17 +16,30 @@ const Slider = ({ setValue, initialValue, showEdgy, label }) => {
   };
 
   const transformRealismLevel = (level) => {
-    const edgyText = showEdgy ? " and Edgy" : "";
-    return level === 1
-      ? "Realistic " + edgyText
-      : level === 2
-      ?  ( showEdgy ? "Realistic, Somewhat Fantastic"  + edgyText : "Realistic and Somewhat Fantastic")
-      : ( showEdgy ? "Realistic, Somewhat Fantastic, Outlandish" + edgyText : "Realistic, Somewhat Fantastic and Outlandish");
+    const span1Text = showEdgy && level === 1 ? "Realistic and Edgy" : "Realistic";
+    const span2Text = showEdgy && level === 2 ? " - Somewhat Fantastic and Edgy" : " - Somewhat Fantastic";
+    const span3Text = showEdgy && level === 3 ? " - Outlandish and Edgy" : " - Outlandish";
+    const hiddenEdgySpanText = " and Edgy";
+
+    const span1Classes = (level >= 1 ? 'visible' : 'hidden');
+    const span2Classes = (level >= 2 ? 'visible' : 'hidden');
+    const span3Classes = (level >= 3 ? 'visible' : 'hidden');
+
+    return (
+      <span className="realismText" style={{ position: 'relative', display: 'inline-block' }}>
+        <span className={span1Classes}>{span1Text}</span>
+        <span className={span2Classes}>{span2Text}</span>
+        <span className={span3Classes}>{span3Text}</span>
+        <span className={showEdgy ? 'hide hidden' : 'hidden'}>{hiddenEdgySpanText}</span>
+      </span>
+    );
   };
 
+
   return (
-    <div>
-      <label htmlFor="slider">{label}</label>
+    <div className={"sliderDiv"}>
+      <p className={"displayNoneSm"}></p>
+      <label className={"sliderLabel"} htmlFor="slider">{label}</label>
       <input
         type="range"
         id="slider"

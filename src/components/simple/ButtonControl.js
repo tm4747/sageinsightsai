@@ -14,6 +14,13 @@ const ButtonControl = ({ onPress, text, type = "", isDisabled = false}) => {
         case "resetButton":
             buttonClasses += ` ${styles.redButton}`;
             break;
+        case "progressionButton":
+            buttonClasses += ` ${styles.yellowButton}`;
+            break;
+        case "secondaryFetch":
+            buttonClasses += ` ${styles.cancelScroll}`;
+            buttonClasses += ` ${styles.purpleButton}`;
+            break;
         default:
             break;
     }

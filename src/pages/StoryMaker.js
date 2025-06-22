@@ -8,6 +8,7 @@ import AILogo from '../components/AILogo';
 import Slider from '../components/simple/Slider';
 import FlashingText from '../components/FlashingText';
 import BoxList from '../components/BoxList';
+import ButtonControl from '../components/simple/ButtonControl';
 
 
 function StoryMaker({setIsLoading}) {
@@ -80,9 +81,9 @@ function StoryMaker({setIsLoading}) {
           }
 
           const audioUrl = await fetchAudioFromLambda(bucketPath + s3FileName);
-          setAudioUrl(audioUrl); //  Set the audio URL 
+          setAudioUrl(audioUrl);
           scrollToCharacterDescription();
-          setPolling(true); // Start polling
+          setPolling(true);
           setIsLoading(false);
 
         } catch (error) {
@@ -179,22 +180,6 @@ function StoryMaker({setIsLoading}) {
       characterDescriptionRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 250);
   }
-  const resetState = () => {
-    setHtmlResponse("");
-    setPostResponse("");
-    setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
-    setDisableScroll(false);
-    setShowCharacterInput(1);
-    setCharacterInputs([]);
-    setAudioUrl(null);
-    setIsAudioReady(false);
-    setPolling(false);
-    setAudioUrlError(false);
-    setDisplayedText("");
-    setIsDone(false);
-    setIsStarted(false);
-    adjustTextareaHeight();
-  }
 
   const fetchAudioAndScrollUp = () => {
     setDisableScroll(true);
@@ -230,6 +215,23 @@ function StoryMaker({setIsLoading}) {
   
   const handleGetDifferentSituation = () => {
     setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
+    adjustTextareaHeight();
+  }
+
+  const resetState = () => {
+    setHtmlResponse("");
+    setPostResponse("");
+    setEnteredSituation(getRandomSituation(levelOfRealism, getEdgy));
+    setDisableScroll(false);
+    setShowCharacterInput(1);
+    setCharacterInputs([]);
+    setAudioUrl(null);
+    setIsAudioReady(false);
+    setPolling(false);
+    setAudioUrlError(false);
+    setDisplayedText("");
+    setIsDone(false);
+    setIsStarted(false);
     adjustTextareaHeight();
   }
 
@@ -275,32 +277,67 @@ function StoryMaker({setIsLoading}) {
 
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
-    <button className={"button btnCancelScroll"} onClick={() => {setDisableScroll(true)}}>Disable Auto-Scroll</button> : "";
+    <ButtonControl type={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/> : "";
   const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? 
-    <button className={"button btnCancelScroll purple-button"} onClick={fetchAudioAndScrollUp}>Get Audio</button> : ""; 
+    <ButtonControl type={"secondaryFetch"} onPress={fetchAudioAndScrollUp} text={"Get Audio"}/> : ""; 
 
   // which showCharacterInput (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
-  <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={1} submittedData={(data) => {handleCharacterInputSubmit(data, 1)}}/> :
-  (showCharacterInput === 2 ? <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={2} submittedData={(data) => {handleCharacterInputSubmit(data, 2)}}/> :
-    (showCharacterInput === 3 ? <CharacterConfigurator levelOfRealism={levelOfRealism} getEdgy={getEdgy} setGetEdgy={setGetEdgy} characterId={3} submittedData={(data) => {handleCharacterInputSubmit(data, 3)}}/> : ""
-  ));
+    <CharacterConfigurator 
+      levelOfRealism={levelOfRealism} 
+      getEdgy={getEdgy} 
+      setGetEdgy={setGetEdgy} 
+      characterId={1} 
+      submittedData={(data) => {handleCharacterInputSubmit(data, 1)}}
+    /> 
+    : (showCharacterInput === 2 ? 
+      <CharacterConfigurator 
+        levelOfRealism={levelOfRealism} 
+        getEdgy={getEdgy} 
+        setGetEdgy={setGetEdgy} 
+        characterId={2} 
+        submittedData={(data) => {handleCharacterInputSubmit(data, 2)}}
+        handleResetState={resetState}
+      /> 
+      : (showCharacterInput === 3 ? 
+          <CharacterConfigurator 
+            levelOfRealism={levelOfRealism} 
+            getEdgy={getEdgy} 
+            setGetEdgy={setGetEdgy} 
+            characterId={3} 
+            submittedData={(data) => {handleCharacterInputSubmit(data, 3)}}
+            handleResetState={resetState}
+          /> : "")
+      );
 
   // showCharacterInput 4 shows the optional context/situation text input and submit button
-  const situationHtml = !postResponse ? <><p className={"pStandard bold"}>Your characters have found themselves in the following situation 
-    <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span></p>
-  <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
-                  onChange={handleSituationInputChange} rows={1}/></> : "";
-  const getADifferentSituationButton = !postResponse ? <button className={"button yellow-button"} onClick={handleGetDifferentSituation}>Get A Different Situation</button> : "";
-  const tellMeAStoryButton = !postResponse ? <button className={"button green-button"} onClick={fetchStory}>Tell Me A Story!</button> : "";
-  const submitInputGroup = showCharacterInput === 4 ? <>
-  {situationHtml}
-  {tellMeAStoryButton}
-  {getADifferentSituationButton}
-  <button className={"button red-button"} onClick={resetState}>Clear And Start Over</button></> : "";
+  const situationHtml = !postResponse ? 
+    <>
+      <span className={"pStandard bold"}>Your characters have found themselves in the following situation 
+        <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span>
+      </span>
+      <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
+        onChange={handleSituationInputChange} rows={1}/>
+    </> : "";
+
+  const getADifferentSituationButton = !postResponse ? 
+    <ButtonControl type={"progressionButton"} onPress={handleGetDifferentSituation} text={"Get A Different Situations"}/> : "";
+  const tellMeAStoryButton = !postResponse ? 
+    <ButtonControl type={"submitRequest"} onPress={fetchStory} text={"Tell Me A Story!"}/> : "";
+  const submitInputGroup = showCharacterInput === 4 ? 
+    <>
+      <div className="button-row commonDiv">
+        {situationHtml}
+      </div>
+      <div className="button-row commonDiv">
+        {tellMeAStoryButton}
+        {getADifferentSituationButton}
+        <ButtonControl type={"resetButton"} onPress={resetState} text={"Clear And Start Over"}/>
+      </div>
+    </> : "";
 
   const formattedCharacterData = datafyCharacterInputs(characterInputs);
-  const characterInputsDisplay = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
+  const showCreatedCharactersBoxlist = <BoxList title={""} data={formattedCharacterData} showBoxList={true} 
   setShowBoxList={() => {return null;}} showCloseButton={false} listType={"ul"}/>
 
   const displayAudio = (audioUrl ? 
@@ -316,14 +353,16 @@ function StoryMaker({setIsLoading}) {
         <source src={audioUrl} type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio> 
-      <h6 className={"no-margin-padding"}>
+      <h5 className={"no-margin-padding paddingBottom"}>
         <FlashingText text={'To download file click \'<strong>&#8942;</strong>\' &uarr;'} htmlEntities={true}/>
-      </h6>
+      </h5>
       </>
     )}
   </div> : "")
 
-  const displaySlider = <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
+  const displaySlider = <div className="commonDiv">
+    <Slider label={"First Set Level of Realism:"} setValue={setLevelOfRealism} initialValue={levelOfRealism} showEdgy={getEdgy} />
+  </div>
 
 
   return (
@@ -331,7 +370,7 @@ function StoryMaker({setIsLoading}) {
       <div className={"formDiv"}>
         <div ref={characterDescriptionRef}  className={"pageBody"}>
           {!postResponse ? displaySlider : ""}
-          {!postResponse && characterInputs && characterInputs.length > 0 ? <>{characterInputsDisplay}</> : ""}
+          {!postResponse && characterInputs && characterInputs.length > 0 ? <>{showCreatedCharactersBoxlist}</> : ""}
           {!postResponse ? characterInputGroup : ""}
           {submitInputGroup}
           {displayAudio}
@@ -347,9 +386,11 @@ function StoryMaker({setIsLoading}) {
       </div>
       <div ref={messagesEndRef}/>
       <div className={"divFixedBottom"}>
-        {stopScrollButton}
-        {fetchAudioButtonBottom} 
-        {audioUrlError ? <span>&nbsp;</span> : ""}
+        <div className={"button-row"}>
+          {stopScrollButton}
+          {fetchAudioButtonBottom} 
+          {audioUrlError ? <span>&nbsp;</span> : ""}
+        </div>
       </div>
     </div>
   );

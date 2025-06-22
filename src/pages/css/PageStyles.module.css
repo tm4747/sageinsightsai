@@ -1,3 +1,18 @@
 .content html, .content body, .content p, .content span, .content h1, .content h2, .content h3, .content h4, .content h5, .content h6, .content div{
     font-family:'IBM Plex Mono', 'Courier New', Courier, monospace;
 }
+
+.bottomButtonsDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    border:solid 2px red;
+}
+
+@media screen and (max-width: 768px) {
+    .bottomButtonsDiv{
+        flex-direction: column;
+    }
+}

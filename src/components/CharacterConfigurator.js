@@ -4,9 +4,10 @@ import "./styles/CharacterConfigurator.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
 import { removeNonAlphanumericMultispace } from '../lib/ValidationHelper';
+import ButtonControl from './simple/ButtonControl';
 // todo: test 
 
-const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, getEdgy, setGetEdgy }) => {
+const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, getEdgy, setGetEdgy, handleResetState }) => {
   
     const [characterName, setCharacterName] = useState('');
     const [characterType, setCharacterType] = useState('');
@@ -115,9 +116,8 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
       } else {
         setGetEdgy(true);
       }
-      
     }
-    let iconClasses = "flashing-icon edgy-icon";
+    let iconClasses = "flashing-icon rounded-icon edgy-icon";
     iconClasses += getEdgy ? " red-border" : " black-border";
 
     const handleToggleEnterValues = () =>{
@@ -127,7 +127,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
     const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={iconClasses} title="Close"/>
 
     return (
-      <div className={"character-config"}>
+      <div className={"character-config commonDiv"}>
         <h3>{nameDisplay}</h3>
         <table className={"inputContainer"}>
           <tbody>
@@ -203,19 +203,23 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                     </select>}
                 </td>
             </tr>
-            <tr className={"inputDiv"}>
-                <td colSpan={2} >
+            <tr className={"inputDiv paddingTop"} >
+                <td colSpan={2} style={{paddingTop:"1rem"}} >
                 <textarea ref={textareaRef} className="text-input textarea-input" value={characterDescription ? "Character " + characterId + " is " + characterDescription : ""} 
                   onChange={handleCharacterDescriptionUpdated} rows={1} readOnly={true}/>
                 </td>
             </tr>
           </tbody>
         </table>
-        <div className="button-row">
-          {characterDescription ? <button className={"button green-button"} onClick={() => handleInputSubmit(characterDescription)}>Character {characterId} Done!</button> : ""}
-          <button className={"button yellow-button"} onClick={getRandomChoices}>Get Random Choices</button>
-          <button className={"button yellow-button"} onClick={handleToggleEnterValues}>{enterValues ? "Select From Presets" : "Enter Custom Values"}</button>
-          {characterDescription ? <button className={"button red-button"} onClick={clearInputs}>Clear Character Choices</button> : ""}
+        <div className="button-row commonDiv">
+          {characterDescription ? 
+            <ButtonControl type={"submitRequest"} onPress={() => handleInputSubmit(characterDescription)} text={`Character ${characterId} Done!`}/> : ""}
+          <ButtonControl type={"progressionButton"} onPress={getRandomChoices} text={"Get Random Choices"}/> 
+          <ButtonControl type={"progressionButton"} onPress={handleToggleEnterValues} text={enterValues ? "Select From Presets" : "Enter Custom Values"}/> 
+          {!characterDescription && handleResetState ? 
+            <ButtonControl type={"resetButton"} onPress={handleResetState} text={"Delete All Characters"}/> : ""}
+          {characterDescription ? 
+            <ButtonControl type={"resetButton"} onPress={clearInputs} text={"Clear Character Choices"}/> : ""}
           {icon}
         </div>
       </div>

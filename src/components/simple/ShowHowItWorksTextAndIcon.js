@@ -16,8 +16,8 @@ const ShowHowItWorksIcon = ({onClickFn, title = "How does it work?", size = "1.5
             {/* <h3 style={{display: "inline", paddingRight:"1rem", marginTop:"1.5rem"}}>{title}</h3> */}
             <h3 style={{paddingRight:"1rem", alignSelf:"center"}}>{title}</h3>
             <FontAwesomeIcon 
-                style={{height: size, alignSelf:"center", marginBottom:"1.5rem"}}
-                className={"flashing-icon"}
+                style={{height: size, alignSelf:"center", marginBottom:"1.5rem", marginLeft:".5rem"}}
+                className={"flashing-icon rounded-icon"}
                 icon={faCircleQuestion} 
                 title={title}
             />
