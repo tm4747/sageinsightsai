@@ -199,9 +199,10 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
       </div>
     );
   }
-  const beginButton = !begun && !hideContentBeginButton ? 
-    <ButtonControl onPress={handleBegin} text={"Begin!"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/> :  "";
-
+  const beginButtonDiv = !begun && !hideContentBeginButton ? 
+    <div className={"commonDiv"}>
+      <ButtonControl onPress={handleBegin} text={"Begin!"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
+    </div> : "";
   /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (
     <div className="layout" >
@@ -213,9 +214,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
               {nav}
               <div className={`pageDescription ${fadeClass}`}>
                 {descriptionOfPageFunction}
-                <div className={"commonDiv"}>
-                  {beginButton}
-                </div>
+                {beginButtonDiv}
               </div>
             </div>
           </header>
