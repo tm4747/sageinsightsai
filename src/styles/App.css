@@ -24,6 +24,9 @@ html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
 .content html, .content body, .content p, .content span, .content h1, .content h2, .content h3, .content h4, .content h5, .content h6, .content div{
     font-family:'IBM Plex Mono', 'Courier New', Courier, monospace;
 }
+p, span, div{
+  line-height:2.25rem;
+}
 body{
   overflow-x: hidden;
   background-color: var(--white);
@@ -224,6 +227,7 @@ audio{
   min-width: 100%;
   height: 300px;
 }
+/* Responsive rules */
 @media screen and (max-width: 1000px) {
   .table-scroll-container {
     width:100%;
@@ -235,12 +239,12 @@ audio{
     height: 300px;
   }
 }
-
-
-/* Responsive rules */
 @media screen and (max-width: 768px) {
   .displayNoneSm{
     display:none;
+  }
+  p, span, div{
+    line-height:1.75rem;
   }
 }
 
