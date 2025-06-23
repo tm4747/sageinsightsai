@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styles from "./styles/Slider.module.css";
 
 const Slider = ({ setValue, initialValue, showEdgy, label }) => {
   const [sliderValue, setSliderValue] = useState(initialValue);
@@ -21,25 +22,25 @@ const Slider = ({ setValue, initialValue, showEdgy, label }) => {
     const span3Text = showEdgy && level === 3 ? " - Outlandish and Edgy" : " - Outlandish";
     const hiddenEdgySpanText = " and Edgy";
 
-    const span1Classes = (level >= 1 ? 'visible' : 'hidden');
-    const span2Classes = (level >= 2 ? 'visible' : 'hidden');
-    const span3Classes = (level >= 3 ? 'visible' : 'hidden');
+    const span1Classes = `${styles.realismTextSpan} ${(level >= 1 ? styles.realismTextVisible : styles.realismTextHidden)}`;
+    const span2Classes = `${styles.realismTextSpan} ${(level >= 2 ? styles.realismTextVisible : styles.realismTextHidden)}`;
+    const span3Classes = `${styles.realismTextSpan} ${(level >= 3 ? styles.realismTextVisible : styles.realismTextHidden)}`;
 
     return (
-      <span className="realismText" style={{ position: 'relative', display: 'inline-block' }}>
+      <span className={styles.realismText}>
         <span className={span1Classes}>{span1Text}</span>
         <span className={span2Classes}>{span2Text}</span>
         <span className={span3Classes}>{span3Text}</span>
-        <span className={showEdgy ? 'hide hidden' : 'hidden'}>{hiddenEdgySpanText}</span>
+        <span className={showEdgy ? `hide ${styles.realismTextHidden}` : styles.realismTextHidden}>{hiddenEdgySpanText}</span>
       </span>
     );
   };
 
 
   return (
-    <div className={"sliderDiv"}>
+    <div className={styles.sliderDiv}>
       <p className={"displayNoneSm"}></p>
-      <label className={"sliderLabel"} htmlFor="slider">{label}</label>
+      <label className={styles.sliderLabel} htmlFor="slider">{label}</label>
       <input
         type="range"
         id="slider"
@@ -49,29 +50,11 @@ const Slider = ({ setValue, initialValue, showEdgy, label }) => {
         value={sliderValue}
         onChange={handleSliderChange}
       />
-      <p className={"bold"}
+      <p className={styles.sliderResults}
         key={transitionKey} // Force re-render on value change for transition effect
-        style={{
-          opacity: 0,
-          animation: 'fadeIn 0.5s forwards', // Smooth fade-in transition
-        }}
       >
         {transformRealismLevel(sliderValue)}
       </p>
-
-      {/* CSS Animation */}
-      <style>
-        {`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-            }
-            to {
-              opacity: 1;
-            }
-          }
-        `}
-      </style>
     </div>
   );
 };

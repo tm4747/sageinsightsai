@@ -1,10 +1,56 @@
-/* .realismText span {
-  display: inline-block;
-  visibility: hidden;
-  position: absolute;
+.sliderDiv{
+  display: flex;
+  flex-direction: row;
+  gap: 1rem; /* Adjust spacing between buttons */
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap; /* Allows wrapping on smaller screens */
+  width:100%;
 }
-
-.realismText .visible {
+.realismTextGroup{
+  position: relative;
+  display: inline-block; 
+}
+.realismTextSpan {
+  display: inline-block;
+  white-space: pre;
+}
+.realismTextVisible {
   visibility: visible;
   position: static;
-} */
+}
+.realismTextHidden {
+  visibility: hidden;
+  position: static;
+}
+.realismText .hide {
+  display:none;
+}
+.sliderLabel{
+  font-size:1rem;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.sliderResults{
+  font-weight:bold;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@media screen and (max-width: 768px) {
+  .sliderDiv{
+    flex-direction: column;
+    gap: .5rem; /* Adjust spacing between buttons */
+    justify-content: space-between;
+  }
+  .realismText .hidden {
+    display:none;  
+    position: absolute;
+  }
+}
