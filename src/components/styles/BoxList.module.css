@@ -1,7 +1,7 @@
 .closeIcon{
     float:right;
-    height:.9em;
-    width:1em;
+    height:1.25rem;
+    width:1.25rem;
     margin-top:1em;
 }
 .boxListContainer {
@@ -21,6 +21,7 @@
     font-size:1rem;
     max-height: 1000px; /* or something high enough to contain your content */
     opacity: 1;
+    background-color: white;
     visibility: visible;
 }
 @media (max-width: 768px) {

@@ -316,7 +316,7 @@ function StoryMaker({setIsLoading}) {
         <span className={"small-text italic"}> &nbsp; (which can be altered or deleted):</span>
       </span>
       <textarea ref={textareaRef} className="text-input textarea-input" value={enteredSituation} 
-        onChange={handleSituationInputChange} rows={1}/>
+        onChange={handleSituationInputChange} rows={1} style={{paddingLeft:".5rem"}}/>
     </> : "";
 
   const getADifferentSituationButton = !postResponse ? 
@@ -377,7 +377,7 @@ function StoryMaker({setIsLoading}) {
       </div>
       <div className={"resultsDiv"} >
         <div className={"innerResultsDiv"}>
-          <div dangerouslySetInnerHTML={{ __html: !htmlResponse ? "Results Will Display Here." : displayedText }} />
+          <div dangerouslySetInnerHTML={{ __html: !htmlResponse ? `<span class="bold">Results Will Display Here</span>` : displayedText }} />
           <div>
             {isDone ? <p>Done!</p> : ""}
           </div>

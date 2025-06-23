@@ -157,7 +157,7 @@ function WebpageSummaryTool({setIsLoading}) {
       <div className={"commonDiv"}>
         <div className={"resultsDiv"} >
           <div className={"innerResultsDiv"}>
-            <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? "Results Will Display Here." : displayedText }} />
+            <div dangerouslySetInnerHTML={{ __html: !htmlReponse ? `<span class="bold">Results Will Display Here</span>` : displayedText }} />
             <div>
               {isDone ? <p>Done!</p> : ""}
             </div>

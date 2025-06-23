@@ -1,0 +1,43 @@
+.characterConfig{
+  max-width:768;
+  height:auto;
+  margin: 0 auto;
+  position: relative;
+}
+ .textInput, .selectInput{
+  color:var(--off-black);
+  padding: .25em .125em;
+  border:solid 1px #555;
+  border-radius:5px;
+  background-color:white;
+  text-align: left;
+  width:100%;
+  padding: .325em .125em;
+  min-width:300px;
+}
+.selectInput{
+  width:100%;
+}
+.tdLeft{
+    text-align:left;
+}
+.tdRight{
+    text-align:right;
+}
+.inputContainer{
+  width:100%;
+  padding:0 15%;
+}
+.edgyIcon{
+  font-size:1.25rem;
+}
+
+@media screen and (max-width: 768px) {
+  .inputContainer{
+    padding:0 1em;
+  }
+  .textInput, .selectInput{
+    min-width: 200px;
+  }
+  
+}

@@ -7,6 +7,10 @@
   flex-wrap: nowrap; /* Allows wrapping on smaller screens */
   width:100%;
 }
+.sliderInput{
+  background-color: white;
+  color:red;
+}
 .realismTextGroup{
   position: relative;
   display: inline-block; 

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { getCharacterTypes, getCharacterHasItems, getCharacterTraits, getLikes, getDislikes } from '../lib/CharacterConfiguratorHelper';
-import "./styles/CharacterConfigurator.css";
+import styles from "./styles/CharacterConfigurator.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBolt } from '@fortawesome/free-solid-svg-icons';
 import { removeNonAlphanumericMultispace } from '../lib/ValidationHelper';
@@ -119,7 +119,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
         setGetEdgy(true);
       }
     }
-    let iconClasses = "flashing-icon rounded-icon edgy-icon";
+    let iconClasses = `flashing-icon rounded-icon ${styles.edgyIcon}`;
     iconClasses += getEdgy ? " red-border" : " black-border";
 
     const handleToggleEnterValues = () =>{
@@ -129,22 +129,22 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
     const icon = <FontAwesomeIcon icon={faBolt} onClick={handleToggleGetEdgy} className={iconClasses} title="Close"/>
 
     return (
-      <div className={"character-config commonDiv"}>
-        <h3>{nameDisplay}</h3>
-        <table className={"inputContainer"}>
+      <div className={`${styles.characterConfig} commonDiv`}>
+        <h3 style={{marginTop:0}}>{nameDisplay}</h3>
+        <table className={styles.inputContainer}>
           <tbody>
-          <tr className={"inputDiv"}>
-              <td className={"tdLeft"}><label>Character Name:</label></td>
-              <td className={"tdRight"}>
-                <input className={"text-input"}value={characterName} type="text" onChange={(e) => setCharacterName(removeNonAlphanumericMultispace(e.target.value))}/>
+          <tr>
+              <td className={styles.tdLeft}><label>Character Name:</label></td>
+              <td className={styles.tdRight}>
+                <input className={styles.textInput}value={characterName} type="text" onChange={(e) => setCharacterName(removeNonAlphanumericMultispace(e.target.value))}/>
               </td>
           </tr>
-            <tr className={"inputDiv"}>
-                <td className={"tdLeft"}><label>Character Type:</label></td>
-                <td className={"tdRight"}>
+            <tr>
+                <td className={styles.tdLeft}><label>Character Type:</label></td>
+                <td className={styles.tdRight}>
                 {enterValues ? 
-                  <input className={"text-input"} value={characterType} type="text" onChange={(e) => setCharacterType(removeNonAlphanumericMultispace(e.target.value))}/>
-                  : <select className={"select-input"} value={characterType} onChange={(e) => setCharacterType(e.target.value)}>
+                  <input className={styles.textInput} value={characterType} type="text" onChange={(e) => setCharacterType(removeNonAlphanumericMultispace(e.target.value))}/>
+                  : <select className={styles.selectInput} value={characterType} onChange={(e) => setCharacterType(e.target.value)}>
                     <option value="">Select...</option>
                     {characterTypes.map((charType) =>
                         <option key={charType} value={charType}>{capitalizeFirstLetter(charType)}</option>
@@ -153,12 +153,12 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                 </td>
             </tr>
 
-            <tr className={"inputDiv"}>
-                <td className={"tdLeft"}><label>Who Is:</label></td>
-                <td className={"tdRight"}>  
+            <tr>
+                <td className={styles.tdLeft}><label>Who Is:</label></td>
+                <td className={styles.tdRight}>  
                   {enterValues ? 
-                  <input className={"text-input"} value={characterTrait} type="text" onChange={(e) => setCharacterTrait(removeNonAlphanumericMultispace(e.target.value))}/>
-                  : <select value={characterTrait} onChange={(e) => setCharacterTrait(e.target.value)}>
+                  <input className={styles.textInput} value={characterTrait} type="text" onChange={(e) => setCharacterTrait(removeNonAlphanumericMultispace(e.target.value))}/>
+                  : <select className={styles.selectInput} value={characterTrait} onChange={(e) => setCharacterTrait(e.target.value)}>
                   <option value="">Select...</option>
                   {characterTraits.map((charTrait) =>
                       <option key={charTrait} value={charTrait}>{capitalizeFirstLetter(charTrait)}</option>
@@ -166,12 +166,12 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                   </select>}
                 </td>
             </tr>
-            <tr className={"inputDiv"}>
-                <td className={"tdLeft"}><label>Who Has:</label></td>
-                <td className={"tdRight"}>  
+            <tr>
+                <td className={styles.tdLeft}><label>Who Has:</label></td>
+                <td className={styles.tdRight}>  
                   {enterValues ? 
-                    <input className={"text-input"} value={characterHas} type="text" onChange={(e) => setCharacterHas(removeNonAlphanumericMultispace(e.target.value))}/>
-                    : <select value={characterHas} onChange={(e) => setCharacterHas(e.target.value)}>
+                    <input className={styles.textInput} value={characterHas} type="text" onChange={(e) => setCharacterHas(removeNonAlphanumericMultispace(e.target.value))}/>
+                    : <select className={styles.selectInput} value={characterHas} onChange={(e) => setCharacterHas(e.target.value)}>
                     <option value="">Select...</option>
                     {characterHasItems.map((characterHasItem) =>
                         <option key={addDashes(characterHasItem)} value={characterHasItem}>{capitalizeFirstLetter(characterHasItem)}</option>
@@ -179,12 +179,12 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                   </select>}
                 </td>
             </tr>
-            <tr className={"inputDiv"}>
-                <td className={"tdLeft"}><label>Who likes:</label></td>
-                <td className={"tdRight"}>                
+            <tr>
+                <td className={styles.tdLeft}><label>Who Likes:</label></td>
+                <td className={styles.tdRight}>                
                   {enterValues ? 
-                    <input className={"text-input"} value={characterLikes} type="text" onChange={(e) => setCharacterLikes(removeNonAlphanumericMultispace(e.target.value))}/>
-                    : <select value={characterLikes} onChange={(e) => setCharacterLikes(e.target.value)}>
+                    <input className={styles.textInput} value={characterLikes} type="text" onChange={(e) => setCharacterLikes(removeNonAlphanumericMultispace(e.target.value))}/>
+                    : <select className={styles.selectInput} value={characterLikes} onChange={(e) => setCharacterLikes(e.target.value)}>
                     <option value="">Select...</option>
                     {likesChoices.map((likesChoice) =>
                         <option key={addDashes(likesChoice)} value={likesChoice}>{capitalizeFirstLetter(likesChoice)}</option>
@@ -192,12 +192,12 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
                   </select>}
                 </td>
             </tr>
-            <tr className={"inputDiv"}>
-                <td className={"tdLeft"}> <label>But doesn't like:</label></td>
-                <td className={"tdRight"}>  
+            <tr>
+                <td className={styles.tdLeft}> <label>But Doesn't Like:</label></td>
+                <td className={styles.tdRight}>  
                   {enterValues ? 
-                    <input className={"text-input full-width"} value={characterDislikes} type="text" onChange={(e) => setCharacterDislikes(removeNonAlphanumericMultispace(e.target.value))}/>
-                    : <select value={characterDislikes} onChange={(e) => setCharacterDislikes(e.target.value)}>
+                    <input className={`${styles.textInput} full-width`} value={characterDislikes} type="text" onChange={(e) => setCharacterDislikes(removeNonAlphanumericMultispace(e.target.value))}/>
+                    : <select className={styles.selectInput} value={characterDislikes} onChange={(e) => setCharacterDislikes(e.target.value)}>
                     <option value="">Select...</option>
                     {dislikesChoices.map((dislikesChoice) =>
                         <option key={addDashes(dislikesChoice)} value={dislikesChoice}>{capitalizeFirstLetter(dislikesChoice)}</option>
@@ -207,7 +207,7 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
             </tr>
             <tr className={"inputDiv paddingTop"} >
                 <td colSpan={2} style={{paddingTop:"1rem"}} >
-                <textarea ref={textareaRef} className="text-input textarea-input" value={characterDescription ? "Character " + characterId + " is " + characterDescription : ""} 
+                <textarea ref={textareaRef} className={`${styles.textInput} textarea-input`} value={characterDescription ? "Character " + characterId + " is " + characterDescription : ""} 
                   onChange={handleCharacterDescriptionUpdated} rows={1} readOnly={true}/>
                 </td>
             </tr>

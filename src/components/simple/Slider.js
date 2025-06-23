@@ -27,7 +27,7 @@ const Slider = ({ setValue, initialValue, showEdgy, label }) => {
     const span3Classes = `${styles.realismTextSpan} ${(level >= 3 ? styles.realismTextVisible : styles.realismTextHidden)}`;
 
     return (
-      <span className={styles.realismText}>
+      <span className={styles.realismTextGroup}>
         <span className={span1Classes}>{span1Text}</span>
         <span className={span2Classes}>{span2Text}</span>
         <span className={span3Classes}>{span3Text}</span>
@@ -42,6 +42,7 @@ const Slider = ({ setValue, initialValue, showEdgy, label }) => {
       <p className={"displayNoneSm"}></p>
       <label className={styles.sliderLabel} htmlFor="slider">{label}</label>
       <input
+        className={styles.sliderInput}
         type="range"
         id="slider"
         min="1"

@@ -5,7 +5,7 @@ import styles from "./styles/BoxList.module.css"; // Import CSS Module styles
 
 const BoxList = ({showBoxList, setShowBoxList, title, data, showCloseButton = false, listType = "ol"}) => {
     const closeButton = showCloseButton ? 
-    <FontAwesomeIcon icon={faXmark} onClick={() => { setShowBoxList(false); }} className={`${styles.closeIcon} flashing-icon`} title="Close"/> 
+    <FontAwesomeIcon icon={faXmark} onClick={() => { setShowBoxList(false); }} className={`${styles.closeIcon} flashing-icon rounded-icon`} title="Close"/> 
     : "";
 
     const allListItems = (() => {
