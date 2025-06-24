@@ -11,7 +11,9 @@ import { removeNonAlphanumericMultispace } from './lib/ValidationHelper';
 import FlashingText from './components/FlashingText';
 import { useViewportWidth } from './lib/Utilities';
 import styles from "./styles/Layout.module.css";
-import ButtonControl from "./components/simple/ButtonControl"
+import ButtonControl from "./components/simple/ButtonControl";
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 const Layout = ({isLoading, pages, showBeta, devOnly}) => {
@@ -30,9 +32,24 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   const headerContentRef = useRef();
   const [bodyTopOffset, setBodyTopOffset] = useState(100);
   const viewportWidth = useViewportWidth();
+  const env = process.env.REACT_APP_ENV || "dev"; // Set this in your .env file as dev, qa, or prod
+  const uuidKey = `sage-insights-${env}-uuid`;
+  const [uuid, setUuid] = useState(null);
+
 
 
   /***** USE EFFECTS  ******/
+  // GET / STORE UUID
+  useEffect(() => {
+    let storedUuid = localStorage.getItem(uuidKey);
+    if (!storedUuid) {
+      storedUuid = uuidv4();
+      localStorage.setItem(uuidKey, storedUuid);
+    }
+    setUuid(storedUuid);
+  }, []);
+
+  // FADE EFFECT FOR CHANGE OF PAGE (location.pathname)
   useEffect(() => {
     setFadeClass(styles.fadeEnter); // Start at opacity 0
     setBegun(false);
@@ -189,7 +206,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
               <input type="text-input" className={nameInputClasses} value={userName}
               onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
               {nameErrorText}
-              <FlashingText text={userName} blockDisplay={true}/>              
+              <FlashingText text={userName + " - " + uuid} blockDisplay={true}/>              
               <div className={"commonDiv"} style={{width:"100%"}}>
                 <ButtonControl onPress={handleSubmitName} text={"Submit"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
               </div>
