@@ -29,7 +29,7 @@ jobs:
           elif [[ "${{ github.ref }}" == "refs/heads/qa" ]]; then
             echo "bucket=ai-portfolio-tommolinaro-qa" >> $GITHUB_OUTPUT
             echo "cf_dist=E10CK62O23I86Y" >> $GITHUB_OUTPUT
-            echo "env=non-prod" >> $GITHUB_OUTPUT
+            echo "env=qa" >> $GITHUB_OUTPUT
           fi
 
       - name: Build React app
