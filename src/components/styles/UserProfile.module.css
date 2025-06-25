@@ -1,0 +1,91 @@
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding-top:1rem;
+  padding-right:1rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; 
+  background-color:rgba(40, 44, 52, 0.7);
+  border-radius: 6px;
+}
+
+.profileArea {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  background-color: #555;
+  color: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuButton {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.dropdown {
+  background-color: rgba(255,255,255,0.9);
+  color: var(--off-black);
+  margin-top: 6px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  width: 180px;
+  padding: 0.5rem 0;
+  text-align: left;
+  font-size:1rem;
+  animation: fadeIn 0.5s forwards;
+}
+.dropdown.fadeOut {
+    animation: fadeOut 0.5s forwards;
+}
+
+.userInfo {
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #ccc;
+}
+
+.menuItem {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background-color: rgba(255,255,255,1);
+}

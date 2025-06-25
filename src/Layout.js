@@ -13,10 +13,9 @@ import { useViewportWidth } from './lib/Utilities';
 import styles from "./styles/Layout.module.css";
 import ButtonControl from "./components/simple/ButtonControl";
 import { v4 as uuidv4 } from 'uuid';
+import UserProfile from './components/UserProfile';
 
-
-
-const Layout = ({isLoading, pages, showBeta, devOnly}) => {
+const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const location = useLocation();
   const [begun, setBegun] = useState(false);
   const [fadeClass, setFadeClass] = useState(styles.fadeWrapper);
@@ -35,6 +34,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   const env = process.env.REACT_APP_ENV || "dev"; // Set this in your .env file as dev, qa, or prod
   const uuidKey = `sage-insights-${env}-uuid`;
   const [uuid, setUuid] = useState(null);
+  const apiKey = process.env.REACT_APP_API_KEY;
 
 
 
@@ -47,7 +47,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
       localStorage.setItem(uuidKey, storedUuid);
     }
     setUuid(storedUuid);
-  }, []);
+  }, [uuidKey]);
 
   // FADE EFFECT FOR CHANGE OF PAGE (location.pathname)
   useEffect(() => {
@@ -85,6 +85,55 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
     }
   }, [viewportWidth, begun]);
 
+  /*** DYNAMO DB UPDATES ***/
+  const handleSubmitName = async () => {
+    const trimmedName = userName.trim();
+    setUserName(trimmedName);
+
+    if(trimmedName.length > 1){
+      setNameErrorMessage("");
+      setNameError(false);
+      setValidUserNameSubmitted(true);
+
+      // Call Lambda to create/update user
+      // TODO: update api gateway url - best would be to call it via constant. 
+      const res = await fetch("https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/database", {
+        method: "POST",
+        headers: { "Content-Type": "application/json",'x-api-key': apiKey  },
+        body: JSON.stringify({
+          action: "create",
+          uuid: uuid,
+          name: trimmedName
+        })
+      });
+      console.log(res);
+    } else {
+      setNameErrorMessage("* Entered name must be at least 2 characters.");
+      setNameError(true);
+    }
+  }
+
+  // fetch user data IF uuid
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const res = await fetch("https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/database", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", 'x-api-key': apiKey },
+        body: JSON.stringify({ action: "get", uuid: uuid })
+      });
+      const data = await res.json();
+      if (data?.name) {
+        setUserName(data.name);
+        setValidUserNameSubmitted(true);
+      }
+    };
+
+    if (uuid) {
+      fetchUserData();
+    }
+  }, [uuid, apiKey]);
+
+
   /******* JAVASCRIPT HELPERS *********/
   const activePage = pages.find(page => page.active);
   const howItWorksData = activePage.howItWorks;
@@ -108,20 +157,6 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
   const handleUpdateName = (e) => {
     const sanitizedName = removeNonAlphanumericMultispace(e.target.value);
     setUserName(sanitizedName);
-  }
-
-  const handleSubmitName = () => {
-    setUserName(userName.trim());
-    if(userName && userName.length > 1){
-      console.log('good user name');
-      setNameErrorMessage("");
-      setNameError(false);
-      setValidUserNameSubmitted(true);
-    } else {
-      console.log('bad user name');
-      setNameErrorMessage("* Entered name must be at least 2 characters.");
-      setNameError(true);
-    }
   }
 
   const handleShowHowItWorks = () => {
@@ -191,6 +226,11 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
     <PageDescription text={pageDescText} /> 
   </> : "";
 
+  const userData = userName ? <>
+    <UserProfile userName={userName} />
+    {/* <div className={styles.userDataDiv}> {userName}</div> */}
+  </> : "";
+
 
   /**** RETURN INPUT TO ENTER USERNAME IF NOT ENTERED ****/
   if(!validUserNameSubmitted){
@@ -199,6 +239,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
         <main>
           <div className={styles.app}>
             <header className={styles.appHeader} style={{ height: headerHeight, alignItems: "center" }}>
+              {userData}
               <h3 className={"pageTitle"}>
               <AILogo size={".75em"}/>
                 <TypingText text={"Please enter your name"} flashingText={"_ "} headerSize={"small"}/>
@@ -206,7 +247,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
               <input type="text-input" className={nameInputClasses} value={userName}
               onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
               {nameErrorText}
-              <FlashingText text={userName + " - " + uuid} blockDisplay={true}/>              
+              <FlashingText text={userName} blockDisplay={true}/>              
               <div className={"commonDiv"} style={{width:"100%"}}>
                 <ButtonControl onPress={handleSubmitName} text={"Submit"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
               </div>
@@ -227,6 +268,7 @@ const Layout = ({isLoading, pages, showBeta, devOnly}) => {
         <div className={styles.app} >
           <header className={styles.appHeader} style={{ height: headerHeight }}>
             <div ref={headerContentRef}>
+              {userData}
               {pageTitle}
               {nav}
               <div className={`pageDescription ${fadeClass}`}>
