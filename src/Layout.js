@@ -93,7 +93,6 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
     if(trimmedName.length > 1){
       setNameErrorMessage("");
       setNameError(false);
-      setValidUserNameSubmitted(true);
 
       // Call Lambda to create/update user
       // TODO: update api gateway url - best would be to call it via constant. 
@@ -106,6 +105,7 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
           name: trimmedName
         })
       });
+      setValidUserNameSubmitted(true);
       console.log(res);
     } else {
       setNameErrorMessage("* Entered name must be at least 2 characters.");
@@ -141,7 +141,6 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const activeLinkText = activePage?.label;
   const isBeta = activePage?.isBeta;
   const hideContentBeginButton = isBeta && !showBeta;
-
 
   const toggleMenu = () => {
     setBegun(false);
@@ -226,7 +225,7 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
     <PageDescription text={pageDescText} /> 
   </> : "";
 
-  const userData = userName ? <>
+  const userData = userName && validUserNameSubmitted ? <>
     <UserProfile userName={userName} />
     {/* <div className={styles.userDataDiv}> {userName}</div> */}
   </> : "";

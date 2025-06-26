@@ -31,7 +31,7 @@
   transition: height 0.5s ease;
   padding: 1rem .5rem 1rem .5rem;  /* T R B L */
   position:fixed;
-  width:98vw;
+  width:100vw;
   border-bottom: solid 2px var(--blue);
 }
 .activeLink{
