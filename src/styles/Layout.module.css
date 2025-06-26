@@ -8,13 +8,6 @@
 }
 .pageTitle{
 }
-.theNav{
-  padding-bottom: .5rem;
-}
-.mobileNav {
-  display: none;
-  width:90%;
-}
 .app {
   text-align: center;
   align-items: center;
@@ -34,67 +27,6 @@
   width:100vw;
   border-bottom: solid 2px var(--blue);
 }
-.activeLink{
-  color: var(--light-blue);
-}
-@media screen and (max-width: 768px) {
-  .desktopNav {
-    display: none;
-  }
-  .mobileNav {
-    display: inline;
-  }
-  .userDataDiv{
-  position:static;
-}
-}
-
-
-/* Hide mobile nav by default */
-.hamburger {
-  font-size: 2rem;
-  background: none;
-  border: solid 2px grey;
-  cursor: pointer;
-  color:white;
-  border-radius:10px;
-  margin-left:1rem;
-}
-.mobileMenu {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  text-align: center;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height 0.4s ease, opacity 0.4s ease;
-}
-
-.mobileMenuOpen {
-  max-height: 500px;
-  opacity: 1;
-}
-
-.mobileLink {
-  background-color: #222;
-  padding: 0.75rem;
-  text-align: center;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 10px;
-  border: solid 2px grey;
-  color: white;
-  margin-top:.5rem;
-}
-
-.activeLink, .mobileLink:hover{
-  color: var(--light-blue);
-}
-.activeLinkMobile, .mobileLink:hover{
-  background-color:black;
-}
-
 /* page navigation fade-in animation */
 .fadeWrapper {
   opacity: 1;
@@ -103,7 +35,6 @@
 .fadeEnter {
   opacity: 0;
 }
-
 .appBody{
   justify-content: center;
   align-items: center;
@@ -117,4 +48,10 @@
   max-width: 1400px;
   /* border: solid 2px yellow; */
   margin: 0 auto; 
+}
+
+@media screen and (max-width: 768px) {
+  .userDataDiv{
+    position:static;
+  }
 }

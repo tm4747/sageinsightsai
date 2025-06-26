@@ -1,6 +1,6 @@
 // src/Layout.js
 import React, {useState, useEffect, useRef} from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import AILogo from './components/AILogo';
 import LoadingModal from "./components/LoadingModal";
 import TypingText from './components/TypingText';
@@ -14,6 +14,7 @@ import styles from "./styles/Layout.module.css";
 import ButtonControl from "./components/simple/ButtonControl";
 import { v4 as uuidv4 } from 'uuid';
 import UserProfile from './components/UserProfile';
+import Navigation from './components/Navigation';
 
 const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const location = useLocation();
@@ -179,44 +180,7 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
         flashingText={"_ "}
       />
     </h2> : "";
-  const nav = (
-    <>
-      {/* Desktop Nav */}
-      <nav className={`${styles.theNav} ${styles.desktopNav}`}>
-        {pages.map((page, index) => (
-          <React.Fragment key={page.key}>
-            {index > 0 && <span>&nbsp;|&nbsp;</span>}
-            <Link
-              className={page.active ? styles.activeLink : ''}
-              to={page.url}
-            >
-              {page.label}
-            </Link>
-          </React.Fragment>
-        ))}
-      </nav>
-
-      {/* Mobile Hamburger */}
-      <div className={styles.mobileNav}>
-        <span className="bold">{activeLinkText} </span> 
-        <button className={styles.hamburger} onClick={toggleMenu}>
-          ☰
-        </button>
-        <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileMenuOpen : ''}`}>
-          {pages.map(page => (
-            <Link
-              key={page.key}
-              className={`${styles.mobileLink} ${page.active ? `${styles.activeLink} ${styles.activeLinkMobile}` : ''}`}
-              to={page.url}
-              onClick={() => setMenuOpen(false)}
-            >
-              {page.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </>
-  );
+  const nav = <Navigation pages={pages} activeLinkText={activeLinkText} toggleMenu={toggleMenu} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />;
 
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;

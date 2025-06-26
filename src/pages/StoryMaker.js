@@ -128,6 +128,7 @@ function StoryMaker({setIsLoading}) {
   }, [postResponse]);
 
   // GET STORY TEXT LAMBDA
+  // TODO: should be await, no? 
   const fetchStory = () => {
     if(haveValidData()){
       try {
