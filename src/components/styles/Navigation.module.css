@@ -6,7 +6,6 @@
   display: none;
   width:90%;
 }
-
 .activeLink{
   color: var(--light-blue);
 }
@@ -61,6 +60,6 @@
     display: none;
   }
   .mobileNav {
-    display: inline;
+    display: inline-block;
   }
 }

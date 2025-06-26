@@ -180,8 +180,8 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
         flashingText={"_ "}
       />
     </h2> : "";
-  const nav = <Navigation pages={pages} activeLinkText={activeLinkText} toggleMenu={toggleMenu} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />;
 
+  const nav = <Navigation pages={pages} activeLinkText={activeLinkText} toggleMenu={toggleMenu} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />;
   const nameErrorText = nameError ? <p className={"small-text notice error"}>{nameErrorMessage}</p> : "";
   const nameInputClasses = nameError ? `text-input red-border` : `text-input`;
   const howAppWorksExpandable = (<BoxList title={"How it works:"} data={howItWorksData} showBoxList={showHowItWorksBoxList} setShowBoxList={setShowHowItWorksBoxList} showCloseButton={true}/>);
@@ -193,6 +193,11 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
     <UserProfile userName={userName} />
     {/* <div className={styles.userDataDiv}> {userName}</div> */}
   </> : "";
+
+  const beginButtonDiv = !begun && !hideContentBeginButton ? 
+    <div className={"commonDiv"}>
+      <ButtonControl onPress={handleBegin} text={"Begin!"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
+    </div> : "";
 
 
   /**** RETURN INPUT TO ENTER USERNAME IF NOT ENTERED ****/
@@ -220,13 +225,10 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
       </div>
     );
   }
-  const beginButtonDiv = !begun && !hideContentBeginButton ? 
-    <div className={"commonDiv"}>
-      <ButtonControl onPress={handleBegin} text={"Begin!"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
-    </div> : "";
+
   /**** HAVE USERNAME - RETURN LAYOUT ****/
   return (
-    <div className="layout" >
+    <div className={styles.layoutDiv} >
       <main>
         <div className={styles.app} >
           <header className={styles.appHeader} style={{ height: headerHeight }}>

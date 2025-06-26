@@ -1,3 +1,10 @@
+/* 
+ margin:0;
+  padding:0; */
+.layoutDiv{
+  overflow-x:hidden;
+}
+
 .userDataDiv{
   position:absolute;
   top:.25rem;
@@ -24,8 +31,10 @@
   transition: height 0.5s ease;
   padding: 1rem .5rem 1rem .5rem;  /* T R B L */
   position:fixed;
-  width:100vw;
+  width:100%;
   border-bottom: solid 2px var(--blue);
+  padding-top:2.5rem;
+  padding-bottom:2.5rem;
 }
 /* page navigation fade-in animation */
 .fadeWrapper {
