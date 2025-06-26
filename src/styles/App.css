@@ -17,10 +17,13 @@
   --red:rgb(224, 8, 40);
   --gray:hsl(0, 0%, 80%);
 }
-* {
+/** NEXT 2 RULES - keep margins & padding consistent & enclosed within the container, preventing unexpected overflow **/
+html {
   box-sizing: border-box;
 }
-
+*, *::before, *::after {
+  box-sizing: inherit;
+}
 html, body, p, span, h1, h2, h3, h4, h5, h6, div, .button{
   font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-family:'Montserrat', 'Courier Prime', Courier, monospace;
@@ -186,14 +189,20 @@ audio{
 }
 /* DIV and P SPECIFIC */
 
-.button-row {
+.button-row  {
   display: flex;
   flex-direction: row;
   gap: 1rem; /* Adjust spacing between buttons */
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap; /* Allows wrapping on smaller screens */
-  width:100%;
+  box-sizing: border-box;
+  max-width:100%;
+}
+
+.button-row > * {
+  box-sizing: border-box;
+  max-width:100%;
 }
 .commonDiv{
   padding:1rem;
@@ -228,9 +237,16 @@ audio{
   text-align: center;
   position:fixed;
   bottom:5px;
-  margin:auto;
-  width:100vw;
+  left: 0;
+  right: 0;
+  margin:0 auto;
+  width:100%;
   max-width: 1400px;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  text-align: center;
 }
 .preContentDiv{
   width:100%;
