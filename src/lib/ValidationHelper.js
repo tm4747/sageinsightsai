@@ -11,7 +11,6 @@ export const removeNonUrlCharacters = (inputString) => {  // keep only alphanume
     .trim();
 }
 
-
 export const removeSpecialChars = (str) => {
   return str.replace(/(\r\n|\n|\r)/g, "").replace(/"/g, "'");
 }

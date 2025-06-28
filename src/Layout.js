@@ -1,5 +1,5 @@
 // src/Layout.js
-import React, {useState, useEffect, useRef} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import AILogo from './components/simple/AILogo';
 import LoadingModal from "./components/modals/LoadingModal";
@@ -85,9 +85,9 @@ const handleSubmitName = async () => {
 
     // Call Lambda to create/update user
     // TODO: I don't know if there is a check whether or not record was inserted.  Prob insert here. 
-    const res = await insertUserName(uuid, trimmedName);
+    const data = await insertUserName(uuid, trimmedName);
     setValidUserNameSubmitted(true);
-    console.log(res);
+    console.log(data);
   } else {
     setNameErrorMessage("* Entered name must be at least 2 characters.");
     setNameError(true);
@@ -96,8 +96,7 @@ const handleSubmitName = async () => {
   // fetch user data IF uuid
   useEffect(() => {
     const fetchUserData = async () => {
-      const res = await getUserData(uuid);
-      const data = await res.json();
+      const data = await getUserData(uuid);
       if (data?.name) {
         setUserName(data.name);
         setValidUserNameSubmitted(true);
