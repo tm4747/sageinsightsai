@@ -168,7 +168,7 @@ export const fetchAudio = async (
 ) => {
   if (!postResponse) return;
 
-  setIsLoading(true);
+  setIsLoading(true, "lambda");
   try {
     let useablePostResponse = removeSpecialChars(postResponse);
     useablePostResponse = removeIntroMaterial(useablePostResponse);

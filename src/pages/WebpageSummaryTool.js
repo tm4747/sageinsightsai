@@ -61,7 +61,7 @@ function WebpageSummaryTool({setIsLoading}) {
     } else {
       setEnteredUrlError(false);
       try {
-        setIsLoading(true);
+        setIsLoading(true, "lambda");
         await fetchWebSummary(enteredUrl, setPostResponse, setIsLoading);
       } catch (error) {
         console.error('Error fetching summary:', error);

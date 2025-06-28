@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import AILogo from './components/simple/AILogo';
-import LoadingModal from "./components/modals/LoadingModal";
 import TypingText from './components/TypingText';
 import BoxList from './components/BoxList';
 import PageDescription from './components/simple/PageDescription';
@@ -17,7 +16,7 @@ import UserProfile from './components/UserProfile';
 import Navigation from './components/Navigation';
 import { insertUserName, getUserData } from './lib/AWSHelper';
 
-const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
+const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
   const location = useLocation();
   const [begun, setBegun] = useState(false);
   const [fadeClass, setFadeClass] = useState(styles.fadeWrapper);
@@ -37,13 +36,20 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const uuidKey = `sage-insights-${env}-uuid`;
   const [uuid, setUuid] = useState(null);
   const [userFetchAttempted, setUserFetchAttempted] = useState(false);
+  const [readyToSetLoading, setReadyToSetLoading] = useState(false);
 
 
   /***** USE EFFECTS  ******/
   /*** Load from the time the app loads until there is a uuid and dynamoDB has run.  */
   useEffect(() => {
-    setIsLoading(!userFetchAttempted);
-  }, [userFetchAttempted]);
+    const timer = setTimeout(() => setReadyToSetLoading(true), 750);
+    return () => clearTimeout(timer);
+  }, []);
+  useEffect(() => {
+    if (readyToSetLoading) {
+      setIsLoading(!userFetchAttempted);
+    }
+  }, [userFetchAttempted, readyToSetLoading, setIsLoading]);
 
 
   // GET / STORE UUID
@@ -248,7 +254,6 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
                 </> : ""} {/* This renders the current child route */}
             </div>
           </section>
-          <LoadingModal isLoading={isLoading}/>
         </div>
       </main>
     </div>

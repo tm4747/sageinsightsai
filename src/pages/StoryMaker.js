@@ -66,7 +66,7 @@ function StoryMaker({setIsLoading}) {
   const fetchStory = async () => {
     if (haveValidData()) {
       try {
-        setIsLoading(true);
+        setIsLoading(true, "lambda");
         const inputData = getDataArray();
         await fetchStoryFromLambda(inputData, setPostResponse, setIsLoading);
       } catch (error) {
