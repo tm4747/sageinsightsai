@@ -130,15 +130,6 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
   const isBeta = activePage?.isBeta;
   const hideContentBeginButton = isBeta && !showBeta;
 
-  const setOrGetUuid = () => {
-    let storedUuid = localStorage.getItem(uuidKey);
-    if (!storedUuid) {
-      storedUuid = uuidv4();
-      localStorage.setItem(uuidKey, storedUuid);
-    }
-    setUuid(storedUuid);
-  }
-
   const toggleMenu = () => {
     setBegun(false);
     setMenuOpen(prev => !prev);
@@ -171,7 +162,9 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
     setUserName("");
     setBegun(false);
     setValidUserNameSubmitted(false);
-    setOrGetUuid();
+    const storedUuid = uuidv4();
+    localStorage.setItem(uuidKey, storedUuid);
+    setUuid(storedUuid);
   }
 
 
