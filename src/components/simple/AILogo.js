@@ -1,4 +1,4 @@
-import logo from '../logo-gear.png';
+import logo from '../../logo-gear.png';
 import styles from './styles/AILogo.module.css';
 
 const AILogo = ({size, transparency}) => {

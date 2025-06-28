@@ -1,6 +1,8 @@
+import { APIBASE } from "./Constants";
+
 export const testGet = async (setResponse) => {
     const apiKey = process.env.REACT_APP_API_KEY;
-    const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/hello";
+    const apiUrl = APIBASE + "/hello";
     try {
         const res = await fetch(apiUrl, {
           method: 'GET', 
@@ -19,7 +21,7 @@ export const testGet = async (setResponse) => {
 
 export const fetchWebSummary = async (enteredUrl, setResponse, setIsLoading) => {
     const apiKey = process.env.REACT_APP_API_KEY;
-    const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/hello";
+    const apiUrl = APIBASE + "/hello";
     console.log('enteredUrl')
     console.log(enteredUrl)
     try {
@@ -44,7 +46,7 @@ export const fetchWebSummary = async (enteredUrl, setResponse, setIsLoading) => 
 
 export const fetchStoryFromLambda = async (input, setResponse, setIsLoading) => {
   const apiKey = process.env.REACT_APP_API_KEY;
-  const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/story-maker";
+  const apiUrl = APIBASE + "/story-maker";
   console.log('input')
   console.log(input)
   console.log('input.data')
@@ -74,7 +76,7 @@ export const fetchStoryFromLambda = async (input, setResponse, setIsLoading) => 
 
 export const fetchAudioFromLambda = async (fileUrl) => {
   const apiKey = process.env.REACT_APP_API_KEY;
-  const apiUrl = "https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/transcribe-to-audio";
+  const apiUrl = APIBASE + "/transcribe-to-audio";
   try {
       const res = await fetch(apiUrl, {
         method: 'POST', 

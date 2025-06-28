@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import FlashingText from '../components/FlashingText';
-import InputModal from '../components/InputModal';
+import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
 import ButtonControl from '../components/simple/ButtonControl';
 
@@ -121,6 +121,10 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       currentItems={criteriaRows}
     />
   );
+  const choiceDisplay = choiceText ? 
+          <div className={"commonDiv"}>
+            <FlashingText text={"Decision: " + choiceText} />
+          </div> : "";
 
   if (!featureFlagShowBeta) {
     return (
@@ -139,9 +143,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       </div>
       <div className={"resultsDiv"}>
         <div className={"innerResultsDiv"}>
-          <div className={"commonDiv"}>
-            <FlashingText text={choiceText} />
-          </div>
+          {choiceDisplay}
           <div className={"commonDiv"}>
             <div className={"button-row"}>
               {startOverButton}

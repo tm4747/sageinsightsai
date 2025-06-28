@@ -1,8 +1,8 @@
 // src/Layout.js
 import React, {useState, useEffect, useRef} from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import AILogo from './components/AILogo';
-import LoadingModal from "./components/LoadingModal";
+import AILogo from './components/simple/AILogo';
+import LoadingModal from "./components/modals/LoadingModal";
 import TypingText from './components/TypingText';
 import BoxList from './components/BoxList';
 import PageDescription from './components/simple/PageDescription';
@@ -15,6 +15,7 @@ import ButtonControl from "./components/simple/ButtonControl";
 import { v4 as uuidv4 } from 'uuid';
 import UserProfile from './components/UserProfile';
 import Navigation from './components/Navigation';
+import { APIBASE } from './lib/Constants';
 
 const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const location = useLocation();
@@ -61,18 +62,6 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
     return () => clearTimeout(timeout);
   }, [location.pathname]);
 
-  useEffect(() => {
-    if (begun && headerContentRef.current) {
-      // Measure the content height and animate to it
-      const contentHeight = headerContentRef.current.scrollHeight;
-      setHeaderHeight(`${contentHeight}px`);
-      setBodyTopOffset(`${contentHeight + 25}px`);
-    } else {
-      // Full screen when not begun
-      setHeaderHeight("100vh");
-    }
-  }, [begun]);
-
   /*** UPDATE BODY CONTENT OFFSET WHEN VIEWPORT CHANGES */
   useEffect(() => {
     if (begun && headerContentRef.current) {
@@ -97,7 +86,7 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
 
       // Call Lambda to create/update user
       // TODO: update api gateway url - best would be to call it via constant. 
-      const res = await fetch("https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/database", {
+      const res = await fetch( APIBASE + "/database", {
         method: "POST",
         headers: { "Content-Type": "application/json",'x-api-key': apiKey  },
         body: JSON.stringify({
@@ -117,7 +106,7 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   // fetch user data IF uuid
   useEffect(() => {
     const fetchUserData = async () => {
-      const res = await fetch("https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/database", {
+      const res = await fetch(APIBASE + "/database", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-api-key': apiKey },
         body: JSON.stringify({ action: "get", uuid: uuid })

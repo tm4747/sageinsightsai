@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from "./styles/InputModal.module.css";
-import ButtonControl from './simple/ButtonControl';
+import ButtonControl from '../simple/ButtonControl';
 
 const InputModal = ({ 
   isOpen, 

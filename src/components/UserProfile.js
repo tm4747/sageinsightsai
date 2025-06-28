@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from './styles/UserProfile.module.css';
+import SettingsModal from './modals/SettingsModal';
 
 const UserProfile = ({ userName = "User" }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const dropdownRef = useRef(null);
+  const [modalOpen, setModalOpen] = useState(false);
+ 
 
   const closeMenu = () => {
     setClosing(true);
@@ -41,10 +44,11 @@ const UserProfile = ({ userName = "User" }) => {
       {menuOpen && (
         <div className={`${styles.dropdown} ${closing ? styles.fadeOut : ''}`}>
             <div className={styles.userInfo}>{userName}</div>
-            <div className={styles.menuItem}>Settings</div>
+            <div className={styles.menuItem} onClick={()=>setModalOpen(true)}>Settings</div>
             <div className={styles.menuItem}>Sign Out</div>
         </div>
         )}
+        {modalOpen ? <SettingsModal /> : ""}
     </div>
   );
 };

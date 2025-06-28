@@ -3,7 +3,7 @@ import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
 import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
 import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
-import AILogo from '../components/AILogo';
+import AILogo from '../components/simple/AILogo';
 import Slider from '../components/simple/Slider';
 import FlashingText from '../components/FlashingText';
 import BoxList from '../components/BoxList';
@@ -128,18 +128,18 @@ function StoryMaker({setIsLoading}) {
   }, [postResponse]);
 
   // GET STORY TEXT LAMBDA
-  // TODO: should be await, no? 
-  const fetchStory = () => {
-    if(haveValidData()){
-      try {
-        setIsLoading(true);
-        const inputData = getDataArray();
-        fetchStoryFromLambda(inputData, setPostResponse, setIsLoading);
-      } catch (error) {
-        console.error('Error fetching summary:', error);
-      } 
+  const fetchStory = async () => {
+  if (haveValidData()) {
+    try {
+      setIsLoading(true);
+      const inputData = getDataArray();
+      await fetchStoryFromLambda(inputData, setPostResponse, setIsLoading);
+    } catch (error) {
+      console.error('Error fetching summary:', error);
     }
   }
+};
+
   
 
   // POLLING function to check if audio file is available
