@@ -19,7 +19,6 @@ function WebpageSummaryTool({setIsLoading}) {
   const [isDone, setIsDone] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const messagesEndRef = useRef(null);  //scroll vars
-
   const lockTextInput = isDone || isStarted;
 
 
@@ -54,7 +53,7 @@ function WebpageSummaryTool({setIsLoading}) {
 
 
   // website summary call
-  const callLambda = () => {
+  const callLambda = async () => {
     if (!haveValidData(enteredUrl)) {
       setEnteredUrlError(true);
       setEnteredUrlErrorMessage("Entered url is invalid.");
@@ -63,7 +62,7 @@ function WebpageSummaryTool({setIsLoading}) {
       setEnteredUrlError(false);
       try {
         setIsLoading(true);
-        fetchWebSummary(enteredUrl, setPostResponse, setIsLoading);
+        await fetchWebSummary(enteredUrl, setPostResponse, setIsLoading);
       } catch (error) {
         console.error('Error fetching summary:', error);
       } 

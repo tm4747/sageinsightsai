@@ -36,8 +36,6 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const env = process.env.REACT_APP_ENV || "dev"; // Set this in your .env file as dev, qa, or prod
   const uuidKey = `sage-insights-${env}-uuid`;
   const [uuid, setUuid] = useState(null);
-  const apiKey = process.env.REACT_APP_API_KEY;
-
 
 
   /***** USE EFFECTS  ******/
@@ -108,7 +106,7 @@ const handleSubmitName = async () => {
     if (uuid) {
       fetchUserData();
     }
-  }, [uuid, apiKey]);
+  }, [uuid]);
 
 
   /******* JAVASCRIPT HELPERS *********/

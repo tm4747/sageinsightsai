@@ -114,10 +114,21 @@ function StoryMaker({setIsLoading}) {
     }, 250);
   }
 
-  const fetchAudioAndScrollUp = () => {
-    setDisableScroll(true);
-    fetchAudio( postResponse, setIsLoading, setAudioUrl, scrollToCharacterDescription, setPolling );
-  }
+  const fetchAudioAndScrollUp = async () => {
+    try {
+      setDisableScroll(true);
+      await fetchAudio(
+        postResponse,
+        setIsLoading,
+        setAudioUrl,
+        scrollToCharacterDescription,
+        setPolling
+      );
+    } catch (err) {
+      console.error("Unexpected error in fetchAudioAndScrollUp:", err);
+    }
+  };
+
 
   const handleSituationInputChange = (event) => {
     setEnteredSituation(event.target.value);

@@ -2,18 +2,17 @@
  * ALL FUNCTIONS THAT HIT AWS SERVICES SHOULD LIVE HERE. EVENTUALLY MAY SPLIT BY SERVICE (S3/Lambda/DDB)
  */
 
-import { APIBASE, BUCKETPATH } from "./Constants";
+import { APIBASE, BUCKETPATH, APIKEY } from "./Constants";
 import { removeIntroMaterial } from "./MiscellaneousHelper";
 import { removeSpecialChars } from "./ValidationHelper";
 // TODO: move apikey to const
 
 /******** DYNAMO DB ********/
 export const insertUserName = async (uuid, trimmedName) => {
-  const apiKey = process.env.REACT_APP_API_KEY;
   return (
     fetch( APIBASE + "/database", {
       method: "POST",
-      headers: { "Content-Type": "application/json",'x-api-key': apiKey  },
+      headers: { "Content-Type": "application/json",'x-api-key': APIKEY  },
       body: JSON.stringify({
         action: "create",
         uuid: uuid,
@@ -24,11 +23,10 @@ export const insertUserName = async (uuid, trimmedName) => {
 }
 
 export const getUserData = async (uuid) => {
-  const apiKey = process.env.REACT_APP_API_KEY;
   return (
     fetch(APIBASE + "/database", {
       method: "POST",
-      headers: { "Content-Type": "application/json", 'x-api-key': apiKey },
+      headers: { "Content-Type": "application/json", 'x-api-key': APIKEY },
       body: JSON.stringify({ action: "get", uuid: uuid })
     })
   );
@@ -36,7 +34,6 @@ export const getUserData = async (uuid) => {
 
 /******* GET WEB INFO TOOL (future state will not be just summary) *******/
 export const fetchWebSummary = async ( enteredUrl, setResponse, setIsLoading ) => {
-    const apiKey = process.env.REACT_APP_API_KEY;
     const apiUrl = APIBASE + "/hello";
     console.log('enteredUrl')
     console.log(enteredUrl)
@@ -44,7 +41,7 @@ export const fetchWebSummary = async ( enteredUrl, setResponse, setIsLoading ) =
         const res = await fetch(apiUrl, {
           method: 'POST', 
           headers: {
-            'x-api-key': apiKey, 
+            'x-api-key': APIKEY, 
           },
           body: JSON.stringify({ url: enteredUrl })  // Add the request body here
         });
@@ -62,7 +59,6 @@ export const fetchWebSummary = async ( enteredUrl, setResponse, setIsLoading ) =
 
 /******* STORY MAKER *******/
 export const fetchStoryFromLambda = async ( input, setResponse, setIsLoading ) => {
-  const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = APIBASE + "/story-maker";
   console.log('input')
   console.log(input)
@@ -75,7 +71,7 @@ export const fetchStoryFromLambda = async ( input, setResponse, setIsLoading ) =
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': apiKey
+          'x-api-key': APIKEY
         },
         body: JSON.stringify(input)  // Add the request body here
       });
@@ -104,12 +100,11 @@ export const fetchAudio = async ( postResponse, setIsLoading, setAudioUrl, scrol
       const s3FileName = `story-${timestamp}.txt`;
 
       try {
-        const apiKey = process.env.REACT_APP_API_KEY;
         // Get pre-signed URL from Lambda (through API Gateway)
         const presignResponse = await fetch(APIBASE + "/generate-upload-url", {
           method: 'POST',
           headers: {
-            'x-api-key': apiKey,
+            'x-api-key': APIKEY,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ fileName: s3FileName })
@@ -157,13 +152,12 @@ export const fetchAudio = async ( postResponse, setIsLoading, setAudioUrl, scrol
 
 
 export const fetchAudioFromLambda = async (fileUrl) => {
-  const apiKey = process.env.REACT_APP_API_KEY;
   const apiUrl = APIBASE + "/transcribe-to-audio";
   try {
       const res = await fetch(apiUrl, {
         method: 'POST', 
         headers: {
-          'x-api-key': apiKey, 
+          'x-api-key': APIKEY, 
         },
         body: JSON.stringify({ url: fileUrl })  // Add the request body here
       });
