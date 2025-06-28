@@ -54,7 +54,12 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
 
   // GET / STORE UUID
   useEffect(() => {
-    setOrGetUuid();
+    let storedUuid = localStorage.getItem(uuidKey);
+    if (!storedUuid) {
+      storedUuid = uuidv4();
+      localStorage.setItem(uuidKey, storedUuid);
+    }
+    setUuid(storedUuid);
   }, [uuidKey]);
 
   // FADE EFFECT FOR CHANGE OF PAGE (location.pathname)
