@@ -10,3 +10,8 @@ export const removeNonUrlCharacters = (inputString) => {  // keep only alphanume
     .replace(/[^a-zA-Z0-9./:]/g, '')
     .trim();
 }
+
+
+export const removeSpecialChars = (str) => {
+  return str.replace(/(\r\n|\n|\r)/g, "").replace(/"/g, "'");
+}

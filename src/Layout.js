@@ -15,7 +15,7 @@ import ButtonControl from "./components/simple/ButtonControl";
 import { v4 as uuidv4 } from 'uuid';
 import UserProfile from './components/UserProfile';
 import Navigation from './components/Navigation';
-import { APIBASE } from './lib/Constants';
+import { insertUserName, getUserData } from './lib/AWSHelper';
 
 const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const location = useLocation();
@@ -76,48 +76,35 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   }, [viewportWidth, begun]);
 
   /*** DYNAMO DB UPDATES ***/
-  const handleSubmitName = async () => {
-    const trimmedName = userName.trim();
-    setUserName(trimmedName);
 
-    if(trimmedName.length > 1){
-      setNameErrorMessage("");
-      setNameError(false);
+const handleSubmitName = async () => {
+  const trimmedName = userName.trim();
+  setUserName(trimmedName);
 
-      // Call Lambda to create/update user
-      // TODO: update api gateway url - best would be to call it via constant. 
-      const res = await fetch( APIBASE + "/database", {
-        method: "POST",
-        headers: { "Content-Type": "application/json",'x-api-key': apiKey  },
-        body: JSON.stringify({
-          action: "create",
-          uuid: uuid,
-          name: trimmedName
-        })
-      });
-      setValidUserNameSubmitted(true);
-      console.log(res);
-    } else {
-      setNameErrorMessage("* Entered name must be at least 2 characters.");
-      setNameError(true);
-    }
+  if(trimmedName.length > 1){
+    setNameErrorMessage("");
+    setNameError(false);
+
+    // Call Lambda to create/update user
+    // TODO: I don't know if there is a check whether or not record was inserted.  Prob insert here. 
+    const res = await insertUserName(uuid, trimmedName);
+    setValidUserNameSubmitted(true);
+    console.log(res);
+  } else {
+    setNameErrorMessage("* Entered name must be at least 2 characters.");
+    setNameError(true);
   }
-
+}
   // fetch user data IF uuid
   useEffect(() => {
     const fetchUserData = async () => {
-      const res = await fetch(APIBASE + "/database", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", 'x-api-key': apiKey },
-        body: JSON.stringify({ action: "get", uuid: uuid })
-      });
+      const res = await getUserData(uuid);
       const data = await res.json();
       if (data?.name) {
         setUserName(data.name);
         setValidUserNameSubmitted(true);
       }
     };
-
     if (uuid) {
       fetchUserData();
     }

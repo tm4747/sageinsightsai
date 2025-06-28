@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { fetchWebSummary } from '../lib/LambdaHelper';
+import { fetchWebSummary } from '../lib/AWSHelper';
 import { marked } from 'marked';
 import FlashingText from '../components/FlashingText';
 import { removeNonUrlCharacters } from '../lib/ValidationHelper';

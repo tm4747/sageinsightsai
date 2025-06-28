@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { marked } from 'marked';
 import CharacterConfigurator from "../components/CharacterConfigurator"
-import { fetchStoryFromLambda, fetchAudioFromLambda } from '../lib/LambdaHelper';
+import { fetchStoryFromLambda, fetchAudio } from '../lib/AWSHelper';
 import { getRandomSituation } from '../lib/CharacterConfiguratorHelper';
 import AILogo from '../components/simple/AILogo';
 import Slider from '../components/simple/Slider';
@@ -33,71 +33,6 @@ function StoryMaker({setIsLoading}) {
 
 
   /********* USE EFFECTS & API CALLS **********/
-  // send text to text file in S3 and url to file
-  const fetchAudio = async () => {  
-    if(postResponse){
-      try {
-        const bucketPath = "https://sageinsightsai-audio.s3.amazonaws.com/";
-        let useablePostResponse = removeSpecialChars(postResponse);
-        useablePostResponse = removeIntroMaterial(useablePostResponse);
-        setIsLoading(true);
-
-        // Create filename for the text file
-        const timestamp = Math.floor(Date.now() / 1000);
-        const s3FileName = `story-${timestamp}.txt`;
-
-        try {
-          const apiKey = process.env.REACT_APP_API_KEY;
-          // Get pre-signed URL from Lambda (through API Gateway)
-          const presignResponse = await fetch('https://z9k5p8h1lg.execute-api.us-east-1.amazonaws.com/Prod/generate-upload-url', {
-            method: 'POST',
-            headers: {
-              'x-api-key': apiKey,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ fileName: s3FileName })
-          });
-
-          if (!presignResponse.ok) {
-            throw new Error('Failed to get pre-signed URL');
-          }
-
-          const { uploadURL } = await presignResponse.json();
-
-          // Upload the text using fetch
-          const uploadResponse = await fetch(uploadURL, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'text/plain'
-            },
-            body: useablePostResponse
-          });
-
-          if (!uploadResponse.ok) {
-            throw new Error('Failed to upload to S3');
-          } else {
-            console.log("file upload successful", s3FileName);
-          }
-
-          const audioUrl = await fetchAudioFromLambda(bucketPath + s3FileName);
-          setAudioUrl(audioUrl);
-          scrollToCharacterDescription();
-          setPolling(true);
-          setIsLoading(false);
-
-        } catch (error) {
-          console.error('Error uploading to S3:', error.message);
-          setIsLoading(false);
-        } finally {
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.error("Error sending story text to S3:", error);
-        setIsLoading(false);
-      }
-    }
-  };
-  
   // TYPING EFFECT DISPLAY RESULTS 
   useEffect(() => {
     if (!htmlResponse) return;
@@ -129,19 +64,17 @@ function StoryMaker({setIsLoading}) {
 
   // GET STORY TEXT LAMBDA
   const fetchStory = async () => {
-  if (haveValidData()) {
-    try {
-      setIsLoading(true);
-      const inputData = getDataArray();
-      await fetchStoryFromLambda(inputData, setPostResponse, setIsLoading);
-    } catch (error) {
-      console.error('Error fetching summary:', error);
+    if (haveValidData()) {
+      try {
+        setIsLoading(true);
+        const inputData = getDataArray();
+        await fetchStoryFromLambda(inputData, setPostResponse, setIsLoading);
+      } catch (error) {
+        console.error('Error fetching summary:', error);
+      }
     }
-  }
-};
-
+  };
   
-
   // POLLING function to check if audio file is available
   useEffect(() => {
     let intervalId;
@@ -183,7 +116,7 @@ function StoryMaker({setIsLoading}) {
 
   const fetchAudioAndScrollUp = () => {
     setDisableScroll(true);
-    fetchAudio();
+    fetchAudio( postResponse, setIsLoading, setAudioUrl, scrollToCharacterDescription, setPolling );
   }
 
   const handleSituationInputChange = (event) => {
@@ -237,15 +170,6 @@ function StoryMaker({setIsLoading}) {
 
 
   /******** HELPER FUNCTIONS **********/
-  const removeSpecialChars = (str) => {
-    return str.replace(/(\r\n|\n|\r)/g, "").replace(/"/g, "'");
-  }
-
-  const removeIntroMaterial = (str) => {
-    const index = str.indexOf("Here is your story");
-    return str.substring(index);
-  }
-
   const getDataArray = () => {
     const inputData = {
       data:  {
