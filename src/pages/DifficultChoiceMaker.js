@@ -5,7 +5,8 @@ import DataTable from '../components/DataTable';
 import ButtonControl from '../components/simple/ButtonControl';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
-  const [choiceText, setDecisionText] = useState("Where To Move");
+  const overrideChoice = false ? "Where to move" : "";
+  const [choiceText, setDecisionText] = useState(overrideChoice);
   const [choiceTextDone, setDecisionTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
