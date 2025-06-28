@@ -19,10 +19,16 @@ const SettingsModal = ({
     console.log(value)
   }
 
-
+  
   const handleSubmit = () => {
-    console.log("hey")
-  }
+    console.log("hey");
+    setShowSettingChanged(true);
+
+    setTimeout(() => {
+      setShowSettingChanged(false);
+    }, 2000); // 2000 milliseconds = 2 seconds
+  };
+
 
   /******** DISPLAY FUNCTIONS & VARS *********/
   const descriptionText = formDescription ? <p className={"small-text"}>{formDescription}</p> : "";
