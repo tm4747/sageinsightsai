@@ -64,6 +64,36 @@ export const getUserData = async (uuid) => {
 };
 
 
+export const deleteUserData = async (uuid) => {
+  console.log('attempt delete user data: ' + uuid);
+  try {
+    const response = await fetch(APIBASE + "/database", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": APIKEY
+      },
+      body: JSON.stringify({
+        action: "delete",
+        uuid: uuid
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API error: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Error in deleteUserData:", error.message || error);
+    throw error; // Re-throw to allow caller to handle if needed
+  }
+};
+
+
 /******* GET WEB INFO TOOL (future state will not be just summary) *******/
 export const fetchWebSummary = async (enteredUrl, setResponse, setIsLoading) => {
   const apiUrl = APIBASE + "/hello";

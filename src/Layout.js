@@ -36,17 +36,19 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   const env = process.env.REACT_APP_ENV || "dev"; // Set this in your .env file as dev, qa, or prod
   const uuidKey = `sage-insights-${env}-uuid`;
   const [uuid, setUuid] = useState(null);
+  const [userFetchAttempted, setUserFetchAttempted] = useState(false);
 
 
   /***** USE EFFECTS  ******/
+  /*** Load from the time the app loads until there is a uuid and dynamoDB has run.  */
+  useEffect(() => {
+    setIsLoading(!userFetchAttempted);
+  }, [userFetchAttempted]);
+
+
   // GET / STORE UUID
   useEffect(() => {
-    let storedUuid = localStorage.getItem(uuidKey);
-    if (!storedUuid) {
-      storedUuid = uuidv4();
-      localStorage.setItem(uuidKey, storedUuid);
-    }
-    setUuid(storedUuid);
+    setOrGetUuid();
   }, [uuidKey]);
 
   // FADE EFFECT FOR CHANGE OF PAGE (location.pathname)
@@ -74,25 +76,25 @@ const Layout = ({isLoading, setIsLoading, pages, showBeta, devOnly}) => {
   }, [viewportWidth, begun]);
 
   /*** DYNAMO DB UPDATES ***/
+  const handleSubmitName = async () => {
+    const trimmedName = userName.trim();
+    setUserName(trimmedName);
 
-const handleSubmitName = async () => {
-  const trimmedName = userName.trim();
-  setUserName(trimmedName);
+    if(trimmedName.length > 1){
+      setNameErrorMessage("");
+      setNameError(false);
 
-  if(trimmedName.length > 1){
-    setNameErrorMessage("");
-    setNameError(false);
-
-    // Call Lambda to create/update user
-    // TODO: I don't know if there is a check whether or not record was inserted.  Prob insert here. 
-    const data = await insertUserName(uuid, trimmedName);
-    setValidUserNameSubmitted(true);
-    console.log(data);
-  } else {
-    setNameErrorMessage("* Entered name must be at least 2 characters.");
-    setNameError(true);
+      // Call Lambda to create/update user
+      // TODO: I don't know if there is a check whether or not record was inserted.  Prob insert here. 
+      const data = await insertUserName(uuid, trimmedName);
+      setValidUserNameSubmitted(true);
+      console.log(data);
+    } else {
+      setNameErrorMessage("* Entered name must be at least 2 characters.");
+      setNameError(true);
+    }
   }
-}
+
   // fetch user data IF uuid
   useEffect(() => {
     const fetchUserData = async () => {
@@ -101,6 +103,7 @@ const handleSubmitName = async () => {
         setUserName(data.name);
         setValidUserNameSubmitted(true);
       }
+      setUserFetchAttempted(true);
     };
     if (uuid) {
       fetchUserData();
@@ -115,6 +118,15 @@ const handleSubmitName = async () => {
   const activeLinkText = activePage?.label;
   const isBeta = activePage?.isBeta;
   const hideContentBeginButton = isBeta && !showBeta;
+
+  const setOrGetUuid = () => {
+    let storedUuid = localStorage.getItem(uuidKey);
+    if (!storedUuid) {
+      storedUuid = uuidv4();
+      localStorage.setItem(uuidKey, storedUuid);
+    }
+    setUuid(storedUuid);
+  }
 
   const toggleMenu = () => {
     setBegun(false);
@@ -142,6 +154,15 @@ const handleSubmitName = async () => {
     scrollToPageBody();
   }
 
+  const handleCleanUpUserData = () => {
+    localStorage.removeItem(uuidKey);
+    setUuid(null); 
+    setUserName("");
+    setBegun(false);
+    setValidUserNameSubmitted(false);
+    setOrGetUuid();
+  }
+
 
   /******** DISPLAY FUNCTIONS **********/
   const pageTitle = !begun ? 
@@ -163,7 +184,7 @@ const handleSubmitName = async () => {
   </> : "";
 
   const userData = userName && validUserNameSubmitted ? <>
-    <UserProfile userName={userName} />
+    <UserProfile userName={userName} uuid={uuid} cleanUpUserData={handleCleanUpUserData} />
     {/* <div className={styles.userDataDiv}> {userName}</div> */}
   </> : "";
 

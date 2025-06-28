@@ -1,0 +1,57 @@
+.modalBackgroundDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+.modalBox {
+  background-color: white;
+  color: black;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 90%;
+  width: 320px;
+}
+
+.buttonRow {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.confirmBtn {
+  background-color: #229810;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancelBtn {
+  background-color: #999;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.confirmBtn:hover {
+  background-color: #1b7c0d;
+}
+
+.cancelBtn:hover {
+  background-color: #777;
+}

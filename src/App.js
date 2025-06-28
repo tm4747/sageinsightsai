@@ -9,7 +9,7 @@ import { getWebSummaryHowItWorks, getStoryMakerHowItWorks, getDifficultChoiceMak
 
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const path = location.pathname;
   const featureFlagShowBeta = process.env.REACT_APP_ENV !== "prod";
