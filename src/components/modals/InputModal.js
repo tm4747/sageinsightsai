@@ -103,12 +103,15 @@ const InputModal = ({
 
 
   /******** DISPLAY FUNCTIONS & VARS *********/
+  const sliderId = field1Name + "_slider";
+  const nameId = field1Name + "_name";
+  const descriptionId = field1Name + "_description";
   const descriptionText = formDescription ? <p className={"small-text"}>{formDescription}</p> : "";
   const doneButton = <ButtonControl onPress={handleOnClose} text={"Done"} variation={"resetButton"}/>;
   const submitButton = <ButtonControl onPress={handleSubmit} text={`Add ${field1NameToUpper}`} variation={"submitRequest"}/>;
   const sliderDiv = showSlider ? <div>
-          <label htmlFor="slider">{sliderTitle} {sliderValue}</label>
-          <input id="slider" type="range" min="1" max="10" value={sliderValue}
+          <label htmlFor={sliderId}>{sliderTitle} {sliderValue}</label>
+          <input id={sliderId} type="range" min="1" max="10" value={sliderValue}
             onChange={(e) => setSliderValue(parseInt(e.target.value))} className={`margin-bottom ${styles.slider}`} />
         </div> : "";
   const nameInputClasses = nameError ? `text-input ${styles.textInput} red-border` : `text-input ${styles.textInput}`;
@@ -128,15 +131,15 @@ const InputModal = ({
         <h2 className={"margin-bottom"} >{formTitle}</h2>
         {descriptionText}
         <div className={"margin-bottom"}>
-          <label for="name">{field1NameToUpper}:</label><br />
-          <input id="name" type="text" className={nameInputClasses} value={name}
+          <label htmlFor={nameId}>{field1NameToUpper}:</label><br />
+          <input id={nameId} type="text" className={nameInputClasses} value={name}
             onChange={(e) => handleUpdateName(e.target.value)} />
           {nameErrorText}
           {valueAddedText}
         </div>
         <div style={{ marginBottom: '1rem' }}>
-          <label for="description">Description:</label><br />
-          <textarea id="description" className={`text-input ${styles.textInput}`} rows={3}
+          <label htmlFor={descriptionId}>Description:</label><br />
+          <textarea id={descriptionId} className={`text-input ${styles.textInput}`} rows={3}
             value={description} onChange={(e) => setDescription(e.target.value)}/>
         </div>
         {sliderDiv}

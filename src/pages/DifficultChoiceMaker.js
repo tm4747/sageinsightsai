@@ -3,23 +3,27 @@ import FlashingText from '../components/FlashingText';
 import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
 import ButtonControl from '../components/simple/ButtonControl';
+import TextInput from '../components/simple/TextInput';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
-  const overrideChoice = false ? "Where to move" : "";
-  const [decisionText, setDecisionText] = useState(overrideChoice);
-  const [decisionTextDone, setDecisionTextDone] = useState(true);
+  const [decisionText, setDecisionText] = useState("");
+  const [decisionTextDone, setDecisionTextDone] = useState(false);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteria, setCriteria] = useState([]);
   const [choices, setChoices] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [showTable, setShowTable] = useState(false);
+  const [step, setStep] = useState(1);
 
   
+  /********* JAVASCRIPT HELPER FUNCTIONS **********/
   const resetState = () => {
     setDecisionText("");
     setDecisionTextDone(false);
     setChoices([]);
     setCriteria([]);
+    setShowResults(false);
   };
 
   const addCriteria = () => {
@@ -29,6 +33,11 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const addChoice = () => {
     setShowChoiceModal(true);
   };
+
+  const handleDecisionDone = () => {
+    setDecisionTextDone(true);
+    setStep(2);
+  }
 
   const handleSubmitCriteria = ({ name, description, sliderValue }) => {
     const numberOfChoices = choices.length;
@@ -40,12 +49,12 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
         sliderValue
       }
     ]);
+    // must update choices[each].ratings when a new criteria is added
     const updatedChoices = choices;
     for(let x = 0; x < numberOfChoices; x++){
       updatedChoices[x].ratings.push(5);
     }
     setChoices(updatedChoices);
-
   };
 
   const handleSubmitChoice = ({ name, description }) => {
@@ -71,36 +80,54 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
 
   /********* DISPLAY FUNCTIONS **********/
-  const decisionInput = !decisionTextDone && (
-    <>
-      <label>Describe the decision or choice:</label>
-      <input
-        className={"text-input"}
-        value={decisionText}
-        type="text"
-        onChange={(e) => setDecisionText(e.target.value)}
-      />
-    </>
-  );
-  const decisionGoodButton = !decisionTextDone && (
-    <ButtonControl onPress={() => setDecisionTextDone(true)} text={"Decision is correct!"} variation={"submitRequest"}/>
-  );
-  const startOverButton = decisionTextDone && (
-    <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
-  );
+  const dataPreview = decisionText && decisionTextDone ? decisionText : "";
 
-  const addCriteriaButton = decisionTextDone && (
-    <>
-      <ButtonControl onPress={addCriteria} text={"Add Criteria"} variation={"submitRequest"}/>
-      <span className={"small-text notice hide"}> - these are factors of the decision you will use in evaluation.</span>
-    </>
-  );
+  /*** STEP 1 ***/
+  const textForFlashing = decisionText ? "Decision: " + decisionText : "";
+  const enteredDecisionDisplay = !decisionText ? <span className="bold">Please enter your decision:</span> : 
+    <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
+  const textDisplay = <TextInput 
+    id={"setDecisionStep"}
+    handleOnChange={(e) => setDecisionText(e.target.value)}
+    enteredValue={decisionText}
+    addedStyles={{width: "100%"}}
+  />;
+  const setDecisionButton = 
+    <ButtonControl 
+      onPress={handleDecisionDone} 
+      text={"Decision is correct!"} 
+      variation={"submitRequest"} 
+      addedStyles={{width: "100%"}}
+    />
+  const setDecisionStep = step === 1 ? (
+     <div className={"formDiv"} style={{maxWidth:"600px", margin:"auto"}}>
+        <div className={"commonDiv"}>
+          {enteredDecisionDisplay}
+        </div>
+          {textDisplay}
+        <div className={"commonDiv"}>
+          {setDecisionButton}     
+        </div>
+      </div>
+  ) : "";
 
-  const addChoiceButton = decisionTextDone && (
+  /*** STEP 2 ***/
+  const addChoicesStep = step === 2 ? 
     <>
       <ButtonControl onPress={addChoice} text={"Add Choices"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - these are the choices you will evaluate.</span>
-    </>
+    </> : "";
+
+  /*** STEP 2 */
+  const addCriteriaStep = step === 3 ? 
+    <>
+      <ButtonControl onPress={addCriteria} text={"Add Criteria"} variation={"submitRequest"}/>
+      <span className={"small-text notice hide"}> - these are factors of the decision you will use in evaluation.</span>
+    </> : "";
+
+  /*** BUTTONS ***/
+  const startOverButton = decisionTextDone && (
+    <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
   );
 
    const showResultsButton = decisionTextDone && criteria && choices ? (
@@ -110,6 +137,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     </>
   ) : "";
 
+  /*** MODALS ***/
   const criteriaModal = (
     <InputModal
       isOpen={showCriteriaModal}
@@ -134,10 +162,15 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       currentItems={choices}
     />
   );
-  const choiceDisplay = decisionText ? 
-          <div className={"commonDiv"}>
-            <FlashingText text={"Decision: " + decisionText} />
-          </div> : "";
+  
+  const tableDisplay = showTable ?
+  <DataTable
+    choices={choices}
+    criteria={criteria}
+    setCriteria={setCriteria}
+    setChoices={setChoices}
+    showResults={showResults}
+  /> : "";
 
   if (!featureFlagShowBeta) {
     return (
@@ -153,31 +186,27 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   return (
     <div className="content">
       <div className={"formDiv"}>
+        {dataPreview}
+        {setDecisionStep}
+        {addChoicesStep}
+        {addCriteriaStep}
       </div>
-      <div className={"resultsDiv"}>
-        <div className={"innerResultsDiv"}>
-          {choiceDisplay}
-          <div className={"commonDiv"}>
-            <div className={"button-row"}>
-              {decisionInput}
-              {decisionGoodButton}
-              {addCriteriaButton}
-              {addChoiceButton}
-              {showResultsButton}
-              {startOverButton}
+      <div className={"commonDiv"}>
+        <div className={"resultsDiv"}>
+          <div className={"innerResultsDiv"}>
+            <div className={"commonDiv"}>
+              <div className={"button-row"}>
+                {showResultsButton}
+                {startOverButton}
+              </div>
             </div>
+            {criteriaModal}
+            {choiceModal}
+            {tableDisplay}
           </div>
-          {criteriaModal}
-          {choiceModal}
-          <DataTable
-            choices={choices}
-            criteria={criteria}
-            setCriteria={setCriteria}
-            setChoices={setChoices}
-            showResults={showResults}
-          />
         </div>
       </div>
+      
     </div>
   );
 }

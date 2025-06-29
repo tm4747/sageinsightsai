@@ -118,19 +118,31 @@ function WebpageSummaryTool({setIsLoading}) {
   
 
   /********** DISPLAY FUNCTIONS ***********/
-  const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
-    <div className={"commonDiv"}>
-      <ButtonControl variation={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
-    </div>
-     : "";
-  
   const textForFlashing = validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl;
   const enteredUrlDisplay = !enteredUrl ? <span className="bold">Please enter url:</span> : 
-  <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
+    <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
+
+  const textDisplay = <TextInput 
+    enteredValue={enteredUrl} 
+    handleOnChange={handleEnteredUrlChange} 
+    isError={enteredUrlError} 
+    errorMessage={enteredUrlErrorMessage}
+    validData={validUrl}
+    halfWidth={true}
+    isDisabled={lockTextInput}
+    handleClear={clearUrlInput}
+    isClearButton={enteredUrl && !lockTextInput}
+  />
 
   const mainButton = isDone ? 
     <ButtonControl variation={'resetButton'} onPress={resetState} text={"Start Over"}/> : 
     <ButtonControl isDisabled={lockTextInput} variation={'submitRequest'} onPress={callLambda} text={"Get Summary"} /> ;
+  
+  const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
+    <div className={"commonDiv"}>
+      <ButtonControl variation={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
+    </div>
+      : "";
   
   return (
     <div className="content">
@@ -138,17 +150,7 @@ function WebpageSummaryTool({setIsLoading}) {
           <div className={"commonDiv"}>
             {enteredUrlDisplay}
           </div>
-        <TextInput 
-          enteredValue={enteredUrl} 
-          handleOnChange={handleEnteredUrlChange} 
-          isError={enteredUrlError} 
-          errorMessage={enteredUrlErrorMessage}
-          validData={validUrl}
-          halfWidth={true}
-          isDisabled={lockTextInput}
-          handleClear={clearUrlInput}
-          isClearButton={enteredUrl && !lockTextInput}
-        />
+          {textDisplay}
         <div className={"commonDiv"}>
           {mainButton}
         </div>

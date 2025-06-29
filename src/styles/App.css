@@ -58,7 +58,7 @@ a:hover{
 }
 /* INPUTS AND SPECIAL ELEMENTS */
 label{
-  font-size:.75em;
+  font-size:.75rem;
   padding:.5em;
   font-weight:bold;
 }
@@ -140,6 +140,10 @@ audio{
 .paddingBottom{
   padding-bottom:1rem;
 }
+.paddingVertical{
+  padding-top:1rem;
+  padding-bottom:1rem;
+}
 .margin-bottom{
   margin-bottom:1rem;
 }
@@ -209,6 +213,13 @@ audio{
   padding-top:1rem;
   padding-bottom:1rem;
   /* border: solid 2px red; */
+}
+.flexVertical{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Adjust spacing between buttons */
+  justify-content: center;
+  align-items:center;
 }
 .standardVerticalPadding{
   padding-top:.5rem;

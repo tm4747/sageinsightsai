@@ -32,8 +32,6 @@
   color:var(--white);
   background-color:var(--red);
 }
-
-
 .cancelScroll{
   background-color: var(--gray);
   width:25%;
@@ -45,7 +43,6 @@
   color: var(--white);
   opacity:1;
 }
-
 .purpleButton{
   background-color:var(--purple);
   color:var(--white);
@@ -63,7 +60,9 @@
 .yellowButton:hover{
   background-color:var(--yellow);
 }
-
+.fullWidth{
+  width:100%;
+}
 
 @media screen and (max-width: 768px) {
   .button{
