@@ -194,7 +194,7 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
 
   const beginButtonDiv = !begun && !hideContentBeginButton ? 
     <div className={"commonDiv"}>
-      <form style={{width:"100%"}} onSubmit={(e) => {
+      <form id="beginForm" style={{width:"100%"}} onSubmit={(e) => {
           e.preventDefault(); // Prevent default form submission (like page reload)
           handleBegin();
         }}>
@@ -215,12 +215,19 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
               <AILogo size={".75em"}/>
                 <TypingText text={"Please enter your name"} flashingText={"_ "} headerSize={"small"}/>
               </h3>
-              <form style={{width:"100%"}} onSubmit={(e) => {
+              <form id="enterNameForm" style={{width:"100%"}} onSubmit={(e) => {
                 e.preventDefault(); // Prevent default form submission (like page reload)
                 handleSubmitName();
               }}>
-                <input type="text-input" className={nameInputClasses} value={userName}
-                onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
+                <input 
+                  name="name"  
+                  type="text" 
+                  className={nameInputClasses} 
+                  value={userName}
+                  onChange={handleUpdateName} 
+                  style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}
+                  autoComplete="name"
+                />
                 {nameErrorText}
                 <FlashingText text={userName} blockDisplay={true}/>              
                 <div className={"commonDiv"} style={{width:"100%"}}>

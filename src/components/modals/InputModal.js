@@ -128,15 +128,15 @@ const InputModal = ({
         <h2 className={"margin-bottom"} >{formTitle}</h2>
         {descriptionText}
         <div className={"margin-bottom"}>
-          <label>{field1NameToUpper}:</label><br />
-          <input type="text" className={nameInputClasses} value={name}
+          <label for="name">{field1NameToUpper}:</label><br />
+          <input id="name" type="text" className={nameInputClasses} value={name}
             onChange={(e) => handleUpdateName(e.target.value)} />
           {nameErrorText}
           {valueAddedText}
         </div>
         <div style={{ marginBottom: '1rem' }}>
-          <label>Description:</label><br />
-          <textarea className={`text-input ${styles.textInput}`} rows={3}
+          <label for="description">Description:</label><br />
+          <textarea id="description" className={`text-input ${styles.textInput}`} rows={3}
             value={description} onChange={(e) => setDescription(e.target.value)}/>
         </div>
         {sliderDiv}
