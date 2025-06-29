@@ -215,13 +215,13 @@ const CharacterConfigurator = ({ characterId, submittedData, levelOfRealism, get
         </table>
         <div className="button-row commonDiv">
           {characterDescription ? 
-            <ButtonControl type={"submitRequest"} onPress={() => handleInputSubmit(characterDescription)} text={`Character ${characterId} Done!`}/> : ""}
-          <ButtonControl type={"progressionButton"} onPress={getRandomChoices} text={"Get Random Choices"}/> 
-          <ButtonControl type={"progressionButton"} onPress={handleToggleEnterValues} text={enterValues ? "Select From Presets" : "Enter Custom Values"}/> 
+            <ButtonControl variation={"submitRequest"} onPress={() => handleInputSubmit(characterDescription)} text={`Character ${characterId} Done!`}/> : ""}
+          <ButtonControl variation={"progressionButton"} onPress={getRandomChoices} text={"Get Random Choices"}/> 
+          <ButtonControl variation={"progressionButton"} onPress={handleToggleEnterValues} text={enterValues ? "Select From Presets" : "Enter Custom Values"}/> 
           {!characterDescription && handleResetState ? 
-            <ButtonControl type={"resetButton"} onPress={handleResetState} text={"Delete All Characters"}/> : ""}
+            <ButtonControl variation={"resetButton"} onPress={handleResetState} text={"Delete All Characters"}/> : ""}
           {characterDescription ? 
-            <ButtonControl type={"resetButton"} onPress={clearInputs} text={"Clear Character Choices"}/> : ""}
+            <ButtonControl variation={"resetButton"} onPress={clearInputs} text={"Clear Character Choices"}/> : ""}
           {icon}
         </div>
       </div>

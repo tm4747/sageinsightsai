@@ -32,8 +32,8 @@ const SettingsModal = ({
 
   /******** DISPLAY FUNCTIONS & VARS *********/
   const descriptionText = formDescription ? <p className={"small-text"}>{formDescription}</p> : "";
-  const doneButton = <ButtonControl onPress={handleOnClose} text={"Done"} type={"resetButton"}/>;
-  const submitButton = <ButtonControl onPress={handleSubmit} text={`Update setting`} type={"submitRequest"}/>;
+  const doneButton = <ButtonControl onPress={handleOnClose} text={"Done"} variation={"resetButton"}/>;
+  const submitButton = <ButtonControl onPress={handleSubmit} text={`Update setting`} variation={"submitRequest"}/>;
   const settingUpdatedText = showSettingChanged ? <p className={"small-text notice success"}>Settings updated!</p> : "";
 
   

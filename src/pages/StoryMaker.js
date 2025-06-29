@@ -212,9 +212,9 @@ function StoryMaker({setIsLoading}) {
 
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
-    <ButtonControl type={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/> : "";
+    <ButtonControl variation={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/> : "";
   const fetchAudioButtonBottom = (postResponse && (!polling && !isAudioReady)) ? 
-    <ButtonControl type={"secondaryFetch"} onPress={fetchAudioAndScrollUp} text={"Get Audio"}/> : ""; 
+    <ButtonControl variation={"secondaryFetch"} onPress={fetchAudioAndScrollUp} text={"Get Audio"}/> : ""; 
 
   // which showCharacterInput (1, 2, or 3) should show
   const characterInputGroup = showCharacterInput === 1 ? 
@@ -256,9 +256,9 @@ function StoryMaker({setIsLoading}) {
     </> : "";
 
   const getADifferentSituationButton = !postResponse ? 
-    <ButtonControl type={"progressionButton"} onPress={handleGetDifferentSituation} text={"Get A Different Situations"}/> : "";
+    <ButtonControl variation={"progressionButton"} onPress={handleGetDifferentSituation} text={"Get A Different Situations"}/> : "";
   const tellMeAStoryButton = !postResponse ? 
-    <ButtonControl type={"submitRequest"} onPress={fetchStory} text={"Tell Me A Story!"}/> : "";
+    <ButtonControl type={"submit"} variation={"submitRequest"} onPress={fetchStory} text={"Tell Me A Story!"}/> : "";
   const submitInputGroup = showCharacterInput === 4 ? 
     <>
       <div className="button-row commonDiv">
@@ -267,7 +267,7 @@ function StoryMaker({setIsLoading}) {
       <div className="button-row commonDiv">
         {tellMeAStoryButton}
         {getADifferentSituationButton}
-        <ButtonControl type={"resetButton"} onPress={resetState} text={"Clear And Start Over"}/>
+        <ButtonControl variation={"resetButton"} onPress={resetState} text={"Clear And Start Over"}/>
       </div>
     </> : "";
 

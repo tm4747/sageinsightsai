@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FlashingText from '../components/FlashingText';
 import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
@@ -10,8 +10,14 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [choiceTextDone, setDecisionTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
-  const [criteriaRows, setCriteriaRows] = useState([]);
+  const [criteria, setCriteria] = useState([]);
+  const [choices, setChoices] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const [tableData, sesTableData] = useState([]);
+
+  useEffect(() => {
+    }, [criteria]);
+  
 
   const resetState = () => {
     setDecisionText("");
@@ -27,27 +33,25 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   };
 
   const handleSubmitCriteria = ({ name, description, sliderValue }) => {
-    setCriteriaRows(prevItems => [
+    setCriteria(prevItems => [
       ...prevItems,
       {
         name,
         description,
-        sliderValue,
-        choices: prevItems[0] && prevItems[0].choices ? prevItems[0].choices : [] // initially empty choices
+        sliderValue
       }
     ]);
   };
 
   const handleSubmitChoice = ({ name, description }) => {
-    setCriteriaRows(prevCriteriaRows =>
-      prevCriteriaRows.map(criterion => ({
-        ...criterion,
-        choices: [
-          ...criterion.choices,
-          { name, description, rating: 5 } // default rating
-        ]
-      }))
-    );
+    setChoices(prevItems => [
+      ...prevItems,
+      {
+        name,
+        description,
+        rating: 5
+      }
+    ]);
   };
 
   const closeModal = () => {
@@ -55,7 +59,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     setShowChoiceModal(false);
   };
 
-  const haveCriteria = criteriaRows && criteriaRows.length > 0;
+  const haveCriteria = criteria && criteria.length > 0;
 
 
   /********* DISPLAY FUNCTIONS **********/
@@ -72,28 +76,29 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     </>
   );
   const decisionGoodButton = !choiceTextDone && (
-    <ButtonControl onPress={() => setDecisionTextDone(true)} text={"Decision is correct!"} type={"submitRequest"}/>
+    <ButtonControl onPress={() => setDecisionTextDone(true)} text={"Decision is correct!"} variation={"submitRequest"}/>
   );
   const startOverButton = choiceTextDone && (
-    <ButtonControl onPress={resetState} text={"Start Over"} type={"resetButton"}/>
+    <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
   );
 
   const addCriteriaButton = choiceTextDone && (
     <>
-      <ButtonControl onPress={addCriteria} text={"Add Criteria"} type={"submitRequest"}/>
+      <ButtonControl onPress={addCriteria} text={"Add Criteria"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - these are factors of the decision you will use in evaluation.</span>
     </>
   );
 
-  const addChoiceButton = haveCriteria ? 
+  const addChoiceButton = choiceTextDone && (
     <>
-      <ButtonControl onPress={addChoice} text={"Add Choices"} type={"submitRequest"}/>
+      <ButtonControl onPress={addChoice} text={"Add Choices"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - these are the choices you will evaluate.</span>
-    </> : "";
+    </>
+  );
 
-   const showResultsButton = choiceTextDone && (
+   const showResultsButton = choiceTextDone && criteria && choices (
     <>
-      <ButtonControl onPress={() => setShowResults(true)} text={"Show Results"} type={"submitRequest"}/>
+      <ButtonControl onPress={() => setShowResults(true)} text={"Show Results"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - this will display totals and reveal your best choice.</span>
     </>
   );
@@ -108,7 +113,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       formDescription={"You can enter multiple criteria. Description is optional. Click 'Done' when finished."}
       showSlider={true}
       sliderTitle={"How important is this criterion:"}
-      currentItems={criteriaRows}
+      currentItems={criteria}
     />
   );
   const choiceModal = (
@@ -119,7 +124,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       formTitle={"Enter Choices"}
       field1Name={"choice"}
       formDescription={"You can enter multiple choices. Description is optional. Click 'Done' when finished."}
-      currentItems={criteriaRows}
+      currentItems={choices}
     />
   );
   const choiceDisplay = choiceText ? 
@@ -147,21 +152,21 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
           {choiceDisplay}
           <div className={"commonDiv"}>
             <div className={"button-row"}>
-              {startOverButton}
               {decisionInput}
               {decisionGoodButton}
               {addCriteriaButton}
               {addChoiceButton}
               {showResultsButton}
+              {startOverButton}
             </div>
           </div>
           {criteriaModal}
           {choiceModal}
-          <DataTable
+          {/* <DataTable
             criteriaRows={criteriaRows}
-            setCriteriaRows={setCriteriaRows}
+            setCriteriaRows={tableData}
             showResults={showResults}
-          />
+          /> */}
         </div>
       </div>
     </div>

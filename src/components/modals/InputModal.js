@@ -104,8 +104,8 @@ const InputModal = ({
 
   /******** DISPLAY FUNCTIONS & VARS *********/
   const descriptionText = formDescription ? <p className={"small-text"}>{formDescription}</p> : "";
-  const doneButton = <ButtonControl onPress={handleOnClose} text={"Done"} type={"resetButton"}/>;
-  const submitButton = <ButtonControl onPress={handleSubmit} text={`Add ${field1NameToUpper}`} type={"submitRequest"}/>;
+  const doneButton = <ButtonControl onPress={handleOnClose} text={"Done"} variation={"resetButton"}/>;
+  const submitButton = <ButtonControl onPress={handleSubmit} text={`Add ${field1NameToUpper}`} variation={"submitRequest"}/>;
   const sliderDiv = showSlider ? <div>
           <label htmlFor="slider">{sliderTitle} {sliderValue}</label>
           <input id="slider" type="range" min="1" max="10" value={sliderValue}

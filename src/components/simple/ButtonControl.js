@@ -1,10 +1,10 @@
 import styles from './styles/ButtonControl.module.css';
 
 
-const ButtonControl = ({ onPress, text, type = "", isDisabled = false, addedStyles = null}) => {
+const ButtonControl = ({ onPress, text, variation = "", type = "", isDisabled = false, addedStyles = null}) => {
     let buttonClasses = `button ${styles.button} `;
 
-    switch (type) {
+    switch (variation) {
         case "submitRequest":
             buttonClasses += ` ${styles.greenButton}`;
             break;
@@ -33,6 +33,7 @@ const ButtonControl = ({ onPress, text, type = "", isDisabled = false, addedStyl
             onClick={onPress}
             disabled={isDisabled}
             style={addedStyles}
+            type={type}
         >{text}</button>
     );
 }

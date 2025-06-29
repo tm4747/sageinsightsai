@@ -242,6 +242,8 @@ export const getRandomSituation = (levelOfRealism = 1, getEdgy = false) => {
         "Investigating a mysterious disappearance in a quiet town", 
         "Leading a group of explorers through dangerous terrain", 
         "A hamburger eating contest at McDonalds", 
+        "Crash landed in an alligator infested swamp",
+        "Shipwrecked on an unknown tropical island"
     ]
     const list2 = [
         "Trying to decode an ancient map leading to a hidden city", 

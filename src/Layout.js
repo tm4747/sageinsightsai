@@ -194,7 +194,12 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
 
   const beginButtonDiv = !begun && !hideContentBeginButton ? 
     <div className={"commonDiv"}>
-      <ButtonControl onPress={handleBegin} text={"Begin!"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
+      <form style={{width:"100%"}} onSubmit={(e) => {
+          e.preventDefault(); // Prevent default form submission (like page reload)
+          handleBegin();
+        }}>
+        <ButtonControl onPress={handleBegin} text={"Begin!"} variation={"submitRequest"} addedStyles={{maxWidth: "400px"}} type={"submit"}/>
+      </form>
     </div> : "";
 
 
@@ -210,13 +215,18 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
               <AILogo size={".75em"}/>
                 <TypingText text={"Please enter your name"} flashingText={"_ "} headerSize={"small"}/>
               </h3>
-              <input type="text-input" className={nameInputClasses} value={userName}
-              onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
-              {nameErrorText}
-              <FlashingText text={userName} blockDisplay={true}/>              
-              <div className={"commonDiv"} style={{width:"100%"}}>
-                <ButtonControl onPress={handleSubmitName} text={"Submit"} type={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
-              </div>
+              <form style={{width:"100%"}} onSubmit={(e) => {
+                e.preventDefault(); // Prevent default form submission (like page reload)
+                handleSubmitName();
+              }}>
+                <input type="text-input" className={nameInputClasses} value={userName}
+                onChange={handleUpdateName} style={{maxWidth: "400px", color:"white", paddingLeft:".5rem"}}/>
+                {nameErrorText}
+                <FlashingText text={userName} blockDisplay={true}/>              
+                <div className={"commonDiv"} style={{width:"100%"}}>
+                  <ButtonControl type={"submit"} onPress={handleSubmitName} text={"Submit"} variation={"submitRequest"} addedStyles={{maxWidth: "400px"}}/>
+                </div>
+              </form>
           </header>
           </div>
         </main>
@@ -229,7 +239,18 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
     <div className={styles.layoutDiv} >
       <main>
         <div className={styles.app} >
-          <header className={styles.appHeader} style={{ height: headerHeight }}>
+          <header 
+            className={styles.appHeader} 
+            style={{ height: headerHeight }} 
+            tabIndex={0} // Make it focusable
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                if(!begun && !hideContentBeginButton ){
+                  handleBegin();
+                }
+              }
+            }}>
             <div ref={headerContentRef}>
               {userData}
               {pageTitle}

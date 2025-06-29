@@ -120,7 +120,7 @@ function WebpageSummaryTool({setIsLoading}) {
   /********** DISPLAY FUNCTIONS ***********/
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <div className={"commonDiv"}>
-      <ButtonControl type={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
+      <ButtonControl variation={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
     </div>
      : "";
   
@@ -129,8 +129,8 @@ function WebpageSummaryTool({setIsLoading}) {
   <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
 
   const mainButton = isDone ? 
-    <ButtonControl type={'resetButton'} onPress={resetState} text={"Start Over"}/> : 
-    <ButtonControl isDisabled={lockTextInput} type={'submitRequest'} onPress={callLambda} text={"Get Summary"} /> ;
+    <ButtonControl variation={'resetButton'} onPress={resetState} text={"Start Over"}/> : 
+    <ButtonControl isDisabled={lockTextInput} variation={'submitRequest'} onPress={callLambda} text={"Get Summary"} /> ;
   
   return (
     <div className="content">
