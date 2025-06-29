@@ -13,7 +13,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [criteria, setCriteria] = useState([]);
   const [choices, setChoices] = useState([]);
   const [showResults, setShowResults] = useState(false);
-  const [showTable, setShowTable] = useState(false);
   const [step, setStep] = useState(1);
 
   
@@ -163,7 +162,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     />
   );
   
-  const tableDisplay = showTable ?
+  const tableDisplay = step === 5 ?
   <DataTable
     choices={choices}
     criteria={criteria}
