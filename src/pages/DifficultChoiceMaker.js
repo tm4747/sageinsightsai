@@ -13,12 +13,9 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [criteria, setCriteria] = useState([]);
   const [choices, setChoices] = useState([]);
   const [showResults, setShowResults] = useState(false);
-  const [tableData, sesTableData] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
-  useEffect(() => {
-    }, [criteria]);
   
-
   const resetState = () => {
     setDecisionText("");
     setDecisionTextDone(false);
@@ -60,10 +57,10 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   };
 
   const haveCriteria = criteria && criteria.length > 0;
+  const haveChoices = choices && choices.length > 0;
 
 
   /********* DISPLAY FUNCTIONS **********/
-
   const decisionInput = !choiceTextDone && (
     <>
       <label>Describe the decision or choice:</label>
@@ -96,12 +93,12 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     </>
   );
 
-   const showResultsButton = choiceTextDone && criteria && choices (
+   const showResultsButton = choiceTextDone && criteria && choices ? (
     <>
       <ButtonControl onPress={() => setShowResults(true)} text={"Show Results"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - this will display totals and reveal your best choice.</span>
     </>
-  );
+  ) : "";
 
   const criteriaModal = (
     <InputModal
@@ -162,11 +159,11 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
           </div>
           {criteriaModal}
           {choiceModal}
-          {/* <DataTable
-            criteriaRows={criteriaRows}
-            setCriteriaRows={tableData}
+          <DataTable
+            choices={choices}
+            criteria={criteria}
             showResults={showResults}
-          /> */}
+          />
         </div>
       </div>
     </div>

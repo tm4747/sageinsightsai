@@ -56,19 +56,21 @@ const ChoiceCellRenderer = (props) => {
   );
 };
 
-const DataTable = ({ criteriaRows, setCriteriaRows, showResults }) => {
+
+const DataTable = ({ criteria, choices, showResults }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
+  const [criteriaRows, setCriteriaRows] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
 
-
+  /*** UPDATE TABLE DATA */
   useEffect(() => {
-    if (criteriaRows.length === 0) {
+    if (criteria.length === 0) {
       setRowData([]);
       return;
     }
 
-    const choiceCount = criteriaRows[0].choices.length;
+    const choiceCount = choices.length;
     const updatedColDefs = [
       { field: "name", headerName: "Criterion" },
       { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer }
@@ -77,7 +79,7 @@ const DataTable = ({ criteriaRows, setCriteriaRows, showResults }) => {
     for (let i = 0; i < choiceCount; i++) {
       updatedColDefs.push({
         field: `choice${i + 1}`,
-        headerName: criteriaRows[0].choices[i].name,
+        headerName: choices[i].name,
         cellRenderer: ChoiceCellRenderer
       });
       updatedColDefs.push({
@@ -88,13 +90,13 @@ const DataTable = ({ criteriaRows, setCriteriaRows, showResults }) => {
 
     setColDefs(updatedColDefs);
 
-    const rows = criteriaRows.map(criterion => {
+    const rows = criteria.map(criterion => {
       const row = {
         name: criterion.name,
         importance: criterion.sliderValue
       };
 
-      criterion.choices.forEach((choice, index) => {
+      choices.forEach((choice, index) => {
         row[`choice${index + 1}`] = choice.rating;
         row[`choice${index + 1}Rating`] = choice.rating * criterion.sliderValue;
       });
@@ -102,26 +104,30 @@ const DataTable = ({ criteriaRows, setCriteriaRows, showResults }) => {
       return row;
     });
 
-    const firstCriterion = criteriaRows[0];
+    const firstCriterion = criteria[0];
     let totalImportance = 0;
     const totalRatings = {};
     rows.forEach(row => {
       totalImportance += Number(row.importance) || 0;
-      firstCriterion.choices.forEach((_, index) => {
+      choices.forEach((_, index) => {
         const key = `choice${index + 1}Rating`;
         totalRatings[key] = (totalRatings[key] || 0) + (Number(row[key]) || 0);
       });
     });
 
     const totalsRow = { name: "TOTAL", importance: totalImportance };
-    firstCriterion.choices.forEach((_, index) => {
+    choices.forEach((_, index) => {
       const ratingKey = `choice${index + 1}Rating`;
       totalsRow[`choice${index + 1}`] = "";
       totalsRow[ratingKey] = showResults ? totalRatings[ratingKey] : null;
     });
     setRowData(rows);
     setPinnedBottomRowData([totalsRow]);
-  }, [criteriaRows, showResults]);
+    console.log("criteria", criteria);
+    console.log("choices", choices);
+    console.log("rowData", rowData);
+  }, [criteria, choices, showResults]);
+
 
   const defaultColDef = { flex: 1 };
   const rowStyles = params => (params.data?.name === 'TOTAL' ? { fontWeight: 'bold', backgroundColor: '#f0f0f0' } : {});
