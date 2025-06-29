@@ -6,8 +6,8 @@ import ButtonControl from '../components/simple/ButtonControl';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const overrideChoice = false ? "Where to move" : "";
-  const [choiceText, setDecisionText] = useState(overrideChoice);
-  const [choiceTextDone, setDecisionTextDone] = useState(true);
+  const [decisionText, setDecisionText] = useState(overrideChoice);
+  const [decisionTextDone, setDecisionTextDone] = useState(true);
   const [showCriteriaModal, setShowCriteriaModal] = useState(false);
   const [showChoiceModal, setShowChoiceModal] = useState(false);
   const [criteria, setCriteria] = useState([]);
@@ -19,6 +19,8 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const resetState = () => {
     setDecisionText("");
     setDecisionTextDone(false);
+    setChoices([]);
+    setCriteria([]);
   };
 
   const addCriteria = () => {
@@ -30,6 +32,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   };
 
   const handleSubmitCriteria = ({ name, description, sliderValue }) => {
+    const numberOfChoices = choices.length;
     setCriteria(prevItems => [
       ...prevItems,
       {
@@ -38,15 +41,26 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
         sliderValue
       }
     ]);
+    const updatedChoices = choices;
+    for(let x = 0; x < numberOfChoices; x++){
+      updatedChoices[x].ratings.push(5);
+    }
+    setChoices(updatedChoices);
+
   };
 
   const handleSubmitChoice = ({ name, description }) => {
+    const numberOfCriteria = criteria.length;
+    const initialRatings = [];
+    for(let x = 0; x < numberOfCriteria; x++){
+      initialRatings.push(5);
+    }
     setChoices(prevItems => [
       ...prevItems,
       {
         name,
         description,
-        rating: 5
+        ratings: initialRatings
       }
     ]);
   };
@@ -61,39 +75,39 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
 
   /********* DISPLAY FUNCTIONS **********/
-  const decisionInput = !choiceTextDone && (
+  const decisionInput = !decisionTextDone && (
     <>
       <label>Describe the decision or choice:</label>
       <input
         className={"text-input"}
-        value={choiceText}
+        value={decisionText}
         type="text"
         onChange={(e) => setDecisionText(e.target.value)}
       />
     </>
   );
-  const decisionGoodButton = !choiceTextDone && (
+  const decisionGoodButton = !decisionTextDone && (
     <ButtonControl onPress={() => setDecisionTextDone(true)} text={"Decision is correct!"} variation={"submitRequest"}/>
   );
-  const startOverButton = choiceTextDone && (
+  const startOverButton = decisionTextDone && (
     <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
   );
 
-  const addCriteriaButton = choiceTextDone && (
+  const addCriteriaButton = decisionTextDone && (
     <>
       <ButtonControl onPress={addCriteria} text={"Add Criteria"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - these are factors of the decision you will use in evaluation.</span>
     </>
   );
 
-  const addChoiceButton = choiceTextDone && (
+  const addChoiceButton = decisionTextDone && (
     <>
       <ButtonControl onPress={addChoice} text={"Add Choices"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - these are the choices you will evaluate.</span>
     </>
   );
 
-   const showResultsButton = choiceTextDone && criteria && choices ? (
+   const showResultsButton = decisionTextDone && criteria && choices ? (
     <>
       <ButtonControl onPress={() => setShowResults(true)} text={"Show Results"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - this will display totals and reveal your best choice.</span>
@@ -124,9 +138,9 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       currentItems={choices}
     />
   );
-  const choiceDisplay = choiceText ? 
+  const choiceDisplay = decisionText ? 
           <div className={"commonDiv"}>
-            <FlashingText text={"Decision: " + choiceText} />
+            <FlashingText text={"Decision: " + decisionText} />
           </div> : "";
 
   if (!featureFlagShowBeta) {
@@ -162,6 +176,8 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
           <DataTable
             choices={choices}
             criteria={criteria}
+            setCriteria={setCriteria}
+            setChoices={setChoices}
             showResults={showResults}
           />
         </div>
