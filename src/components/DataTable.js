@@ -44,6 +44,7 @@ const ChoiceCellRenderer = (props) => {
         });
         setChoices(updatedChoices);
       }
+      return null;
     });
   };
 
@@ -60,7 +61,6 @@ const ChoiceCellRenderer = (props) => {
 const DataTable = ({ criteria, choices, setCriteria, setChoices, showResults }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
-  const [criteriaRows, setCriteriaRows] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
 
   /*** UPDATE TABLE DATA */
@@ -104,7 +104,6 @@ const DataTable = ({ criteria, choices, setCriteria, setChoices, showResults }) 
       return row;
     });
 
-    const firstCriterion = criteria[0];
     let totalImportance = 0;
     const totalRatings = {};
     rows.forEach(row => {
@@ -125,7 +124,6 @@ const DataTable = ({ criteria, choices, setCriteria, setChoices, showResults }) 
     setPinnedBottomRowData([totalsRow]);
     console.log("criteria", criteria);
     console.log("choices", choices);
-    console.log("rowData", rowData);
   }, [criteria, choices, showResults]);
 
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import FlashingText from '../components/FlashingText';
 import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
@@ -13,7 +13,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [criteria, setCriteria] = useState([]);
   const [choices, setChoices] = useState([]);
   const [showResults, setShowResults] = useState(false);
-  const [tableData, setTableData] = useState([]);
 
   
   const resetState = () => {
@@ -69,9 +68,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     setShowCriteriaModal(false);
     setShowChoiceModal(false);
   };
-
-  const haveCriteria = criteria && criteria.length > 0;
-  const haveChoices = choices && choices.length > 0;
 
 
   /********* DISPLAY FUNCTIONS **********/
