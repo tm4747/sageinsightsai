@@ -4,6 +4,7 @@ import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
 import ButtonControl from '../components/simple/ButtonControl';
 import TextInput from '../components/simple/TextInput';
+import TextInputForm from '../components/complex/TextInputForm';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [decisionText, setDecisionText] = useState("");
@@ -83,32 +84,10 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const dataPreview = decisionText && decisionTextDone ? <div className={"commonDiv bold"}>Decision: {decisionText}</div> : "";
 
   /*** STEP 1 ***/
-  const textForFlashing = decisionText ? "Decision: " + decisionText : "";
-  const enteredDecisionDisplay = !decisionText ? <span className="bold">Please enter your decision:</span> : 
-    <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
-  const textDisplay = <TextInput 
-    id={"setDecisionStep"}
-    handleOnChange={(e) => setDecisionText(e.target.value)}
-    enteredValue={decisionText}
-    addedStyles={{width: "100%"}}
-  />;
-  const setDecisionButton = 
-    <ButtonControl 
-      onPress={handleDecisionDone} 
-      text={"Decision is correct!"} 
-      variation={"submitRequest"} 
-      addedStyles={{width: "100%"}}
-    />
   const setDecisionStep = step === 1 ? (
-     <div className={"formDiv"} style={{maxWidth:"600px", margin:"auto"}}>
-        <div className={"commonDiv"}>
-          {enteredDecisionDisplay}
-        </div>
-          {textDisplay}
-        <div className={"commonDiv"}>
-          {setDecisionButton}     
-        </div>
-      </div>
+    <TextInputForm formLabel={"Please enter your decision:"} 
+      fieldName={"Decision"} fieldValue={decisionText} setFieldValue={setDecisionText}
+      submitForm={handleDecisionDone} submitButtonText={"Decision is correct!"}/>
   ) : "";
 
   /*** STEP 2 ***/
