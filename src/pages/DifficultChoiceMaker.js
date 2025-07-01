@@ -15,6 +15,9 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [showResults, setShowResults] = useState(false);
   const [step, setStep] = useState(1);
 
+  const haveChoices = choices.length > 1;
+  const haveCriteria = criteria.length > 0;
+
   
   /********* JAVASCRIPT HELPER FUNCTIONS **********/
   const resetState = () => {
@@ -23,6 +26,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     setChoices([]);
     setCriteria([]);
     setShowResults(false);
+    setStep(1);
   };
 
   const addCriteria = () => {
@@ -79,7 +83,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
 
   /********* DISPLAY FUNCTIONS **********/
-  const dataPreview = decisionText && decisionTextDone ? decisionText : "";
+  const dataPreview = decisionText && decisionTextDone ? <div className={"commonDiv bold"}>Decision: {decisionText}</div> : "";
 
   /*** STEP 1 ***/
   const textForFlashing = decisionText ? "Decision: " + decisionText : "";
@@ -126,7 +130,9 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
   /*** BUTTONS ***/
   const startOverButton = decisionTextDone && (
-    <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
+    <div className={"commonDiv"}>
+      <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
+    </div>
   );
 
    const showResultsButton = decisionTextDone && criteria && choices ? (
@@ -196,7 +202,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
             <div className={"commonDiv"}>
               <div className={"button-row"}>
                 {showResultsButton}
-                {startOverButton}
               </div>
             </div>
             {criteriaModal}
@@ -204,6 +209,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
             {tableDisplay}
           </div>
         </div>
+        {startOverButton}
       </div>
       
     </div>
