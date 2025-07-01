@@ -122,28 +122,6 @@ function WebpageSummaryTool({setIsLoading}) {
   
 
   /********** DISPLAY FUNCTIONS ***********/
-  const textForFlashing = validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl;
-  const enteredUrlDisplay = !enteredUrl ? <span className="bold">Please enter url:</span> : 
-    <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
-
-  const textDisplay = <TextInput 
-    enteredValue={enteredUrl} 
-    handleOnChange={(e) => handleEnteredUrlChange(e.target.value)} 
-    isError={enteredUrlError} 
-    errorMessage={enteredUrlErrorMessage}
-    validData={validUrl}
-    halfWidth={true}
-    isDisabled={lockTextInput}
-    handleClear={clearUrlInput}
-    isClearButton={enteredUrl && !lockTextInput}
-  />
-
-  const mainButton = <ButtonControl 
-    isDisabled={lockTextInput} 
-    variation={'submitRequest'} 
-    onPress={callLambda} 
-    text={"Get Summary"} /> ;
-    
   const textInputFormDisplay = <TextInputForm 
     textForFlashing={validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl}
     formLabel={"Please enter url:"} 
@@ -173,15 +151,6 @@ function WebpageSummaryTool({setIsLoading}) {
   
   return (
     <div className="content">
-      <div className={"formDiv"}>
-          <div className={"commonDiv"}>
-            {enteredUrlDisplay}
-          </div>
-          {textDisplay}
-        <div className={"commonDiv"}>
-          {mainButton}
-        </div>
-      </div>
       {textInputFormDisplay}
       {startOver}
       <div className={"commonDiv"}>
