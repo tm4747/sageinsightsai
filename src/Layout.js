@@ -47,7 +47,7 @@ const Layout = ({ setIsLoading, pages, showBeta, devOnly}) => {
   }, []);
   useEffect(() => {
     if (readyToSetLoading) {
-      setIsLoading(!userFetchAttempted);
+      setIsLoading(!userFetchAttempted, "default", "layout->initial app load time");
     }
   }, [userFetchAttempted, readyToSetLoading, setIsLoading]);
 

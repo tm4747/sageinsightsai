@@ -55,6 +55,7 @@ function WebpageSummaryTool({setIsLoading}) {
 
   // website summary call
   const callLambda = async () => {
+
     if (!haveValidData(enteredUrl)) {
       setEnteredUrlError(true);
       setEnteredUrlErrorMessage("Entered url is invalid.");
@@ -62,11 +63,13 @@ function WebpageSummaryTool({setIsLoading}) {
     } else {
       setEnteredUrlError(false);
       try {
-        setIsLoading(true, "lambda");
-        await fetchWebSummary(enteredUrl, setPostResponse, setIsLoading);
+        setIsLoading(true, "lambda", "webSummary -> fetch web summary");
+        await fetchWebSummary(enteredUrl, setPostResponse);
       } catch (error) {
         console.error('Error fetching summary:', error);
-      } 
+      } finally {
+        setIsLoading(false, "lambda");
+      }
     }  
   }
 
@@ -135,8 +138,11 @@ function WebpageSummaryTool({setIsLoading}) {
     isClearButton={enteredUrl && !lockTextInput}
   />
 
-  const mainButton = <ButtonControl isDisabled={lockTextInput} variation={'submitRequest'} 
-  onPress={callLambda} text={"Get Summary"} /> ;
+  const mainButton = <ButtonControl 
+    isDisabled={lockTextInput} 
+    variation={'submitRequest'} 
+    onPress={callLambda} 
+    text={"Get Summary"} /> ;
     
   const textInputFormDisplay = <TextInputForm 
     textForFlashing={validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl}

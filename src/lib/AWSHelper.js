@@ -95,7 +95,7 @@ export const deleteUserData = async (uuid) => {
 
 
 /******* GET WEB INFO TOOL (future state will not be just summary) *******/
-export const fetchWebSummary = async (enteredUrl, setResponse, setIsLoading) => {
+export const fetchWebSummary = async (enteredUrl, setResponse) => {
   const apiUrl = APIBASE + "/hello";
   console.log('enteredUrl', enteredUrl);
 
@@ -121,9 +121,7 @@ export const fetchWebSummary = async (enteredUrl, setResponse, setIsLoading) => 
   } catch (error) {
     console.error('Error fetching data:', error.message || error);
     setResponse("⚠️ An error occurred while fetching the summary.");
-  } finally {
-    setIsLoading(false);
-  }
+  } 
 };
 
 

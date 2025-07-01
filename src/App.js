@@ -11,7 +11,7 @@ import LoadingModal from './components/modals/LoadingModal';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [loadingModalType, setLoadingModalType] = useState("");
+  const [isLambdaLoading, setIsLambdaLoading] = useState(false);
   const location = useLocation();
   const path = location.pathname;
   const featureFlagShowBeta = process.env.REACT_APP_ENV !== "prod";
@@ -24,21 +24,32 @@ function App() {
     { key: "decidedly", url: "/decidedly-choice-tool", active: path === "/decidedly-choice-tool", label: "Decidedly", howItWorks: getDifficultChoiceMakerHowItWorks(), description: "This tool will assist in making difficult and/or complex choices. " + (featureFlagShowBeta ? "" : "Coming Soon!"), isBeta: true}
   ];
 
-  const handleSetIsLoading = (isLoading, type = "") => {
-    if(type){
-      setLoadingModalType(type);
-    }
+  const handleSetIsLoading = (isLoading, type = "general", referrer = "referrer not set") => {
+    console.log("handleSetIsLoading", isLoading, type, referrer);
     setIsLoading(isLoading);
+  }
+
+
+  const handleSetIsLambdaLoading = (isLoading, type = "", referrer = "referrer not set") => {
+    console.log("handleSetIsLambdaLoading", isLoading, "lambda", referrer);
+    if(isLoading){
+      setIsLoading(false);
+      setIsLambdaLoading(true);
+    } else {
+       setIsLambdaLoading(false);
+    }
+    
   }
   
   return (
     <>
-      <LoadingModal isLoading={isLoading} type={loadingModalType}/>
+      <LoadingModal isLoading={isLoading} type={""}/>
+      <LoadingModal isLoading={isLambdaLoading} type={"lambda"}/>
       <Routes>
         <Route path="/" element={<Layout isLoading={isLoading} setIsLoading={handleSetIsLoading} pages={pages} showBeta={featureFlagShowBeta} devOnly={featureFlagDevOnly} />}>
-          <Route index element={<WebpageSummaryTool setIsLoading={handleSetIsLoading}/>} />
-          <Route path="story-maker" element={<StoryMaker setIsLoading={handleSetIsLoading}/>}  />
-          <Route path="decidedly-choice-tool" element={<DifficultChoiceMaker setIsLoading={handleSetIsLoading} featureFlagShowBeta={featureFlagShowBeta}/>} />
+          <Route index element={<WebpageSummaryTool setIsLoading={handleSetIsLambdaLoading}/>} />
+          <Route path="story-maker" element={<StoryMaker setIsLoading={handleSetIsLambdaLoading}/>}  />
+          <Route path="decidedly-choice-tool" element={<DifficultChoiceMaker setIsLoading={handleSetIsLambdaLoading} featureFlagShowBeta={featureFlagShowBeta}/>} />
         </Route>
       </Routes>
     </>
