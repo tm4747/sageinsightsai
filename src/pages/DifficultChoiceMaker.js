@@ -74,6 +74,10 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     ]);
   };
 
+  const handleSetDecisionText = (value) =>{
+    setDecisionText(value)
+  }
+
   const closeModal = () => {
     setShowCriteriaModal(false);
     setShowChoiceModal(false);
@@ -85,9 +89,9 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
   /*** STEP 1 ***/
   const setDecisionStep = step === 1 ? (
-    <TextInputForm formLabel={"Please enter your decision:"} 
-      fieldName={"Decision"} fieldValue={decisionText} setFieldValue={setDecisionText}
-      submitForm={handleDecisionDone} submitButtonText={"Decision is correct!"}/>
+    <TextInputForm formLabel={"Please enter your decision:"} textForFlashing={decisionText ? "Decision: " + decisionText : ""}
+      fieldName={"Decision"} fieldValue={decisionText} setFieldValue={handleSetDecisionText}
+      submitForm={handleDecisionDone} submitButtonText={"Decision is correct!"} addedStyles={{width:"100%"}}/>
   ) : "";
 
   /*** STEP 2 ***/

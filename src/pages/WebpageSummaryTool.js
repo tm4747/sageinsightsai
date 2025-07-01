@@ -5,6 +5,7 @@ import FlashingText from '../components/FlashingText';
 import { removeNonUrlCharacters } from '../lib/ValidationHelper';
 import TextInput from '../components/simple/TextInput';
 import ButtonControl from '../components/simple/ButtonControl';
+import TextInputForm from '../components/complex/TextInputForm';
 
 
 function WebpageSummaryTool({setIsLoading}) {
@@ -78,8 +79,8 @@ function WebpageSummaryTool({setIsLoading}) {
 
 
   /********** DYNAMIC JS FUNCTIONS **********/ 
-  const handleEnteredUrlChange = (event) => {
-    const enteredValue = removeNonUrlCharacters(event.target.value);
+  const handleEnteredUrlChange = (value) => {
+    const enteredValue = removeNonUrlCharacters(value);
     setEnteredUrl(enteredValue);
     if ( enteredValue && haveValidData(enteredValue)) {
       setEnteredUrlErrorMessage("")
@@ -124,7 +125,7 @@ function WebpageSummaryTool({setIsLoading}) {
 
   const textDisplay = <TextInput 
     enteredValue={enteredUrl} 
-    handleOnChange={handleEnteredUrlChange} 
+    handleOnChange={(e) => handleEnteredUrlChange(e.target.value)} 
     isError={enteredUrlError} 
     errorMessage={enteredUrlErrorMessage}
     validData={validUrl}
@@ -134,10 +135,30 @@ function WebpageSummaryTool({setIsLoading}) {
     isClearButton={enteredUrl && !lockTextInput}
   />
 
-  const mainButton = isDone ? 
-    <ButtonControl variation={'resetButton'} onPress={resetState} text={"Start Over"}/> : 
-    <ButtonControl isDisabled={lockTextInput} variation={'submitRequest'} onPress={callLambda} text={"Get Summary"} /> ;
-  
+  const mainButton = <ButtonControl isDisabled={lockTextInput} variation={'submitRequest'} 
+  onPress={callLambda} text={"Get Summary"} /> ;
+    
+  const textInputFormDisplay = <TextInputForm 
+    textForFlashing={validUrl ? "Valid url: " + enteredUrl : "Entered url: " + enteredUrl}
+    formLabel={"Please enter url:"} 
+    fieldName={"Url"} 
+    fieldValue={enteredUrl} 
+    validData={validUrl} 
+    validValueMessage={"Valid url: " + enteredUrl} 
+    setFieldValue={handleEnteredUrlChange}
+    isError={enteredUrlError} 
+    errorMessage={enteredUrlErrorMessage}
+    isDisabled={lockTextInput}
+    handleClear={clearUrlInput}
+    isClearButton={enteredUrl && !lockTextInput}
+    submitForm={callLambda} submitButtonText={"Get Summary!"}/>;
+
+    const startOver = isDone ? 
+      <div className={"commonDiv"}>
+        <ButtonControl variation={'resetButton'} onPress={resetState} text={"Start Over"}/>
+      </div> : "";
+
+
   const stopScrollButton = (isStarted && !isDone && !disableScroll) ? 
     <div className={"commonDiv"}>
       <ButtonControl variation={"cancelScroll"} onPress={() => {setDisableScroll(true)}} text={"Disable Auto-Scroll"}/>
@@ -155,6 +176,8 @@ function WebpageSummaryTool({setIsLoading}) {
           {mainButton}
         </div>
       </div>
+      {textInputFormDisplay}
+      {startOver}
       <div className={"commonDiv"}>
         <div className={"resultsDiv"} >
           <div className={"innerResultsDiv"}>
