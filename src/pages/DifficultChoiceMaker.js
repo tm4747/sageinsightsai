@@ -15,9 +15,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [showResults, setShowResults] = useState(false);
   const [step, setStep] = useState(1);
 
-  const haveChoices = choices.length > 1;
-  const haveCriteria = criteria.length > 0;
-
   
   /********* JAVASCRIPT HELPER FUNCTIONS **********/
   const resetState = () => {
