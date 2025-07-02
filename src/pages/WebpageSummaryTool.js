@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { fetchWebSummary } from '../lib/AWSHelper';
 import { marked } from 'marked';
-import FlashingText from '../components/FlashingText';
 import { removeNonUrlCharacters } from '../lib/ValidationHelper';
-import TextInput from '../components/simple/TextInput';
 import ButtonControl from '../components/simple/ButtonControl';
 import TextInputForm from '../components/complex/TextInputForm';
 
@@ -163,7 +161,6 @@ function WebpageSummaryTool({setIsLoading}) {
           </div>
         </div>
       </div>
-      
       <div ref={messagesEndRef}/>
       {stopScrollButton}
     </div>

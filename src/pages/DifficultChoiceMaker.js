@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import FlashingText from '../components/FlashingText';
 import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
 import ButtonControl from '../components/simple/ButtonControl';
-import TextInput from '../components/simple/TextInput';
 import TextInputForm from '../components/complex/TextInputForm';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
@@ -89,9 +87,15 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
   /*** STEP 1 ***/
   const setDecisionStep = step === 1 ? (
-    <TextInputForm formLabel={"Please enter your decision:"} textForFlashing={decisionText ? "Decision: " + decisionText : ""}
-      fieldName={"Decision"} fieldValue={decisionText} setFieldValue={handleSetDecisionText}
-      submitForm={handleDecisionDone} submitButtonText={"Decision is correct!"} addedStyles={{width:"100%"}}/>
+    <TextInputForm 
+      formLabel={"Please enter your decision:"} 
+      textForFlashing={decisionText ? "Decision: " + decisionText : ""}
+      fieldName={"Decision"} 
+      fieldValue={decisionText} 
+      setFieldValue={handleSetDecisionText}
+      submitForm={handleDecisionDone} 
+      submitButtonText={"Decision is correct!"} 
+      addedStyles={{width:"100%"}}/>
   ) : "";
 
   /*** STEP 2 ***/
