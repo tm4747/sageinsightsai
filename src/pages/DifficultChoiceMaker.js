@@ -227,7 +227,10 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
 
   /*** STEP 4 */  
-   const tableDisplay = step >= 4 ? 
+  const tableDirections = step == 4 ? <span className={"notice bold"}>For each Decision Factor, please adjust relative importance with 10 being most important.</span> : 
+    ""; 
+
+  const tableDisplay = step >= 4 ? 
     <DataTable
       potentialOptions={potentialOptions}
       whatMatters={whatMatters}
@@ -265,6 +268,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     <div className="content">
       <div className={"formDiv"}>
         {progressBar}
+        {step >= 4 ? dataPreview : ""}
         {setDecisionStep}
         {setDecisionOptionsStep}
         {setWhatMattersStep}
@@ -272,7 +276,8 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       <div className={"commonDiv"}>
         <div className={"resultsDiv"}>
           <div className={"innerResultsDiv"}>
-            {dataPreview}
+            {step < 4 ? dataPreview : ""}
+            {tableDirections}
             {tableDisplay}
           </div>
         </div>

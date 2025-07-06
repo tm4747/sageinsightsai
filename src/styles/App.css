@@ -168,6 +168,9 @@ audio{
 .small-text{
   font-size:small;
 }
+.larger-text{
+  font-size:larger;
+}
 .italic{
   font-style: italic;
 }
