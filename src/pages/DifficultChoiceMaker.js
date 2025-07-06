@@ -5,18 +5,25 @@ import ButtonControl from '../components/simple/ButtonControl';
 import TextInputForm from '../components/complex/TextInputForm';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
-  const [decisionText, setDecisionText] = useState("");
-  const [decisionTextDone, setDecisionTextDone] = useState(false);
+  const initialRatingValue = 5;
+  const override = true;
+
+  const [decisionText, setDecisionText] = useState(override ? "Where to move": "");
+  // TODO: may not need this.  Steps might be enough
+  const [decisionTextDone, setDecisionTextDone] = useState(override ? true : false);
+  const [potentialOptions, setPotentialOptions] = useState(override ? [
+    {name: "NY", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}, 
+    {name: "SLC", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}, 
+    {name: "Montana", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}] : []);
   const [potentialOptionText, setPotentialOptionText] = useState("");
-  const [potentialOptionTextDone, setPotentialOptionTextDone] = useState(false);
-  // TODO: we're getting rid of modals probably
-  const [showWhatMattersModal, setShowWhatMattersModal] = useState(false);
-  const [showChoiceModal, setShowChoiceModal] = useState(false);
-  // TODO: rename potentialOptions and whatMatters - decision options & 
-  const [whatMatters, setWhatMatters] = useState([]);
-  const [potentialOptions, setPotentialOptions] = useState([]);
+  const [whatMatters, setWhatMatters] = useState(override ? [
+    {name: "Wide Open Space", sliderValue: initialRatingValue}, 
+    {name: "Culture", sliderValue: initialRatingValue}, 
+    {name: "Job Opportunities", sliderValue: initialRatingValue}] : []);
+  const [whatMattersText, setWhatMattersText] = useState("");
   const [showResults, setShowResults] = useState(false);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(override ? 3 : 1);
+
 
   
   /********* JAVASCRIPT HELPER FUNCTIONS **********/
@@ -30,37 +37,15 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   };
 
   const addWhatMatters = () => {
-    setShowWhatMattersModal(true);
+
   };
-
-  const addChoice = () => {
-    setShowChoiceModal(true);
-  };
-
-
-  const handleSubmitWhatMatters = ({ name, description, sliderValue }) => {
-    const numberOfPotentialOptions = potentialOptions.length;
-    setWhatMatters(prevItems => [
-      ...prevItems,
-      {
-        name,
-        description,
-        sliderValue
-      }
-    ]);
-    // must update potentialOptions[each].ratings when a new whatMatters is added
-    const updatedPotentialOptions = potentialOptions;
-    for(let x = 0; x < numberOfPotentialOptions; x++){
-      updatedPotentialOptions[x].ratings.push(5);
-    }
-    setPotentialOptions(updatedPotentialOptions);
-  };
-
+ 
   const handleSubmitPotentialOption = ({}) => {
+    // need number of whatMatters to set potentialOptions
     const numberOfWhatMatters = whatMatters.length;
     const initialRatings = [];
     for(let x = 0; x < numberOfWhatMatters; x++){
-      initialRatings.push(5);
+      initialRatings.push(initialRatingValue);
     }
     setPotentialOptions(prevItems => [
       ...prevItems,
@@ -69,6 +54,27 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
         ratings: initialRatings
       }
     ]);
+    setPotentialOptionText("");
+  };
+
+  // TODO: check this - probably not right
+  const handleSubmitWhatMatters = ({ }) => {
+    console.log('whatMattersText', whatMattersText);
+    const numberOfPotentialOptions = potentialOptions.length;
+    setWhatMatters(prevItems => [
+      ...prevItems,
+      {
+        name: whatMattersText,
+        sliderValue: initialRatingValue
+      }
+    ]);
+    // must update potentialOptions[each].ratings when a new whatMatters is added
+    const updatedPotentialOptions = potentialOptions;
+    for(let x = 0; x < numberOfPotentialOptions; x++){
+      updatedPotentialOptions[x].ratings.push(initialRatingValue);
+    }
+    setPotentialOptions(updatedPotentialOptions);
+    setWhatMattersText("");
   };
 
   const handleSetDecisionText = (value) =>{
@@ -84,16 +90,18 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     setPotentialOptionText(value)
   }
 
-  const handleDecisionOptionTextDone = () => {
-    setPotentialOptionTextDone(true);
-    setStep(3);
+  const handleSetWhatMattersText = (value) =>{
+    setWhatMattersText(value)
   }
 
 
-  const closeModal = () => {
-    setShowWhatMattersModal(false);
-    setShowChoiceModal(false);
-  };
+  const handleDecisionOptionTextDone = () => {
+    setStep(3);
+  }
+
+  const handleSetWhatMattersTextDone = () => {
+    setStep(4);
+  }
 
 
   /********* DISPLAY FUNCTIONS **********/
@@ -110,7 +118,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     (
       <p>What Matters:
         {whatMatters.map((item, index) => (
-          <span key={index}>{item}</span>
+          <span key={index}>{index != 0 ? ", ": ""} {item.name}</span>
         ))}
       </p>
     ) : "";
@@ -151,20 +159,36 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       addedStyles={{width:"100%"}}/>
   ) : "";
 
-  /*** STEP 3 */
-  const addWhatMattersStep = step === 3 ? 
-    <>
-      <ButtonControl onPress={addWhatMatters} text={"Add WhatMatters"} variation={"submitRequest"}/>
-      <span className={"small-text notice hide"}> - these are factors of the decision you will use in evaluation.</span>
-    </> : "";
+  /*** STEP 3 */  
+   const setWhatMattersStep = step === 3 ? (
+    <TextInputForm 
+      formLabel={"Please enter a what matters options:"} 
+      textForFlashing={whatMattersText ? "What Matters: " + whatMattersText : ""}
+      fieldName={"What Matters"} 
+      fieldValue={whatMattersText} 
+      fieldDescription={"Think of these as the things that matter to you most. They help define what makes one option better than another."}
+      setFieldValue={handleSetWhatMattersText}
+      addButtonFunction={handleSubmitWhatMatters}
+      addButtonText={"Add What Matters"}
+      submitForm={handleSetWhatMattersTextDone} 
+      submitButtonText={"Done with What Matters"} 
+      addedStyles={{width:"100%"}}/>
+  ) : "";
 
-  
+  /*** STEP 4 */  
+   const tableDisplay = step === 4 ? 
+    <DataTable
+      choices={potentialOptions}
+      criteria={whatMatters}
+      setCriteria={setWhatMatters}
+      setChoices={setPotentialOptions}
+      showResults={showResults}
+    /> : "";
+
 
   /*** BUTTONS ***/
   const startOverButton = decisionTextDone && (
-    <div className={"commonDiv"}>
       <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
-    </div>
   );
 
    const showResultsButton = decisionTextDone && whatMatters && potentialOptions ? (
@@ -174,40 +198,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     </>
   ) : "";
 
-  /*** MODALS ***/
-  const whatMattersModal = (
-    <InputModal
-      isOpen={showWhatMattersModal}
-      onSubmit={handleSubmitWhatMatters}
-      onClose={closeModal}
-      formTitle={"Enter WhatMatters"}
-      field1Name={"criterion"}
-      formDescription={"You can enter multiple whatMatters. Description is optional. Click 'Done' when finished."}
-      showSlider={true}
-      sliderTitle={"How important is this criterion:"}
-      currentItems={whatMatters}
-    />
-  );
-  // const choiceModal = (
-  //   <InputModal
-  //     isOpen={showChoiceModal}
-  //     onSubmit={handleSubmitChoice}
-  //     onClose={closeModal}
-  //     formTitle={"Enter PotentialOptions"}
-  //     field1Name={"choice"}
-  //     formDescription={"You can enter multiple potentialOptions. Description is optional. Click 'Done' when finished."}
-  //     currentItems={potentialOptions}
-  //   />
-  // );
-  
-  const tableDisplay = step === 5 ?
-  <DataTable
-    choices={potentialOptions}
-    criteria={whatMatters}
-    setCriteria={setWhatMatters}
-    setChoices={setPotentialOptions}
-    showResults={showResults}
-  /> : "";
 
   if (!featureFlagShowBeta) {
     return (
@@ -226,22 +216,21 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
         {dataPreview}
         {setDecisionStep}
         {setDecisionOptionsStep}
-        {addWhatMattersStep}
+        {setWhatMattersStep}
+       
       </div>
       <div className={"commonDiv"}>
         <div className={"resultsDiv"}>
           <div className={"innerResultsDiv"}>
-            <div className={"commonDiv"}>
-              <div className={"button-row"}>
-                {showResultsButton}
-              </div>
-            </div>
-            {whatMattersModal}
-            {/* {choiceModal} */}
             {tableDisplay}
           </div>
         </div>
-        {startOverButton}
+        <div className={"commonDiv"}>
+          <div className={"button-row"}>
+            {showResultsButton}
+            {startOverButton}
+          </div>
+        </div>
       </div>
       
     </div>
