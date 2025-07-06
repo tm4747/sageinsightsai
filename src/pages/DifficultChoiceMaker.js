@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
 import ButtonControl from '../components/simple/ButtonControl';
 import TextInputForm from '../components/complex/TextInputForm';
@@ -146,7 +145,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     (
       <p>Potential Options:
         {potentialOptions.map((item, index) => (
-          <span key={index}>{index != 0 ? ", ": ""} {item.name}</span>
+          <span key={index}>{index !== 0 ? ", ": ""} {item.name}</span>
         ))}
       </p>
     ) : "";
@@ -154,7 +153,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     (
       <p>Decision Factors:
         {whatMatters.map((item, index) => (
-          <span key={index}>{index != 0 ? ", ": ""} {item.name}</span>
+          <span key={index}>{index !== 0 ? ", ": ""} {item.name}</span>
         ))}
       </p>
     ) : "";
