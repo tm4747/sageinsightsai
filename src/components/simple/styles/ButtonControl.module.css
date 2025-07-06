@@ -60,6 +60,13 @@
 .yellowButton:hover{
   background-color:var(--yellow);
 }
+.blueButton{
+  background-color:var(--blue);
+}
+.blueButton:hover{
+  background-color:var(--dark-blue);
+  color:var(--white);
+}
 .fullWidth{
   width:100%;
 }

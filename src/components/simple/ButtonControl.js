@@ -17,6 +17,9 @@ const ButtonControl = ({ onPress, text, variation = "", type = "", isDisabled = 
         case "progressionButton":
             buttonClasses += ` ${styles.yellowButton}`;
             break;
+        case "btnPrimary":
+            buttonClasses += ` ${styles.blueButton}`;
+            break;
         case "secondaryFetch":
             buttonClasses += ` ${styles.cancelScroll}`;
             buttonClasses += ` ${styles.purpleButton}`;
@@ -25,6 +28,7 @@ const ButtonControl = ({ onPress, text, variation = "", type = "", isDisabled = 
             break;
     }
 
+    
    
 
     return(

@@ -12,13 +12,15 @@ const TextInputForm = ({
     setFieldValue, 
     isError=false,
     errorMessage="",
+    addButtonFunction,
+    addButtonText,
     submitForm,
     submitButtonText,
     isDisabled=false,
     handleClear=() => {},
     isClearButton=false,
     addedStyles={},
-    limitWidth=""
+    buttonRowStyles={}
 }) => {
   const enteredDecisionDisplay = !fieldValue ? <span className="bold">{formLabel}</span> : 
     <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
@@ -42,9 +44,19 @@ const TextInputForm = ({
       isDisabled={isDisabled}
       onPress={submitForm} 
       text={submitButtonText} 
-      variation={"submitRequest"} 
+      variation={"btnPrimary"} 
       addedStyles={{}}
     />
+  
+
+  const addButtonDisplay = (addButtonFunction && addButtonText) ?
+    <ButtonControl 
+      isDisabled={isDisabled}
+      onPress={addButtonFunction} 
+      text={addButtonText} 
+      variation={"submitRequest"} 
+      addedStyles={{}}
+    /> : "";
 
     return (
         // <div className={"formDiv"} style={{maxWidth:"600px", margin:"auto"}}>
@@ -53,7 +65,8 @@ const TextInputForm = ({
           {enteredDecisionDisplay}
         </div>
           {textDisplay}
-        <div className={"commonDiv"}>
+        <div className={"commonDiv button-row"} style={buttonRowStyles}>
+          {addButtonDisplay}
           {setDecisionButton}     
         </div>
       </div>
