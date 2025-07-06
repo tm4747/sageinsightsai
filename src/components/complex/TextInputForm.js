@@ -8,6 +8,7 @@ const TextInputForm = ({
     formLabel, 
     fieldName,
     fieldValue,
+    fieldDescription = "",
     validData=false,
     setFieldValue, 
     isError=false,
@@ -16,13 +17,15 @@ const TextInputForm = ({
     addButtonText,
     submitForm,
     submitButtonText,
+    resetButton=null,
+    resetButtonText="",
     isDisabled=false,
     handleClear=() => {},
     isClearButton=false,
     addedStyles={},
     buttonRowStyles={}
 }) => {
-  const enteredDecisionDisplay = !fieldValue ? <span className="bold">{formLabel}</span> : 
+  const enteredInputDisplay = !fieldValue ? <span className="bold">{formLabel}</span> : 
     <FlashingText interval={750} text={textForFlashing} boldText={true}/>;
 
   const textDisplay = <TextInput 
@@ -31,6 +34,7 @@ const TextInputForm = ({
     handleOnChange={(e) => setFieldValue(e.target.value)}
     isError={isError}
     errorMessage={errorMessage}
+    fieldDescription={fieldDescription}
     validData={validData}
     halfWidth={true}
     isDisabled={isDisabled}
@@ -58,16 +62,26 @@ const TextInputForm = ({
       addedStyles={{}}
     /> : "";
 
+    const resetButtonDisplay = (resetButton && resetButtonText) ?
+    <ButtonControl 
+      isDisabled={isDisabled}
+      onPress={resetButton} 
+      text={resetButtonText} 
+      variation={"resetButton"} 
+      addedStyles={{}}
+    /> : "";
+
     return (
         // <div className={"formDiv"} style={{maxWidth:"600px", margin:"auto"}}>
         <div className={"formDiv"}>
         <div className={"commonDiv"}>
-          {enteredDecisionDisplay}
+          {enteredInputDisplay}
         </div>
           {textDisplay}
         <div className={"commonDiv button-row"} style={buttonRowStyles}>
           {addButtonDisplay}
-          {setDecisionButton}     
+          {setDecisionButton}
+          {resetButtonDisplay}     
         </div>
       </div>
     );

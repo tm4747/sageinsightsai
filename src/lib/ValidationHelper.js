@@ -14,3 +14,13 @@ export const removeNonUrlCharacters = (inputString) => {  // keep only alphanume
 export const removeSpecialChars = (str) => {
   return str.replace(/(\r\n|\n|\r)/g, "").replace(/"/g, "'");
 }
+
+export const validateCharacterLength = (str, requiredLength) => {
+  const sanitizedInput = removeNonAlphanumericMultispace(str).trim();
+  console.log('requiredLength', requiredLength);
+  console.log('sanitizedInput', sanitizedInput);
+  const validInput = sanitizedInput && sanitizedInput.length >= requiredLength ? sanitizedInput : false;
+  console.log('sanitizedInput.length', sanitizedInput.length);
+  console.log('validInput', validInput);
+  return validInput;
+}

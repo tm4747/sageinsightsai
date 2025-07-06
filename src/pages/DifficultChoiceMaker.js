@@ -3,44 +3,58 @@ import InputModal from '../components/modals/InputModal';
 import DataTable from '../components/DataTable';
 import ButtonControl from '../components/simple/ButtonControl';
 import TextInputForm from '../components/complex/TextInputForm';
+import { validateCharacterLength } from '../lib/ValidationHelper';
+import ProgressBar from '../components/simple/ProgressBar';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const initialRatingValue = 5;
-  const override = true;
+  const override = false;
+  const basicTextErrorMessage = "Entered value must be at least 2 characters.";
 
   const [decisionText, setDecisionText] = useState(override ? "Where to move": "");
   // TODO: may not need this.  Steps might be enough
-  const [decisionTextDone, setDecisionTextDone] = useState(override ? true : false);
+  const [decisionTextError, setDecisionTextError] = useState(override ? true : false);
   const [potentialOptions, setPotentialOptions] = useState(override ? [
     {name: "NY", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}, 
     {name: "SLC", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}, 
     {name: "Montana", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}] : []);
   const [potentialOptionText, setPotentialOptionText] = useState("");
+  const [potentialOptionTextError, setPotentialOptionTextError] = useState(false);
   const [whatMatters, setWhatMatters] = useState(override ? [
     {name: "Wide Open Space", rating: initialRatingValue}, 
     {name: "Culture", rating: initialRatingValue}, 
     {name: "Job Opportunities", rating: initialRatingValue}] : []);
   const [whatMattersText, setWhatMattersText] = useState("");
+  const [whatMattersTextError, setWhatMattersTextError] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [step, setStep] = useState(override ? 3 : 1);
+  const [currentErrorMessage, setCurrentErrorMessage] = useState(basicTextErrorMessage);
 
 
   
   /********* JAVASCRIPT HELPER FUNCTIONS **********/
+  const resetErrors = () => {
+    setPotentialOptionTextError(false);
+    setWhatMattersTextError(false);
+    setDecisionTextError(false);
+    setCurrentErrorMessage(basicTextErrorMessage);
+  }
   const resetState = () => {
     setDecisionText("");
-    setDecisionTextDone(false);
+    resetErrors();
     setPotentialOptions([]);
     setWhatMatters([]);
     setShowResults(false);
     setStep(1);
   };
 
-  const addWhatMatters = () => {
-
-  };
- 
-  const handleSubmitPotentialOption = ({}) => {
+  const handleSubmitPotentialOption = () => {
+    const validatedInput = validateCharacterLength(potentialOptionText, 2);
+    if(!validatedInput){
+      setPotentialOptionTextError(true);
+      return false;
+    }
+    setPotentialOptionTextError(false);
     // need number of whatMatters to set potentialOptions
     const numberOfWhatMatters = whatMatters.length;
     const initialRatings = [];
@@ -50,21 +64,26 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     setPotentialOptions(prevItems => [
       ...prevItems,
       {
-        name: potentialOptionText,
+        name: validatedInput,
         ratings: initialRatings
       }
     ]);
     setPotentialOptionText("");
   };
 
-  // TODO: check this - probably not right
-  const handleSubmitWhatMatters = ({ }) => {
-    console.log('whatMattersText', whatMattersText);
+  const handleSubmitWhatMatters = () => {
+    const validatedInput = validateCharacterLength(whatMattersText, 2);
+    if(!validatedInput){
+      setWhatMattersTextError(true);
+      return false;
+    }
+    setWhatMattersTextError(false);
+    console.log('whatMattersText', validatedInput);
     const numberOfPotentialOptions = potentialOptions.length;
     setWhatMatters(prevItems => [
       ...prevItems,
       {
-        name: whatMattersText,
+        name: validatedInput,
         rating: initialRatingValue
       }
     ]);
@@ -82,30 +101,47 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   }
 
   const handleDecisionDone = () => {
-    setDecisionTextDone(true);
-    setStep(2);
+    console.log("handle dec done");
+     if(!decisionText || !validateCharacterLength(decisionText, 3)){
+      console.log("here1");
+      setCurrentErrorMessage("You must enter a decision.");
+      setDecisionTextError(true);
+    } else {
+      console.log("here2");
+      setStep(step + 1);
+      resetErrors();
+    }
   }
-
-  const handlePotentialSetOptionText = (value) =>{
-    setPotentialOptionText(value)
-  }
-
-  const handleSetWhatMattersText = (value) =>{
-    setWhatMattersText(value)
-  }
-
 
   const handleDecisionOptionTextDone = () => {
-    setStep(3);
+     // todo: here is where you override error message - if no what matters are entered
+    if(!potentialOptions || potentialOptions.length < 2){
+      setCurrentErrorMessage("You must enter at least 2 Potential Options.");
+      setPotentialOptionTextError(true);
+    } else {
+      setStep(step + 1);
+      resetErrors();
+    }
+    setStep(step + 1);  
   }
 
   const handleSetWhatMattersTextDone = () => {
-    setStep(4);
+    // TODO: here is where you override error message - if no what matters are entered
+    if(!whatMatters || whatMatters.length < 2){
+      // set custom error
+      setCurrentErrorMessage("You must enter at least 2 Decision Factors.");
+      setWhatMattersTextError(true);
+    } else {
+      setStep(step + 1);
+      resetErrors();
+    }
   }
 
 
   /********* DISPLAY FUNCTIONS **********/
-  const decisionTextDisplay =  decisionText && decisionTextDone ? <p>{`Decision: ${decisionText}`}</p> : "";
+  const progressBar = <ProgressBar totalStages={5} currentStage={step - 1} />;
+
+  const decisionTextDisplay =  decisionText && step > 1 ? <p>{`Decision: ${decisionText}`}</p> : "";
   const potentialOptionsDisplay = potentialOptions && potentialOptions.length > 0 ? 
     (
       <p>Potential Options:
@@ -116,7 +152,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     ) : "";
   const whatMattersDisplay = whatMatters && whatMatters.length > 0 ? 
     (
-      <p>What Matters:
+      <p>Decision Factors:
         {whatMatters.map((item, index) => (
           <span key={index}>{index != 0 ? ", ": ""} {item.name}</span>
         ))}
@@ -133,14 +169,18 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   /*** STEP 1 ***/
   const setDecisionStep = step === 1 ? (
     <TextInputForm 
-      formLabel={"Please enter your decision:"} 
+      formLabel={"Describe your decision:"} 
       textForFlashing={decisionText ? "Decision: " + decisionText : ""}
       fieldName={"Decision"} 
-      fieldValue={decisionText} 
+      fieldValue={decisionText}
+      fieldDescription={'Start by typing in the decision you`re trying to make — for example, "Where should I move?" or "Which job should I take?'} 
       setFieldValue={handleSetDecisionText}
       submitForm={handleDecisionDone} 
-      submitButtonText={"Decision is correct!"} 
-      addedStyles={{width:"100%"}}/>
+      submitButtonText={"Decision is done!"} 
+      addedStyles={{width:"100%"}}
+      isError={decisionTextError}
+      errorMessage={currentErrorMessage}  
+    />
   ) : "";
 
   /*** STEP 2 ***/
@@ -150,17 +190,45 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       textForFlashing={potentialOptionText ? "Potential Option: " + potentialOptionText : ""}
       fieldName={"Decision Option"} 
       fieldValue={potentialOptionText} 
-      fieldDescription={"Each of these represents one possible answer to your question or one route you could take."}
-      setFieldValue={handlePotentialSetOptionText}
+      fieldDescription={"Each of these represents one possible choice or answer to the decision you're trying to make."}
+      setFieldValue={(value) => setPotentialOptionText(value)}
       addButtonFunction={handleSubmitPotentialOption}
       addButtonText={"Add Potential Option"}
       submitForm={handleDecisionOptionTextDone} 
       submitButtonText={"Done with Potential Options"} 
-      addedStyles={{width:"100%"}}/>
+      resetButton={resetState}
+      resetButtonText={"Start Over"}
+      addedStyles={{width:"100%"}}
+      isError={potentialOptionTextError}
+      errorMessage={currentErrorMessage}
+      />
   ) : "";
 
   /*** STEP 3 */  
-   const tableDisplay = step >= 3 ? 
+   const setWhatMattersStep = step === 3 ? (
+    <TextInputForm 
+      formLabel={"Please enter a decision factor:"} 
+      textForFlashing={whatMattersText ? "Decision Factor: " + whatMattersText : ""}
+      fieldName={"Decision Factor"} 
+      fieldValue={whatMattersText} 
+      fieldDescription={"Decision Factors are the things or criteria that matter regarding the decision. They help define what makes one potential choice better than another."}
+      setFieldValue={(value) => setWhatMattersText(value)}
+      handleClear={()=> setWhatMattersText("")}
+      isClearButton={whatMattersText}
+      addButtonFunction={handleSubmitWhatMatters}
+      addButtonText={"Add Decision Factor"}
+      submitForm={handleSetWhatMattersTextDone} 
+      submitButtonText={"Done with What Matters"} 
+      resetButton={resetState}
+      resetButtonText={"Start Over"}
+      addedStyles={{width:"100%"}}
+      isError={whatMattersTextError}
+      errorMessage={currentErrorMessage}/>
+  ) : "";
+
+
+  /*** STEP 4 */  
+   const tableDisplay = step >= 4 ? 
     <DataTable
       potentialOptions={potentialOptions}
       whatMatters={whatMatters}
@@ -169,29 +237,13 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       showResults={showResults}
     /> : "";
 
-  /*** STEP 4 */  
-   const setWhatMattersStep = step === 4 ? (
-    <TextInputForm 
-      formLabel={"Please enter a what matters options:"} 
-      textForFlashing={whatMattersText ? "What Matters: " + whatMattersText : ""}
-      fieldName={"What Matters"} 
-      fieldValue={whatMattersText} 
-      fieldDescription={"Think of these as the things that matter to you most. They help define what makes one option better than another."}
-      setFieldValue={handleSetWhatMattersText}
-      addButtonFunction={handleSubmitWhatMatters}
-      addButtonText={"Add What Matters"}
-      submitForm={handleSetWhatMattersTextDone} 
-      submitButtonText={"Done with What Matters"} 
-      addedStyles={{width:"100%"}}/>
-  ) : "";
-
 
   /*** BUTTONS ***/
-  const startOverButton = decisionTextDone && (
+  const startOverButton = step >= 4 ? (
       <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
-  );
+  ) : "";
 
-   const showResultsButton = decisionTextDone && whatMatters && potentialOptions ? (
+   const showResultsButton = step >= 4 ? (
     <>
       <ButtonControl onPress={() => setShowResults(true)} text={"Show Results"} variation={"submitRequest"}/>
       <span className={"small-text notice hide"}> - this will display totals and reveal your best choice.</span>
@@ -213,15 +265,15 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   return (
     <div className="content">
       <div className={"formDiv"}>
-        {dataPreview}
+        {progressBar}
         {setDecisionStep}
         {setDecisionOptionsStep}
         {setWhatMattersStep}
-       
       </div>
       <div className={"commonDiv"}>
         <div className={"resultsDiv"}>
           <div className={"innerResultsDiv"}>
+            {dataPreview}
             {tableDisplay}
           </div>
         </div>

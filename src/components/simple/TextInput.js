@@ -10,17 +10,20 @@ const TextInput = ({
     isError, 
     errorMessage, 
     validData, 
+    fieldDescription = "",
     halfWidth = false, 
     isDisabled = false, 
     handleClear,
     isClearButton = false,
     addedStyles = ""
 }) => {
-
+  
+  const validError = isError && errorMessage;
   let inputClasses = halfWidth ? `${styles.textInput} ${styles.halfWidth}` : styles.textInput;
   inputClasses += isError ? ` ${styles.errorTextInput}` : (validData ? ` ${styles.inputSuccess}` : "");
 
-  const errorTextDisplay = errorMessage ? <p className={"notice error"}>{errorMessage}</p> : "";
+  const errorTextDisplay = validError ? <p className={"notice error"}>{errorMessage}</p> : "";
+  const fieldDescriptionDisplay = !validError && fieldDescription ? <p className={"notice"} style={{paddingTop:"1rem"}}>{fieldDescription}</p> : "";
   const clearButton = isClearButton ? <ClearButton onPress={handleClear} /> : "";
   const labelDisplay = labelText ? <label htmlFor={id} style={{display: "block"}}>{labelText}</label> : "";
 
@@ -37,7 +40,8 @@ const TextInput = ({
                 disabled={isDisabled}
                 styles={{width:"1000px"}}
                 />
-                {clearButton}
+            {clearButton}
+            {fieldDescriptionDisplay}
             {errorTextDisplay}
         </div>
     );
