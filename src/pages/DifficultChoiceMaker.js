@@ -17,9 +17,9 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     {name: "Montana", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}] : []);
   const [potentialOptionText, setPotentialOptionText] = useState("");
   const [whatMatters, setWhatMatters] = useState(override ? [
-    {name: "Wide Open Space", sliderValue: initialRatingValue}, 
-    {name: "Culture", sliderValue: initialRatingValue}, 
-    {name: "Job Opportunities", sliderValue: initialRatingValue}] : []);
+    {name: "Wide Open Space", rating: initialRatingValue}, 
+    {name: "Culture", rating: initialRatingValue}, 
+    {name: "Job Opportunities", rating: initialRatingValue}] : []);
   const [whatMattersText, setWhatMattersText] = useState("");
   const [showResults, setShowResults] = useState(false);
   const [step, setStep] = useState(override ? 3 : 1);
@@ -65,7 +65,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       ...prevItems,
       {
         name: whatMattersText,
-        sliderValue: initialRatingValue
+        rating: initialRatingValue
       }
     ]);
     // must update potentialOptions[each].ratings when a new whatMatters is added
@@ -160,7 +160,17 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   ) : "";
 
   /*** STEP 3 */  
-   const setWhatMattersStep = step === 3 ? (
+   const tableDisplay = step >= 3 ? 
+    <DataTable
+      potentialOptions={potentialOptions}
+      whatMatters={whatMatters}
+      setWhatMatters={setWhatMatters}
+      setPotentialOptions={setPotentialOptions}
+      showResults={showResults}
+    /> : "";
+
+  /*** STEP 4 */  
+   const setWhatMattersStep = step === 4 ? (
     <TextInputForm 
       formLabel={"Please enter a what matters options:"} 
       textForFlashing={whatMattersText ? "What Matters: " + whatMattersText : ""}
@@ -174,16 +184,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       submitButtonText={"Done with What Matters"} 
       addedStyles={{width:"100%"}}/>
   ) : "";
-
-  /*** STEP 4 */  
-   const tableDisplay = step === 4 ? 
-    <DataTable
-      choices={potentialOptions}
-      criteria={whatMatters}
-      setCriteria={setWhatMatters}
-      setChoices={setPotentialOptions}
-      showResults={showResults}
-    /> : "";
 
 
   /*** BUTTONS ***/

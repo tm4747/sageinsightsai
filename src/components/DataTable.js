@@ -6,14 +6,14 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 // Moved outside component and uses context
 const ImportanceCellRenderer = (props) => {
-  const { value, data, context: { criteria, setCriteria } } = props;
+  const { value, data, context: { whatMatters, setWhatMatters } } = props;
   if (data.name === "TOTAL") return <span>{value}</span>;
 
   const updateImportance = (newValue) => {
-    const updatedCriteria = criteria.map(c =>
-      c.name === data.name ? { ...c, sliderValue: newValue } : c
+    const updatedWhatMatters = whatMatters.map(c =>
+      c.name === data.name ? { ...c, rating: newValue } : c
     );
-    setCriteria(updatedCriteria);
+    setWhatMatters(updatedWhatMatters);
   };
 
   return (
@@ -26,23 +26,23 @@ const ImportanceCellRenderer = (props) => {
 };
 
 const ChoiceCellRenderer = (props) => {
-  const { value, data, colDef, context: { criteria, setChoices, choices } } = props;
+  const { value, data, colDef, context: { whatMatters, setPotentialOptions, potentialOptions } } = props;
   if (data.name === "TOTAL") return <span>{value}</span>;
 
   const choiceIndex = parseInt(colDef.field.replace('choice', ''), 10) - 1;
 
   const updateChoiceRating = (newValue) => {
-    criteria.map((criterion, criterionIndex) => {
-      if (criterion.name === data.name) {
-        const updatedChoices = choices.map((choice, index) => {
+    whatMatters.map((whatMattersItem, whatMattersItemIndex) => {
+      if (whatMattersItem.name === data.name) {
+        const updatedPotentialOptions = potentialOptions.map((choice, index) => {
           if (index === choiceIndex) {
             const updatedRatings = [...choice.ratings]; 
-            updatedRatings[criterionIndex] = newValue; 
+            updatedRatings[whatMattersItemIndex] = newValue; 
             return { ...choice, ratings: updatedRatings };
           }
           return choice;
         });
-        setChoices(updatedChoices);
+        setPotentialOptions(updatedPotentialOptions);
       }
       return null;
     });
@@ -58,28 +58,28 @@ const ChoiceCellRenderer = (props) => {
 };
 
 
-const DataTable = ({ criteria, choices, setCriteria, setChoices, showResults }) => {
+const DataTable = ({ whatMatters, potentialOptions, setWhatMatters, setPotentialOptions, showResults }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
 
   /*** UPDATE TABLE DATA */
   useEffect(() => {
-    if (criteria.length === 0) {
+    if (whatMatters.length === 0) {
       setRowData([]);
       return;
     }
 
-    const choiceCount = choices.length;
+    const choiceCount = potentialOptions.length;
     const updatedColDefs = [
-      { field: "name", headerName: "Criterion" },
+      { field: "name", headerName: "What Matters" },
       { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer }
     ];
 
     for (let i = 0; i < choiceCount; i++) {
       updatedColDefs.push({
         field: `choice${i + 1}`,
-        headerName: choices[i].name,
+        headerName: potentialOptions[i].name,
         cellRenderer: ChoiceCellRenderer
       });
       updatedColDefs.push({
@@ -90,15 +90,15 @@ const DataTable = ({ criteria, choices, setCriteria, setChoices, showResults }) 
 
     setColDefs(updatedColDefs);
 
-    const rows = criteria.map(( criterion, criterionIndex) => {
+    const rows = whatMatters.map(( whatMattersItem, whatMattersItemIndex) => {
       const row = {
-        name: criterion.name,
-        importance: criterion.sliderValue
+        name: whatMattersItem.name,
+        importance: whatMattersItem.rating
       };
 
-      choices.forEach((choice, index) => {
-        row[`choice${index + 1}`] = choice.ratings[criterionIndex];
-        row[`choice${index + 1}Rating`] = choice.ratings[criterionIndex] * criterion.sliderValue;
+      potentialOptions.forEach((choice, index) => {
+        row[`choice${index + 1}`] = choice.ratings[whatMattersItemIndex];
+        row[`choice${index + 1}Rating`] = choice.ratings[whatMattersItemIndex] * whatMattersItem.rating;
       });
 
       return row;
@@ -108,23 +108,23 @@ const DataTable = ({ criteria, choices, setCriteria, setChoices, showResults }) 
     const totalRatings = {};
     rows.forEach(row => {
       totalImportance += Number(row.importance) || 0;
-      choices.forEach((_, index) => {
+      potentialOptions.forEach((_, index) => {
         const key = `choice${index + 1}Rating`;
         totalRatings[key] = (totalRatings[key] || 0) + (Number(row[key]) || 0);
       });
     });
 
     const totalsRow = { name: "TOTAL", importance: totalImportance };
-    choices.forEach((_, index) => {
+    potentialOptions.forEach((_, index) => {
       const ratingKey = `choice${index + 1}Rating`;
       totalsRow[`choice${index + 1}`] = "";
       totalsRow[ratingKey] = showResults ? totalRatings[ratingKey] : null;
     });
     setRowData(rows);
     setPinnedBottomRowData([totalsRow]);
-    console.log("criteria", criteria);
-    console.log("choices", choices);
-  }, [criteria, choices, showResults]);
+    console.log("whatMatters", whatMatters);
+    console.log("potentialOptions", potentialOptions);
+  }, [whatMatters, potentialOptions, showResults]);
 
 
   const defaultColDef = { flex: 1 };
@@ -138,7 +138,7 @@ const DataTable = ({ criteria, choices, setCriteria, setChoices, showResults }) 
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           getRowStyle={rowStyles}
-          context={{ setCriteria, criteria, setChoices, choices}}
+          context={{ setWhatMatters, whatMatters, setPotentialOptions, potentialOptions}}
           pinnedBottomRowData={pinnedBottomRowData}
         />
       </div>
