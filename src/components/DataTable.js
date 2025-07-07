@@ -25,8 +25,10 @@ const ImportanceCellRenderer = (props) => {
   );
 };
 
+/*** RENDERS THE VALUE AND ADJUSTS VALUE OF POTENTIAL OPTIONS RATINGS ***/
 const ChoiceCellRenderer = (props) => {
-  const { value, data, colDef, context: { decisionFactors, setPotentialOptions, potentialOptions } } = props;
+  const { value, data, colDef, context: { decisionFactors, setPotentialOptions, potentialOptions, currentStep } } = props;
+  const showOptionsRatings = currentStep >= 5;
   if (data.name === "TOTAL") return <span>{value}</span>;
 
   const choiceIndex = parseInt(colDef.field.replace('choice', ''), 10) - 1;
@@ -50,9 +52,25 @@ const ChoiceCellRenderer = (props) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateChoiceRating(value - 1); }}>▼</span>
-      <span>{value}</span>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10) updateChoiceRating(value + 1); }}>▲</span>
+      { showOptionsRatings ? <>
+        <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateChoiceRating(value - 1); }}>▼</span>
+        <span>{value}</span>
+        <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10) updateChoiceRating(value + 1); }}>▲</span>
+      </> : ""}
+    </div>
+  );
+};
+
+
+const ChoiceRatingCellRenderer = (props) => {
+  const { value, data, colDef, context: { decisionFactors, setPotentialOptions, potentialOptions, currentStep } } = props;
+  const showOptionsRatings = currentStep >= 5;
+  
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      { showOptionsRatings ? <>
+        <span>{value}</span>
+      </> : ""}
     </div>
   );
 };
@@ -62,8 +80,6 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
-
-  const showOptionsRatings = currentStep >= 5;
 
   /*** UPDATE TABLE DATA */
   useEffect(() => {
@@ -86,7 +102,8 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
       });
       updatedColDefs.push({
         field: `choice${i + 1}Rating`,
-        headerName: "Rating"
+        headerName: "Rating",
+        cellRenderer: ChoiceRatingCellRenderer
       });
     }
     setColDefs(updatedColDefs);
@@ -116,6 +133,7 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
       });
     });
 
+    // RENDER TOTAL ROW? 
     const totalsRow = { name: "TOTAL", importance: totalImportance };
     potentialOptions.forEach((_, index) => {
       const ratingKey = `choice${index + 1}Rating`;
