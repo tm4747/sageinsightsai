@@ -25,7 +25,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     {name: "Job Opportunities", rating: initialRatingValue}] : []);
   const [decisionFactorsText, setDecisionFactorsText] = useState("");
   const [decisionFactorsTextError, setDecisionFactorsTextError] = useState(false);
-  const [showResults, setShowResults] = useState(false);
   const [step, setStep] = useState(override ? 3 : 1);
   const [currentErrorMessage, setCurrentErrorMessage] = useState(basicTextErrorMessage);
 
@@ -43,7 +42,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     resetErrors();
     setPotentialOptions([]);
     setDecisionFactors([]);
-    setShowResults(false);
     setStep(1);
   };
 
@@ -53,7 +51,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       setPotentialOptionTextError(true);
       return false;
     }
-    setPotentialOptionTextError(false);
+    resetErrors();
     // need number of decisionFactors to set potentialOptions
     const numberOfDecisionFactors = decisionFactors.length;
     const initialRatings = [];
@@ -100,13 +98,10 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   }
 
   const handleDecisionDone = () => {
-    console.log("handle dec done");
      if(!decisionText || !validateCharacterLength(decisionText, 3)){
-      console.log("here1");
       setCurrentErrorMessage("You must enter a decision.");
       setDecisionTextError(true);
     } else {
-      console.log("here2");
       setStep(step + 1);
       resetErrors();
     }
@@ -159,10 +154,16 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     
   const dataPreview = decisionTextDisplay ? 
     <div className={"commonDiv bold"}>
+      {potentialOptionText}
       {decisionTextDisplay}
       {potentialOptionsDisplay}
       {decisionFactorsDisplay}
     </div> : "";
+
+  const temporaryStepButtons = <>
+     <button className={"inline-button btnPrimary"} onClick={() => setStep(step - 1)}>▼</button> {step}
+     <button className={"inline-button btnPrimary"} onClick={() => setStep(step + 1)}>▲</button>
+  </>
 
   /*** STEP 1 ***/
   const setDecisionStep = step === 1 ? (
@@ -184,7 +185,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   /*** STEP 2 ***/
     const setDecisionOptionsStep = step === 2 ? (
     <TextInputForm 
-      formLabel={"Please enter your potential options:"} 
+      formLabel={"Please enter your Potential Options:"} 
       textForFlashing={potentialOptionText ? "Potential Option: " + potentialOptionText : ""}
       fieldName={"Decision Option"} 
       fieldValue={potentialOptionText} 
@@ -205,7 +206,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   /*** STEP 3 */  
    const setDecisionFactorsStep = step === 3 ? (
     <TextInputForm 
-      formLabel={"Please enter a decision factor:"} 
+      formLabel={"Please enter a Decision Factor:"} 
       textForFlashing={decisionFactorsText ? "Decision Factor: " + decisionFactorsText : ""}
       fieldName={"Decision Factor"} 
       fieldValue={decisionFactorsText} 
@@ -216,7 +217,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       addButtonFunction={handleSubmitDecisionFactors}
       addButtonText={"Add Decision Factor"}
       submitForm={handleSetDecisionFactorsTextDone} 
-      submitButtonText={"Done with What Matters"} 
+      submitButtonText={"Done with Decision Factors"} 
       resetButton={resetState}
       resetButtonText={"Start Over"}
       addedStyles={{width:"100%"}}
@@ -226,8 +227,19 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
 
 
   /*** STEP 4 */  
-  const tableDirections = step == 4 ? <span className={"notice bold"}>For each Decision Factor, please adjust relative importance with 10 being most important.</span> : 
-    ""; 
+  const step4Or5Text = step === 4 ? 
+    "For each Decision Factor, please adjust Importance with 10 being most important. " : 
+    ( step === 5 ? "Please score how well each Potential Option rates for each Decision Factor." : "");
+
+  const step4Or5ButtonText = step === 4 ? 
+    "Done Rating Decision Factor" : 
+    ( step === 5 ? "Show My Results!" : "");
+  const tableDirections = step === 4 || step === 5 ? 
+  <>
+   <p className={"notice bold larger-text"}>{step4Or5Text}
+    <button className={"inline-button btnPrimary"} onClick={() => setStep(step + 1)}>{step4Or5ButtonText}</button></p>
+  </>
+   : ""; 
 
   const tableDisplay = step >= 4 ? 
     <DataTable
@@ -235,7 +247,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
       decisionFactors={decisionFactors}
       setDecisionFactors={setDecisionFactors}
       setPotentialOptions={setPotentialOptions}
-      showResults={showResults}
       currentStep={step}
     /> : "";
 
@@ -243,13 +254,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   /*** BUTTONS ***/
   const startOverButton = step >= 4 ? (
       <ButtonControl onPress={resetState} text={"Start Over"} variation={"resetButton"}/>
-  ) : "";
-
-   const showResultsButton = step >= 4 ? (
-    <>
-      <ButtonControl onPress={() => setShowResults(true)} text={"Show Results"} variation={"submitRequest"}/>
-      <span className={"small-text notice hide"}> - this will display totals and reveal your best choice.</span>
-    </>
   ) : "";
 
 
@@ -272,18 +276,18 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
         {setDecisionStep}
         {setDecisionOptionsStep}
         {setDecisionFactorsStep}
+        {temporaryStepButtons}
       </div>
       <div className={"commonDiv"}>
         <div className={"resultsDiv"}>
           <div className={"innerResultsDiv"}>
-            {step < 4 ? dataPreview : ""}
+            {step < 4 ? <span className={"larger-text"}>{dataPreview}</span> : ""}
             {tableDirections}
             {tableDisplay}
           </div>
         </div>
         <div className={"commonDiv"}>
           <div className={"button-row"}>
-            {showResultsButton}
             {startOverButton}
           </div>
         </div>

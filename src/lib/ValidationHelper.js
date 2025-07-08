@@ -17,10 +17,6 @@ export const removeSpecialChars = (str) => {
 
 export const validateCharacterLength = (str, requiredLength) => {
   const sanitizedInput = removeNonAlphanumericMultispace(str).trim();
-  console.log('requiredLength', requiredLength);
-  console.log('sanitizedInput', sanitizedInput);
   const validInput = sanitizedInput && sanitizedInput.length >= requiredLength ? sanitizedInput : false;
-  console.log('sanitizedInput.length', sanitizedInput.length);
-  console.log('validInput', validInput);
   return validInput;
 }

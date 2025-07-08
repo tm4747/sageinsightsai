@@ -19,3 +19,11 @@ export const useViewportWidth = () => {
 
   return viewportWidth;
 }
+
+/*** 1. trim whitespace 2. remove all non alphanumeric, non space 3. replace any single or multi-spaces with -  ***/
+export const makeId = (input) => {
+  let id = input.trim();
+  return id
+    .replace(/[^a-zA-Z0-9 ]/g, '') 
+    .replace(/\s+/g, '-');    
+}

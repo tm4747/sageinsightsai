@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
+import "./styles/DataTable.css"
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-// Moved outside component and uses context
+/*** RENDERS ADJUSTABLE DECISION FACTOR IMPORTANCE ***/
 const ImportanceCellRenderer = (props) => {
-  const { value, data, context: { decisionFactors, setDecisionFactors } } = props;
+  const { value, data, context: { decisionFactors, setDecisionFactors, currentStep } } = props;
   if (data.name === "TOTAL") return <span>{value}</span>;
 
   const updateImportance = (newValue) => {
@@ -15,12 +16,13 @@ const ImportanceCellRenderer = (props) => {
     );
     setDecisionFactors(updatedDecisionFactors);
   };
+  const activeStyle = currentStep === 4 ? "flash-green" : "";
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div className={activeStyle}  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
       <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateImportance(value - 1); }}>▼</span>
-      <span>{value}</span>
-      <span style={{ cursor: 'pointer' }} onClick={() => updateImportance(value + 1)}>▲</span>
+      <span className={currentStep === 4 ? "bold" : ""}>{value}</span>
+      <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10 ) updateImportance(value + 1); }}>▲</span>
     </div>
   );
 };
@@ -50,33 +52,35 @@ const ChoiceCellRenderer = (props) => {
     });
   };
 
+  const activeStyle = currentStep === 5 ? "flash-green" : "";
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div className={activeStyle}  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
       { showOptionsRatings ? <>
         <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateChoiceRating(value - 1); }}>▼</span>
-        <span>{value}</span>
+        <span className={currentStep === 5 ? "bold" : ""}>{value}</span>
         <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10) updateChoiceRating(value + 1); }}>▲</span>
       </> : ""}
     </div>
   );
 };
 
-
+/*** CONTROLS DISPLAY OF WEIGHTED POTENTIAL OPTION SCORE - this value is calculated as the product of DECISION FACTOR IMPORTANCE and POTENTIAL OPTION RATING ***/
 const ChoiceRatingCellRenderer = (props) => {
-  const { value, data, colDef, context: { decisionFactors, setPotentialOptions, potentialOptions, currentStep } } = props;
-  const showOptionsRatings = currentStep >= 5;
+  const { value, context: { currentStep } } = props;
+  const showOptionsRatings = currentStep >= 6;
   
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       { showOptionsRatings ? <>
-        <span>{value}</span>
+        <span className={currentStep === 6 ? "bold" : ""}>{value}</span>
       </> : ""}
     </div>
   );
 };
 
 
-const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setPotentialOptions, showResults, currentStep }) => {
+const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setPotentialOptions, currentStep }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
@@ -91,7 +95,7 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
     /** SET / UPDATE COLDEFS */
     const choiceCount = potentialOptions.length;
     const updatedColDefs = [
-      { field: "name", headerName: "What Matters" },
+      { field: "name", headerName: "Decision Factors" },
       { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer }
     ];
     for (let i = 0; i < choiceCount; i++) {
@@ -102,7 +106,7 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
       });
       updatedColDefs.push({
         field: `choice${i + 1}Rating`,
-        headerName: "Rating",
+        headerName: "Score",
         cellRenderer: ChoiceRatingCellRenderer
       });
     }
@@ -138,13 +142,13 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
     potentialOptions.forEach((_, index) => {
       const ratingKey = `choice${index + 1}Rating`;
       totalsRow[`choice${index + 1}`] = "";
-      totalsRow[ratingKey] = showResults ? totalRatings[ratingKey] : null;
+      totalsRow[ratingKey] = currentStep === 6 ? totalRatings[ratingKey] : null;
     });
     setRowData(rows);
     setPinnedBottomRowData([totalsRow]);
     console.log("decisionFactors", decisionFactors);
     console.log("potentialOptions", potentialOptions);
-  }, [decisionFactors, potentialOptions, showResults]);
+  }, [decisionFactors, potentialOptions, currentStep]);
 
 
   const defaultColDef = { flex: 1 };

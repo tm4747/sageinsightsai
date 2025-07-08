@@ -266,28 +266,23 @@ audio{
   width:100%;
   border:solid 2px white;
 }
-/* This wraps the grid and constrains it */
-.table-scroll-container {
-  width: 100%;
-  overflow-x: auto;
+.inline-button {
+  padding:.25rem;
+  padding-left:1rem;
+  padding-right:1rem;
+  border-radius:10px;
+  font-weight:bold;
+  margin-left:1rem;
+  margin-right:1rem;
 }
-/* AG Grid content can be as wide as it needs */
-.ag-theme-alpine.responsive-grid {
-  width: max-content;
-  min-width: 100%;
-  height: 300px;
+.btnPrimary {
+  background-color: var(--dark-blue);
+  color: var(--off-white);
 }
-/* Responsive rules */
-@media screen and (max-width: 1000px) {
-  .table-scroll-container {
-    width:100%;
-  overflow-x: auto;
-  }
-  .ag-theme-alpine.responsive-grid {
-    width: 1200px;
-    min-width: 100%;
-    height: 300px;
-  }
+
+.btnPrimary:hover {
+  background-color: var(--blue);
+  color: var(--off-black);
 }
 @media screen and (max-width: 768px) {
   .displayNoneSm{

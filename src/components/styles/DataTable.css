@@ -1,0 +1,58 @@
+
+/* This wraps the grid and constrains it */
+.table-scroll-container {
+  width: 100%;
+  overflow-x: auto;
+}
+/* AG Grid content can be as wide as it needs */
+.ag-theme-alpine.responsive-grid {
+  width: max-content;
+  min-width: 100%;
+  height: 300px;
+}
+
+.ag-theme-alpine .ag-header-cell{
+  padding: 0 !important;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.ag-theme-alpine .ag-header-cell-label{
+    justify-content: center;
+}
+
+.ag-theme-alpine .ag-cell {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes flashGreen {
+  0%   { background-color: rgb(223, 255, 211); }
+  50%  { background-color: rgb(62, 222, 62); }
+  100% { background-color: rgb(223, 255, 211); }
+}
+
+.flash-green {
+  animation: flashGreen 1s ease-in-out infinite;
+  border-radius: 5px;
+}
+
+
+/* Responsive rules */
+@media screen and (max-width: 1000px) {
+  .table-scroll-container {
+    width:100%;
+  overflow-x: auto;
+  }
+  .ag-theme-alpine.responsive-grid {
+    width: 1200px;
+    min-width: 100%;
+    height: 300px;
+  }
+}
+
+/* Responsive rules */
+@media screen and (max-width: 768px) {
+  
+}
+

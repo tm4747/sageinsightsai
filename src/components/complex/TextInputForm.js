@@ -74,15 +74,15 @@ const TextInputForm = ({
     return (
         // <div className={"formDiv"} style={{maxWidth:"600px", margin:"auto"}}>
         <div className={"formDiv"}>
-        <div className={"commonDiv"}>
-          {enteredInputDisplay}
-        </div>
-          {textDisplay}
-        <div className={"commonDiv button-row"} style={buttonRowStyles}>
-          {addButtonDisplay}
-          {setDecisionButton}
-          {resetButtonDisplay}     
-        </div>
+            <div className={"commonDiv"}>
+              {enteredInputDisplay}
+            </div>
+              {textDisplay}
+            <div className={"commonDiv button-row"} style={buttonRowStyles}>
+              {addButtonDisplay}
+              {setDecisionButton}
+              {resetButtonDisplay}     
+            </div>
       </div>
     );
 }
