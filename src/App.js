@@ -49,7 +49,7 @@ function App() {
         <Route path="/" element={<Layout isLoading={isLoading} setIsLoading={handleSetIsLoading} pages={pages} showBeta={featureFlagShowBeta} devOnly={featureFlagDevOnly} />}>
           <Route index element={<WebpageSummaryTool setIsLoading={handleSetIsLambdaLoading}/>} />
           <Route path="story-maker" element={<StoryMaker setIsLoading={handleSetIsLambdaLoading}/>}  />
-          <Route path="decidedly-choice-tool" element={<DifficultChoiceMaker setIsLoading={handleSetIsLambdaLoading} featureFlagShowBeta={featureFlagShowBeta}/>} />
+          <Route path="decidedly-choice-tool" element={<DifficultChoiceMaker setIsLoading={handleSetIsLambdaLoading}/>} />
         </Route>
       </Routes>
     </>
