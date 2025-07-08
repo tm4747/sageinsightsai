@@ -276,7 +276,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
         {setDecisionStep}
         {setDecisionOptionsStep}
         {setDecisionFactorsStep}
-        {temporaryStepButtons}
+        {process.env.REACT_APP_ENV === "dev" ? temporaryStepButtons : ""}
       </div>
       <div className={"commonDiv"}>
         <div className={"resultsDiv"}>
