@@ -20,9 +20,9 @@ const ImportanceCellRenderer = (props) => {
 
   return (
     <div className={activeStyle}  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateImportance(value - 1); }}>▼</span>
-      <span className={currentStep === 4 ? "bold" : ""}>{value}</span>
       <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10 ) updateImportance(value + 1); }}>▲</span>
+      <span className={currentStep === 4 ? "bold" : ""}>{value}</span>
+      <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateImportance(value - 1); }}>▼</span>
     </div>
   );
 };
@@ -57,9 +57,9 @@ const ChoiceCellRenderer = (props) => {
   return (
     <div className={activeStyle}  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
       { showOptionsRatings ? <>
-        <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateChoiceRating(value - 1); }}>▼</span>
-        <span className={currentStep === 5 ? "bold" : ""}>{value}</span>
         <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10) updateChoiceRating(value + 1); }}>▲</span>
+        <span className={currentStep === 5 ? "bold" : ""}>{value}</span>
+        <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateChoiceRating(value - 1); }}>▼</span>
       </> : ""}
     </div>
   );
@@ -67,23 +67,35 @@ const ChoiceCellRenderer = (props) => {
 
 /*** CONTROLS DISPLAY OF WEIGHTED POTENTIAL OPTION SCORE - this value is calculated as the product of DECISION FACTOR IMPORTANCE and POTENTIAL OPTION RATING ***/
 const ChoiceRatingCellRenderer = (props) => {
-  const { value, context: { currentStep } } = props;
+  const { value, data, colDef, context: { currentStep, maxScoreKey, minScoreKey } } = props;
   const showOptionsRatings = currentStep >= 6;
-  
+  const isTotalRow = data.name === "TOTAL";
+  const field = colDef.field;
+
+  let cellStyle = "";
+  if (isTotalRow && currentStep === 6) {
+    if (field === maxScoreKey) {
+      cellStyle = "flash-green"; // light green
+    } else if (field === minScoreKey) {
+      cellStyle = "flash-red"; // light red
+    }
+  }
+
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      { showOptionsRatings ? <>
-        <span className={currentStep === 6 ? "bold" : ""}>{value}</span>
-      </> : ""}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} className={cellStyle}>
+      { showOptionsRatings && <span className={currentStep === 6 ? "bold" : ""}>{value}</span> }
     </div>
   );
 };
+
 
 
 const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setPotentialOptions, currentStep }) => {
   const [rowData, setRowData] = useState([]);
   const [colDefs, setColDefs] = useState([]);
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
+  const [maxScoreKey, setMaxScoreKey] = useState(null);
+  const [minScoreKey, setMinScoreKey] = useState(null);
 
   /*** UPDATE TABLE DATA */
   useEffect(() => {
@@ -128,7 +140,12 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
     });
 
     let totalImportance = 0;
+    let maxScore = -Infinity;
+    let minScore = Infinity;
+    let maxKey = null;
+    let minKey = null;
     const totalRatings = {};
+
     rows.forEach(row => {
       totalImportance += Number(row.importance) || 0;
       potentialOptions.forEach((_, index) => {
@@ -136,6 +153,21 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
         totalRatings[key] = (totalRatings[key] || 0) + (Number(row[key]) || 0);
       });
     });
+
+    // calculate max and min
+    Object.entries(totalRatings).forEach(([key, value]) => {
+      if (value > maxScore) {
+        maxScore = value;
+        maxKey = key;
+      }
+      if (value < minScore) {
+        minScore = value;
+        minKey = key;
+      }
+    });
+
+    setMaxScoreKey(maxKey);
+    setMinScoreKey(minKey);
 
     // RENDER TOTAL ROW? 
     const totalsRow = { name: "TOTAL", importance: totalImportance };
@@ -160,17 +192,20 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           getRowStyle={rowStyles}
-          context={{ setDecisionFactors, decisionFactors, setPotentialOptions, potentialOptions, currentStep}}
+          context={{ 
+            setDecisionFactors, 
+            decisionFactors, 
+            setPotentialOptions, 
+            potentialOptions, 
+            currentStep,
+            maxScoreKey,
+            minScoreKey,
+          }}
           pinnedBottomRowData={pinnedBottomRowData}
         />
       </div>
     </div>
   );
-
-
-
-
-
 };
 
 export default DataTable;
