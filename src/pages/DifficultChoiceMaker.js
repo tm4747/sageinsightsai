@@ -278,6 +278,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
         {setDecisionFactorsStep}
         {process.env.REACT_APP_ENV === "dev" ? temporaryStepButtons : ""}
       </div>
+      {step > 1 ? 
       <div className={"commonDiv"}>
         <div className={"resultsDiv"}>
           <div className={"innerResultsDiv"}>
@@ -291,7 +292,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
             {startOverButton}
           </div>
         </div>
-      </div>
+      </div> : ""}
       
     </div>
   );
