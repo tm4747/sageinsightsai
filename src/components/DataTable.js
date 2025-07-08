@@ -146,8 +146,6 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
     });
     setRowData(rows);
     setPinnedBottomRowData([totalsRow]);
-    console.log("decisionFactors", decisionFactors);
-    console.log("potentialOptions", potentialOptions);
   }, [decisionFactors, potentialOptions, currentStep]);
 
 

@@ -10,8 +10,8 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const override = false;
   const basicTextErrorMessage = "Entered value must be at least 2 characters.";
 
+  // RESET STATE VARS
   const [decisionText, setDecisionText] = useState(override ? "Where to move": "");
-  // TODO: may not need this.  Steps might be enough
   const [decisionTextError, setDecisionTextError] = useState(override ? true : false);
   const [potentialOptions, setPotentialOptions] = useState(override ? [
     {name: "NY", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}, 
@@ -28,7 +28,6 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [step, setStep] = useState(override ? 3 : 1);
   const [currentErrorMessage, setCurrentErrorMessage] = useState(basicTextErrorMessage);
 
-
   
   /********* JAVASCRIPT HELPER FUNCTIONS **********/
   const resetErrors = () => {
@@ -39,10 +38,12 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   }
   const resetState = () => {
     setDecisionText("");
-    resetErrors();
+    setPotentialOptionText("");
     setPotentialOptions([]);
+    setDecisionFactorsText("");
     setDecisionFactors([]);
     setStep(1);
+    resetErrors();
   };
 
   const handleSubmitPotentialOption = () => {
