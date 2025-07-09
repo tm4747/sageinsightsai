@@ -7,7 +7,7 @@ import ProgressBar from '../components/simple/ProgressBar';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const initialRatingValue = 5;
-  const override = true;
+  const override = process.env.REACT_APP_ENV === "dev";
   const basicTextErrorMessage = "Entered value must be at least 2 characters.";
 
   // RESET STATE VARS
