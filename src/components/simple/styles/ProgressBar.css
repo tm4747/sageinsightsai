@@ -43,6 +43,8 @@
 .progress__label {
   font-size: 12px;
   margin-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;        /* Optional: hide overflowed text */
 }
 
 /* Dynamic Step Placement (up to 10 evenly spaced steps) */

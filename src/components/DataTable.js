@@ -21,9 +21,9 @@ const ImportanceCellRenderer = (props) => {
 
   return (
     <div className={activeStyle}  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (updateable && value < 10 ) updateImportance(updateable && value + 1); }}>▲</span>
+      {updateable ? <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10 ) updateImportance(value + 1); }}>▲</span> : ""}
       <span className={updateable ? "bold" : ""}>{value}</span>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (updateable && value > 1) updateImportance(updateable && value - 1); }}>▼</span>
+      {updateable ? <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateImportance(value - 1); }}>▼</span> : ""}
     </div>
   );
 };
@@ -73,6 +73,10 @@ const ChoiceRatingCellRenderer = (props) => {
   const showOptionsRatings = currentStep >= 6;
   const isTotalRow = data.name === "TOTAL";
   const field = colDef.field;
+  const importanceValue = data.importance;
+  const choiceRatingFieldName = field.replace("Rating", "");
+  const choiceValue = data[choiceRatingFieldName];
+
 
   let cellStyle = "";
   if (isTotalRow && currentStep === 6) {
@@ -85,7 +89,9 @@ const ChoiceRatingCellRenderer = (props) => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} className={cellStyle}>
-      { showOptionsRatings && <span className={currentStep === 6 ? "bold" : ""}>{value}</span> }
+      { showOptionsRatings && <span className={currentStep === 6 ? "bold" : ""}>
+        <span style={{color: "#ccc", fontWeight: "normal"}}>{!isTotalRow ? `${importanceValue} * ${choiceValue} = `: ""}</span> {value}
+        </span> }
     </div>
   );
 };
@@ -114,29 +120,34 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
         tooltipField: "name",
         headerName: "Decision Factors",
         headerTooltip: "Decision Factors",
-        maxWidth: 400,
-        minWidth: 400
+        ...(currentStep === 4 && { maxWidth: 600 }),
+        ...(currentStep > 4 && { maxWidth: 400, minWidth: 400 })
       },
       { 
         field: "importance", 
         headerName: "Importance", 
         cellRenderer: ImportanceCellRenderer,
-        maxWidth: 90,
+        ...(currentStep === 4 && { minWidth: 190, maxWidth: 190 }),
+        ...(currentStep > 4 && { maxWidth: 90 })
       }
     ];
     for (let i = 0; i < choiceCount; i++) {
-      updatedColDefs.push({
-        field: `choice${i + 1}`,
-        headerName: potentialOptions[i].name,
-        headerTooltip: potentialOptions[i].name,
-        cellRenderer: ChoiceCellRenderer
-      });
-      updatedColDefs.push({
-        field: `choice${i + 1}Rating`,
-        headerName: "Score",
-        cellRenderer: ChoiceRatingCellRenderer,
-        maxWidth: 65, // realistic minimum
-      });
+      if(currentStep == 5){
+          updatedColDefs.push({
+          field: `choice${i + 1}`,
+          headerName: potentialOptions[i].name,
+          headerTooltip: potentialOptions[i].name,
+          cellRenderer: ChoiceCellRenderer
+        });
+      }
+      if(currentStep == 6){
+        updatedColDefs.push({
+          field: `choice${i + 1}Rating`,
+          headerName: potentialOptions[i].name,
+          headerTooltip: potentialOptions[i].name,
+          cellRenderer: ChoiceRatingCellRenderer,
+        });
+      }
     }
     setColDefs(updatedColDefs);
 
@@ -208,7 +219,8 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           getRowStyle={rowStyles}
-          tooltipShowDelay={500}
+          tooltipShowDelay={0}
+          tooltipHideDelay={2000}
           tooltipShowMode={"whenTruncated"}
           context={{ 
             setDecisionFactors, 
