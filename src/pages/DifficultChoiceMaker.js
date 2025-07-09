@@ -7,18 +7,30 @@ import ProgressBar from '../components/simple/ProgressBar';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const initialRatingValue = 5;
+  const override = true;
   const basicTextErrorMessage = "Entered value must be at least 2 characters.";
 
   // RESET STATE VARS
-  const [decisionText, setDecisionText] = useState("");
-  const [decisionTextError, setDecisionTextError] = useState(false);
-  const [potentialOptions, setPotentialOptions] = useState([]);
+  const [decisionText, setDecisionText] = useState(override ? "What do I work on next?": "");
+  const [decisionTextError, setDecisionTextError] = useState(override ? true : false);
+  const [potentialOptions, setPotentialOptions] = useState(override ? [
+    {name: "Keep expanding this site", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
+    {name: "Go back to react native apps for androidiphone", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
+    {name: "Build a web service for web sites incorporating AI", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]},
+    {name: "collaborate with someone else to build an app or system", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
+  ] : []);
   const [potentialOptionText, setPotentialOptionText] = useState("");
   const [potentialOptionTextError, setPotentialOptionTextError] = useState(false);
-  const [decisionFactors, setDecisionFactors] = useState([]);
+  const [decisionFactors, setDecisionFactors] = useState(override ? [
+    {name: "How easy is it to get started", rating: initialRatingValue}, 
+    {name: "How long to first marketable product", rating: initialRatingValue}, 
+    {name: "quickness of generating income", rating: initialRatingValue},
+    {name: "amount of generated income over next 2 years", rating: initialRatingValue}, 
+    {name: "leveling up and learning involved", rating: initialRatingValue}, 
+  ] : []);
   const [decisionFactorsText, setDecisionFactorsText] = useState("");
   const [decisionFactorsTextError, setDecisionFactorsTextError] = useState(false);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(override ? 3 : 1);
   const [currentErrorMessage, setCurrentErrorMessage] = useState(basicTextErrorMessage);
 
   
@@ -278,12 +290,12 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   return (
     <div className="content">
       <div className={"formDiv"}>
-        {progressBar}
+        {/* {progressBar} */}
+        {process.env.REACT_APP_ENV === "dev" ? temporaryStepButtons : ""}
         {step >= 4 ? dataPreview : ""}
         {setDecisionStep}
         {setDecisionOptionsStep}
         {setDecisionFactorsStep}
-        {process.env.REACT_APP_ENV === "dev" ? temporaryStepButtons : ""}
       </div>
       {step > 1 ? 
       <div className={"commonDiv"}>

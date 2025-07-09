@@ -109,19 +109,31 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
     /** SET / UPDATE COLDEFS */
     const choiceCount = potentialOptions.length;
     const updatedColDefs = [
-      { field: "name", headerName: "Decision Factors" },
-      { field: "importance", headerName: "Importance", cellRenderer: ImportanceCellRenderer }
+      { 
+        field: "name", 
+        tooltipField: "name",
+        headerName: "Decision Factors",
+        headerTooltip: "Decision Factors",
+      },
+      { 
+        field: "importance", 
+        headerName: "Importance", 
+        cellRenderer: ImportanceCellRenderer 
+      }
     ];
     for (let i = 0; i < choiceCount; i++) {
       updatedColDefs.push({
         field: `choice${i + 1}`,
         headerName: potentialOptions[i].name,
+        headerTooltip: potentialOptions[i].name,
         cellRenderer: ChoiceCellRenderer
       });
       updatedColDefs.push({
         field: `choice${i + 1}Rating`,
         headerName: "Score",
-        cellRenderer: ChoiceRatingCellRenderer
+        cellRenderer: ChoiceRatingCellRenderer,
+        maxWidth: 65, // realistic minimum
+        suppressSizeToFit: true,
       });
     }
     setColDefs(updatedColDefs);
@@ -194,6 +206,8 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           getRowStyle={rowStyles}
+          tooltipShowDelay={500}
+          tooltipShowMode={"whenTruncated"}
           context={{ 
             setDecisionFactors, 
             decisionFactors, 
@@ -203,6 +217,8 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
             maxScoreKey,
             minScoreKey,
           }}
+          style={{width: 1400, border: "solid 2px green", overflow: "scroll"}}
+          domLayout="autoHeight"
           pinnedBottomRowData={pinnedBottomRowData}
         />
       </div>

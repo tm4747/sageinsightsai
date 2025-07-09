@@ -3,11 +3,12 @@
 .table-scroll-container {
   width: 100%;
   overflow-x: auto;
+  overflow-x: scroll;
 }
 /* AG Grid content can be as wide as it needs */
 .ag-theme-alpine.responsive-grid {
   width: max-content;
-  min-width: 100%;
+  min-width: 1400px;
   height: 300px;
 }
 
