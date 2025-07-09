@@ -174,6 +174,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const dataPreview = decisionTextDisplay ? 
     <div className={"commonDiv bold"}>
       {potentialOptionText}
+      {decisionFactorsText}
       {decisionTextDisplay}
       {potentialOptionsDisplay}
       {decisionFactorsDisplay}

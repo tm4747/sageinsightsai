@@ -120,14 +120,13 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
         tooltipField: "name",
         headerName: "Decision Factors",
         headerTooltip: "Decision Factors",
-        ...(currentStep === 4 && { maxWidth: 600 }),
         ...(currentStep > 4 && { maxWidth: 400, minWidth: 400 })
       },
       { 
         field: "importance", 
         headerName: "Importance", 
         cellRenderer: ImportanceCellRenderer,
-        ...(currentStep === 4 && { minWidth: 190, maxWidth: 190 }),
+        ...(currentStep === 4 && { minWidth: 300, maxWidth: 300 }),
         ...(currentStep > 4 && { maxWidth: 90 })
       }
     ];
