@@ -114,6 +114,8 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
         tooltipField: "name",
         headerName: "Decision Factors",
         headerTooltip: "Decision Factors",
+        maxWidth: 400,
+        minWidth: 400
       },
       { 
         field: "importance", 

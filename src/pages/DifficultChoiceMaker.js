@@ -23,7 +23,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const [potentialOptionTextError, setPotentialOptionTextError] = useState(false);
   const [decisionFactors, setDecisionFactors] = useState(override ? [
     {name: "How easy is it to get started", rating: initialRatingValue}, 
-    {name: "How long to first marketable product", rating: initialRatingValue}, 
+    {name: "Quickness to deliver a marketable product", rating: initialRatingValue}, 
     {name: "quickness of generating income", rating: initialRatingValue},
     {name: "amount of generated income over next 2 years", rating: initialRatingValue}, 
     {name: "leveling up and learning involved", rating: initialRatingValue}, 
@@ -248,7 +248,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   /*** STEP 4 */  
   const step4Or5Text = step === 4 ? 
     "For each Decision Factor, please adjust Importance with 10 being most important. " : 
-    ( step === 5 ? "Please score how well each Potential Option rates for each Decision Factor." : "");
+    ( step === 5 ? "Please score how well each Potential Option rates for each Decision Factor. A higher score means more favorable." : "");
 
   const step4Or5ButtonText = step === 4 ? 
     "Done Rating Decision Factor" : 
