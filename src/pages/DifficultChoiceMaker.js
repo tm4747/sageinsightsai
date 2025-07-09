@@ -290,7 +290,7 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   return (
     <div className="content">
       <div className={"formDiv"}>
-        {/* {progressBar} */}
+        {progressBar}
         {process.env.REACT_APP_ENV === "dev" ? temporaryStepButtons : ""}
         {step >= 4 ? dataPreview : ""}
         {setDecisionStep}
