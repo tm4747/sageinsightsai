@@ -132,7 +132,7 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
       }
     ];
     for (let i = 0; i < choiceCount; i++) {
-      if(currentStep == 5){
+      if(currentStep === 5){
           updatedColDefs.push({
           field: `choice${i + 1}`,
           headerName: potentialOptions[i].name,
@@ -140,7 +140,7 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
           cellRenderer: ChoiceCellRenderer
         });
       }
-      if(currentStep == 6){
+      if(currentStep === 6){
         updatedColDefs.push({
           field: `choice${i + 1}Rating`,
           headerName: potentialOptions[i].name,
