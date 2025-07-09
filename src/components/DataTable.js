@@ -118,7 +118,8 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
       { 
         field: "importance", 
         headerName: "Importance", 
-        cellRenderer: ImportanceCellRenderer 
+        cellRenderer: ImportanceCellRenderer,
+        maxWidth: 90,
       }
     ];
     for (let i = 0; i < choiceCount; i++) {
@@ -133,7 +134,6 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
         headerName: "Score",
         cellRenderer: ChoiceRatingCellRenderer,
         maxWidth: 65, // realistic minimum
-        suppressSizeToFit: true,
       });
     }
     setColDefs(updatedColDefs);
