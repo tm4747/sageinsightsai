@@ -7,25 +7,18 @@ import ProgressBar from '../components/simple/ProgressBar';
 
 function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   const initialRatingValue = 5;
-  const override = false;
   const basicTextErrorMessage = "Entered value must be at least 2 characters.";
 
   // RESET STATE VARS
-  const [decisionText, setDecisionText] = useState(override ? "Where to move": "");
-  const [decisionTextError, setDecisionTextError] = useState(override ? true : false);
-  const [potentialOptions, setPotentialOptions] = useState(override ? [
-    {name: "NY", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}, 
-    {name: "SLC", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}, 
-    {name: "Montana", ratings: [initialRatingValue, initialRatingValue, initialRatingValue]}] : []);
+  const [decisionText, setDecisionText] = useState("");
+  const [decisionTextError, setDecisionTextError] = useState(false);
+  const [potentialOptions, setPotentialOptions] = useState([]);
   const [potentialOptionText, setPotentialOptionText] = useState("");
   const [potentialOptionTextError, setPotentialOptionTextError] = useState(false);
-  const [decisionFactors, setDecisionFactors] = useState(override ? [
-    {name: "Wide Open Space", rating: initialRatingValue}, 
-    {name: "Culture", rating: initialRatingValue}, 
-    {name: "Job Opportunities", rating: initialRatingValue}] : []);
+  const [decisionFactors, setDecisionFactors] = useState([]);
   const [decisionFactorsText, setDecisionFactorsText] = useState("");
   const [decisionFactorsTextError, setDecisionFactorsTextError] = useState(false);
-  const [step, setStep] = useState(override ? 3 : 1);
+  const [step, setStep] = useState(1);
   const [currentErrorMessage, setCurrentErrorMessage] = useState(basicTextErrorMessage);
 
   
@@ -46,9 +39,16 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     resetErrors();
   };
 
+  /*** New Potential Option submitted ***/
   const handleSubmitPotentialOption = () => {
     const validatedInput = validateCharacterLength(potentialOptionText, 2);
+    
     if(!validatedInput){
+      setPotentialOptionTextError(true);
+      return false;
+    }
+    if(potentialOptions.some(option => option.name === validatedInput)){
+      setCurrentErrorMessage("This Potential Option has already been added.");
       setPotentialOptionTextError(true);
       return false;
     }
@@ -69,9 +69,15 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
     setPotentialOptionText("");
   };
 
+  /*** New Decision Factor submitted ***/
   const handleSubmitDecisionFactors = () => {
     const validatedInput = validateCharacterLength(decisionFactorsText, 2);
     if(!validatedInput){
+      setDecisionFactorsTextError(true);
+      return false;
+    }
+    if(decisionFactors.some(df => df.name === validatedInput)){
+      setCurrentErrorMessage("This Decision Factor has already been added.");
       setDecisionFactorsTextError(true);
       return false;
     }

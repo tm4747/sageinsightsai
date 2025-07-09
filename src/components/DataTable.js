@@ -11,18 +11,19 @@ const ImportanceCellRenderer = (props) => {
   if (data.name === "TOTAL") return <span>{value}</span>;
 
   const updateImportance = (newValue) => {
-    const updatedDecisionFactors = decisionFactors.map(c =>
-      c.name === data.name ? { ...c, rating: newValue } : c
+    const updatedDecisionFactors = decisionFactors.map(decFactor =>
+      decFactor.name === data.name ? { ...decFactor, rating: newValue } : decFactor
     );
     setDecisionFactors(updatedDecisionFactors);
   };
-  const activeStyle = currentStep === 4 ? "flash-green" : "";
+  const updateable = currentStep === 4;
+  const activeStyle = updateable ? "flash-green" : "";
 
   return (
     <div className={activeStyle}  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10 ) updateImportance(value + 1); }}>▲</span>
-      <span className={currentStep === 4 ? "bold" : ""}>{value}</span>
-      <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateImportance(value - 1); }}>▼</span>
+      <span style={{ cursor: 'pointer' }} onClick={() => { if (updateable && value < 10 ) updateImportance(updateable && value + 1); }}>▲</span>
+      <span className={updateable ? "bold" : ""}>{value}</span>
+      <span style={{ cursor: 'pointer' }} onClick={() => { if (updateable && value > 1) updateImportance(updateable && value - 1); }}>▼</span>
     </div>
   );
 };
@@ -52,14 +53,15 @@ const ChoiceCellRenderer = (props) => {
     });
   };
 
-  const activeStyle = currentStep === 5 ? "flash-green" : "";
+  const updateable = currentStep === 5;
+  const activeStyle = updateable ? "flash-green" : "";
 
   return (
     <div className={activeStyle}  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around' }}>
       { showOptionsRatings ? <>
-        <span style={{ cursor: 'pointer' }} onClick={() => { if (value < 10) updateChoiceRating(value + 1); }}>▲</span>
-        <span className={currentStep === 5 ? "bold" : ""}>{value}</span>
-        <span style={{ cursor: 'pointer' }} onClick={() => { if (value > 1) updateChoiceRating(value - 1); }}>▼</span>
+        <span style={{ cursor: 'pointer' }} onClick={() => { if (updateable && value < 10) updateChoiceRating(updateable && value + 1); }}>▲</span>
+        <span className={updateable ? "bold" : ""}>{value}</span>
+        <span style={{ cursor: 'pointer' }} onClick={() => { if (updateable && value > 1) updateChoiceRating(updateable && value - 1); }}>▼</span>
       </> : ""}
     </div>
   );
