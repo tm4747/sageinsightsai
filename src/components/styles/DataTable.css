@@ -2,12 +2,11 @@
 /* This wraps the grid and constrains it */
 .table-scroll-container {
   width: 100%;
-  /* overflow-x: auto; */
   overflow-x: scroll;
 }
 /* AG Grid content can be as wide as it needs */
 .ag-theme-alpine.responsive-grid {
-    min-width: 100%;
+  min-width: 100%;
   width: max-content;
   height: 350px;
 }
@@ -50,23 +49,37 @@
 }
 
 /* Responsive rules */
-@media screen and (max-width: 1000px) {
-  .table-scroll-container {
-    width:100%;
-  overflow-x: scroll;
-  }
+@media screen and (max-width: 1200px) {
   .ag-theme-alpine.responsive-grid {
-    width: 100%; 
-    height: 350px;
+     width: 125%;
   }
-  .ag-grid-inner-div{
-    width: 150%;
-  overflow-x: hidden;
+}
+
+@media screen and (max-width: 1050px) {
+  .ag-theme-alpine.responsive-grid {
+     width: 150%;
   }
 }
 
 /* Responsive rules */
-@media screen and (max-width: 768px) {
-  
+@media screen and (max-width: 900px) {
+  .ag-theme-alpine.responsive-grid {
+     width: 200%;
+  }
+}
+
+
+/* Responsive rules */
+@media screen and (max-width: 700px) {
+  .ag-theme-alpine.responsive-grid {
+     width: 300%;
+  }
+}
+
+
+@media screen and (max-width: 500px) {
+  .ag-theme-alpine.responsive-grid {
+     width: 350%;
+  }
 }
 

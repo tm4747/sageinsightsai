@@ -213,7 +213,6 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
   return (
     <div className="table-scroll-container">
       <div className="ag-theme-alpine responsive-grid">
-        <div className="ag-grid-inner-div">
           <AgGridReact
             rowData={rowData}
             columnDefs={colDefs}
@@ -235,8 +234,6 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
             domLayout="autoHeight"
             pinnedBottomRowData={pinnedBottomRowData}
           />
-        </div>
-        
       </div>
     </div>
   );
