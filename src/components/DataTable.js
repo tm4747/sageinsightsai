@@ -213,27 +213,30 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
   return (
     <div className="table-scroll-container">
       <div className="ag-theme-alpine responsive-grid">
-        <AgGridReact
-          rowData={rowData}
-          columnDefs={colDefs}
-          defaultColDef={defaultColDef}
-          getRowStyle={rowStyles}
-          tooltipShowDelay={0}
-          tooltipHideDelay={2000}
-          tooltipShowMode={"whenTruncated"}
-          context={{ 
-            setDecisionFactors, 
-            decisionFactors, 
-            setPotentialOptions, 
-            potentialOptions, 
-            currentStep,
-            maxScoreKey,
-            minScoreKey,
-          }}
-          style={{width: 1400, border: "solid 2px green", overflow: "scroll"}}
-          domLayout="autoHeight"
-          pinnedBottomRowData={pinnedBottomRowData}
-        />
+        <div className="ag-grid-inner-div">
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={colDefs}
+            defaultColDef={defaultColDef}
+            getRowStyle={rowStyles}
+            tooltipShowDelay={0}
+            tooltipHideDelay={2000}
+            tooltipShowMode={"whenTruncated"}
+            context={{ 
+              setDecisionFactors, 
+              decisionFactors, 
+              setPotentialOptions, 
+              potentialOptions, 
+              currentStep,
+              maxScoreKey,
+              minScoreKey,
+            }}
+            style={{width: 1400, border: "solid 2px green", overflow: "scroll"}}
+            domLayout="autoHeight"
+            pinnedBottomRowData={pinnedBottomRowData}
+          />
+        </div>
+        
       </div>
     </div>
   );

@@ -2,14 +2,14 @@
 /* This wraps the grid and constrains it */
 .table-scroll-container {
   width: 100%;
-  overflow-x: auto;
+  /* overflow-x: auto; */
   overflow-x: scroll;
 }
 /* AG Grid content can be as wide as it needs */
 .ag-theme-alpine.responsive-grid {
+    min-width: 100%;
   width: max-content;
-  min-width: 1400px;
-  height: 300px;
+  height: 350px;
 }
 
 .ag-theme-alpine .ag-header-cell{
@@ -53,12 +53,15 @@
 @media screen and (max-width: 1000px) {
   .table-scroll-container {
     width:100%;
-  overflow-x: auto;
+  overflow-x: scroll;
   }
   .ag-theme-alpine.responsive-grid {
-    width: 1200px;
-    min-width: 100%;
-    height: 300px;
+    width: 100%; 
+    height: 350px;
+  }
+  .ag-grid-inner-div{
+    width: 150%;
+  overflow-x: hidden;
   }
 }
 
