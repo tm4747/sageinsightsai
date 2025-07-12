@@ -104,6 +104,15 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
   const [pinnedBottomRowData, setPinnedBottomRowData] = useState([]);
   const [maxScoreKey, setMaxScoreKey] = useState(null);
   const [minScoreKey, setMinScoreKey] = useState(null);
+  const [numberOfColumns, setNumberOfColumns] = useState(2);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  /*** UPDATE WINDOW WIDTH ***/
+  useEffect(() => {
+    const handleResize = () => setScreenWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   /*** UPDATE TABLE DATA */
   useEffect(() => {
@@ -149,6 +158,7 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
       }
     }
     setColDefs(updatedColDefs);
+    setNumberOfColumns(2 + (currentStep > 4 ? choiceCount : 0));
 
 
     const rows = decisionFactors.map(( decisionFactorsItem, decisionFactorsItemIndex) => {
@@ -210,9 +220,18 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
   const defaultColDef = { flex: 1 };
   const rowStyles = params => (params.data?.name === 'TOTAL' ? { fontWeight: 'bold', backgroundColor: '#f0f0f0' } : {});
 
+  // Adjust table width based on formula derived from screen width
+  const fullWidthColumnSizeMultiplier = 1200 * 1200 * 2;
+  const screenWidthSquared = screenWidth * screenWidth;
+  const columnCountMultiplier = numberOfColumns * numberOfColumns / 1.5
+  const tableWidthInt = (screenWidth > 1200 || numberOfColumns < 4) && numberOfColumns <= 5 ? 100 : 
+    Math.floor(100 + (fullWidthColumnSizeMultiplier / screenWidthSquared * columnCountMultiplier));  /// need formula which transforms 
+  const tableWidth = tableWidthInt.toString();
+
   return (
     <div className="table-scroll-container">
-      <div className="ag-theme-alpine responsive-grid">
+      <div className="ag-theme-alpine responsive-grid" style={{width: `${tableWidth}%`}}>
+          {numberOfColumns} - {tableWidth}
           <AgGridReact
             rowData={rowData}
             columnDefs={colDefs}
@@ -230,7 +249,6 @@ const DataTable = ({ decisionFactors, potentialOptions, setDecisionFactors, setP
               maxScoreKey,
               minScoreKey,
             }}
-            style={{width: 1400, border: "solid 2px green", overflow: "scroll"}}
             domLayout="autoHeight"
             pinnedBottomRowData={pinnedBottomRowData}
           />

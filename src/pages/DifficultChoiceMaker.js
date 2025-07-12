@@ -13,12 +13,19 @@ function DifficultChoiceMaker({ setIsLoading, featureFlagShowBeta = true }) {
   // RESET STATE VARS
   const [decisionText, setDecisionText] = useState(override ? "What do I work on next?": "");
   const [decisionTextError, setDecisionTextError] = useState(override ? true : false);
+  // const [potentialOptions, setPotentialOptions] = useState(override ? [
+  //   {name: "Keep expanding this site", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
+  //   {name: "Go back to react native apps for androidiphone", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
+  //   {name: "Build a web service for web sites incorporating AI", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]},
+  //   {name: "collaborate with someone else to build an app or system", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
+  // ] : []);
+
+  // TODO: delete - test data for 4 cols
   const [potentialOptions, setPotentialOptions] = useState(override ? [
     {name: "Keep expanding this site", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
     {name: "Go back to react native apps for androidiphone", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
-    {name: "Build a web service for web sites incorporating AI", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]},
-    {name: "collaborate with someone else to build an app or system", ratings: [initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue, initialRatingValue]}, 
   ] : []);
+
   const [potentialOptionText, setPotentialOptionText] = useState("");
   const [potentialOptionTextError, setPotentialOptionTextError] = useState(false);
   const [decisionFactors, setDecisionFactors] = useState(override ? [
